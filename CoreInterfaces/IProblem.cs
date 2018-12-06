@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CoreInterfaces
+namespace StudyAssist.Core.Interfaces
 {
     /// <summary>
     /// Интерфейс изучаемого "вопроса".

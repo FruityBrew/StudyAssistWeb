@@ -1,7 +1,7 @@
 ﻿using System;
-using  CoreInterfaces;
+using StudyAssist.Core.Interfaces;
 
-namespace Core
+namespace StudyAssist.Core
 {
     class RepeatDateCalculator : IRepeatCalculator
     {
