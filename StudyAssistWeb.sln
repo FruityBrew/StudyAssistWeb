@@ -3,25 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{3E822F9B-67FC-41DE-9A17-7E01458C25A6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2F4B15F5-1AE5-43B7-BE9D-FE9E070EE01A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{7D7EF7E8-545D-4038-A500-E21D7E92E5BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.Core.Interfaces", "CoreInterfaces\StudyAssist.Core.Interfaces.csproj", "{B42CF16A-19BE-44FB-A41A-2AC02601BC8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssist.Core.Interfaces", "CoreInterfaces\StudyAssist.Core.Interfaces.csproj", "{B42CF16A-19BE-44FB-A41A-2AC02601BC8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.Core", "Core\StudyAssist.Core.csproj", "{525A6443-FD37-48E3-802C-2B80647290DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssist.Core", "Core\StudyAssist.Core.csproj", "{525A6443-FD37-48E3-802C-2B80647290DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.Domain.Interfaces", "DomainInterfaces\StudyAssist.Domain.Interfaces.csproj", "{48BF0DC5-003C-43CA-AB67-FC290E712DDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssist.Domain.Interfaces", "DomainInterfaces\StudyAssist.Domain.Interfaces.csproj", "{48BF0DC5-003C-43CA-AB67-FC290E712DDD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{A2E97CCE-1A05-443B-A70C-6C1F24E02613}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.Services.Interfaces", "StudyAssist.Services.Interfaces\StudyAssist.Services.Interfaces.csproj", "{FE7E41A1-DC8D-45BA-AB77-C0E77398584C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssist.Services.Interfaces", "StudyAssist.Services.Interfaces\StudyAssist.Services.Interfaces.csproj", "{FE7E41A1-DC8D-45BA-AB77-C0E77398584C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{F8089E54-60F3-4092-AE84-FE963C5E0938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.Infrastructure.Data", "StudyAssist.Infrastructure.Data\StudyAssist.Infrastructure.Data.csproj", "{172A63D3-850E-40A8-A557-E29BD5CE31AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssist.Infrastructure.Data", "StudyAssist.Infrastructure.Data\StudyAssist.Infrastructure.Data.csproj", "{172A63D3-850E-40A8-A557-E29BD5CE31AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApp", "WebApp", "{761A0848-6BCE-4B4D-BE16-6061FFFF6357}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssistWebApp", "StudyAssistWebApp\StudyAssistWebApp.csproj", "{E42CADE5-8AA0-4E1B-B2F5-B056310BE09A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.Infrastructure.Util", "StudyAssist.Infrastructure.Util\StudyAssist.Infrastructure.Util.csproj", "{61F700EE-194E-4AFC-B27A-F52B673A3413}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +33,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3E822F9B-67FC-41DE-9A17-7E01458C25A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E822F9B-67FC-41DE-9A17-7E01458C25A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E822F9B-67FC-41DE-9A17-7E01458C25A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E822F9B-67FC-41DE-9A17-7E01458C25A6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B42CF16A-19BE-44FB-A41A-2AC02601BC8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B42CF16A-19BE-44FB-A41A-2AC02601BC8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B42CF16A-19BE-44FB-A41A-2AC02601BC8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,6 +53,14 @@ Global
 		{172A63D3-850E-40A8-A557-E29BD5CE31AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{172A63D3-850E-40A8-A557-E29BD5CE31AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{172A63D3-850E-40A8-A557-E29BD5CE31AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E42CADE5-8AA0-4E1B-B2F5-B056310BE09A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E42CADE5-8AA0-4E1B-B2F5-B056310BE09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E42CADE5-8AA0-4E1B-B2F5-B056310BE09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E42CADE5-8AA0-4E1B-B2F5-B056310BE09A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61F700EE-194E-4AFC-B27A-F52B673A3413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61F700EE-194E-4AFC-B27A-F52B673A3413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61F700EE-194E-4AFC-B27A-F52B673A3413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61F700EE-194E-4AFC-B27A-F52B673A3413}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -66,6 +74,9 @@ Global
 		{FE7E41A1-DC8D-45BA-AB77-C0E77398584C} = {A2E97CCE-1A05-443B-A70C-6C1F24E02613}
 		{F8089E54-60F3-4092-AE84-FE963C5E0938} = {2F4B15F5-1AE5-43B7-BE9D-FE9E070EE01A}
 		{172A63D3-850E-40A8-A557-E29BD5CE31AD} = {F8089E54-60F3-4092-AE84-FE963C5E0938}
+		{761A0848-6BCE-4B4D-BE16-6061FFFF6357} = {2F4B15F5-1AE5-43B7-BE9D-FE9E070EE01A}
+		{E42CADE5-8AA0-4E1B-B2F5-B056310BE09A} = {761A0848-6BCE-4B4D-BE16-6061FFFF6357}
+		{61F700EE-194E-4AFC-B27A-F52B673A3413} = {F8089E54-60F3-4092-AE84-FE963C5E0938}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF40537A-0B87-450B-A222-FCD7C8C7EFFE}

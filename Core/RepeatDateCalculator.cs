@@ -3,7 +3,7 @@ using StudyAssist.Core.Interfaces;
 
 namespace StudyAssist.Core
 {
-    class RepeatDateCalculator : IRepeatCalculator
+    public class RepeatDateCalculator : IRepeatCalculator
     {
         #region Fields
 
