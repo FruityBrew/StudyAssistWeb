@@ -10,6 +10,11 @@ namespace StudyAssist.Core.Interfaces
         #region Properties
 
         /// <summary>
+        /// Идентификатор проблемы.
+        /// </summary>
+        Int32? ProblemId { get; set; }
+
+        /// <summary>
         /// Текст вопроса.
         /// </summary>
         String Question { get; set; }

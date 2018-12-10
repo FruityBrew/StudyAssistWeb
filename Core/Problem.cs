@@ -53,6 +53,8 @@ namespace StudyAssist.Core
             set { _isStudy = value; }
         }
 
+        public int? ProblemId { get; set; }
+
         /// <summary>
         /// Формулировка проблемы (вопроса).
         /// </summary>
@@ -113,6 +115,15 @@ namespace StudyAssist.Core
             this.StudyLevelUp();
         }
 
+        public Problem()
+        {
+            this.IsStudy = true;
+            IsAutoRepeate = true;
+            this.AddedToStudyDate = DateTime.Today;
+            this.CreationDate = DateTime.Today;
+            this.RepeatDate = null;
+            this.StudyLevelUp();
+        }
         #endregion Constructors
 
         #region Methods

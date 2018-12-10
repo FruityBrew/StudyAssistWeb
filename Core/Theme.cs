@@ -28,6 +28,8 @@ namespace StudyAssist.Core
             set { _isStudy = value; }
         }
 
+        public int ThemeId { get; set; }
+
         /// <summary>
         /// Название темы.
         /// </summary>

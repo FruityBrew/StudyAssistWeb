@@ -10,6 +10,8 @@ namespace StudyAssist.Core.Interfaces
     {
         #region Properties
 
+        Int32 ThemeId { get; set; }
+
         /// <summary>
         /// Название темы.
         /// </summary>

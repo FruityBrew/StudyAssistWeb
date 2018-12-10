@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using StudyAssist.Core.Interfaces;
 using StudyAssist.Domain.Interfaces;
+using StudyAssist.Infrastructure.Data.DataModel;
 using StudyAssist.Infrastructure.Util;
 
 namespace StudyAssist.Infrastructure.Data

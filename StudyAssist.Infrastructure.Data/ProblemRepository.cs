@@ -5,6 +5,7 @@ using Ninject;
 using Ninject.Modules;
 using StudyAssist.Core.Interfaces;
 using StudyAssist.Domain.Interfaces;
+using StudyAssist.Infrastructure.Data.DataModel;
 using StudyAssist.Infrastructure.Util;
 
 namespace StudyAssist.Infrastructure.Data

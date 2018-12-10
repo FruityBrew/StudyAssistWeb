@@ -7,9 +7,11 @@ namespace StudyAssist.Core.Interfaces
     /// <summary>
     /// Категория - контейнер для тем.
     /// </summary>
-    public interface ICategory
+    public interface ICategory 
     {
         #region Properties
+
+        Int32? CategoryId { get; set; }
 
         /// <summary>
         /// Имя категории.

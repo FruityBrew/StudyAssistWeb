@@ -26,6 +26,8 @@ namespace StudyAssist.Core
 
         #region properties
 
+        public int? CategoryId { get; set; }
+
         /// <summary>
         /// Название категории.
         /// </summary>

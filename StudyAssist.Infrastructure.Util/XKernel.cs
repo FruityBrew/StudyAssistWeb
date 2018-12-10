@@ -25,6 +25,8 @@ namespace StudyAssist.Infrastructure.Util
         {
             Bind<IProblem>().To<Problem>();
             Bind<IRepeatCalculator>().To<RepeatDateCalculator>();
+            Bind<ICategory>().To<Category>();
+            Bind<ITheme>().To<Theme>();
         }
     }
 }
