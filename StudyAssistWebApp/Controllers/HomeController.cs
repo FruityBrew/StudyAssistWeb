@@ -18,7 +18,7 @@ namespace StudyAssistWebApp.Controllers
         private UnitOfWork _uw;
 
 
-        public HomeController(IProblemRepository problemRepository)
+        public HomeController(IRepository<IProblem> problemRepository)
         {
             _uw = new UnitOfWork(problemRepository);
         }

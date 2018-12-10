@@ -38,7 +38,6 @@ namespace StudyAssistWebApp
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<IRepository<IProblem>, ProblemRepository>();
-            services.AddTransient<IProblemRepository, ProblemRepository>();
 
         }
 

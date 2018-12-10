@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using StudyAssist.Core.Interfaces;
 using StudyAssist.Domain.Interfaces;
 using StudyAssist.Infrastructure.Util;
 
@@ -10,9 +11,9 @@ namespace StudyAssist.Infrastructure.Data
     {
         private readonly StudyAssistContext _dbContext;
 
-        public IProblemRepository Problems { get; }
+        public IRepository<IProblem> Problems { get; }
 
-        public UnitOfWork(IProblemRepository problem)
+        public UnitOfWork(IRepository<IProblem> problem)
         {
             Problems = problem;
         }

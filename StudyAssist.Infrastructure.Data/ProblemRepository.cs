@@ -9,7 +9,7 @@ using StudyAssist.Infrastructure.Util;
 
 namespace StudyAssist.Infrastructure.Data
 {
-    public class ProblemRepository : IProblemRepository
+    public class ProblemRepository : IRepository<IProblem>
     {
         #region Fields
 
