@@ -3,8 +3,8 @@ using StudyAssist.Domain.Interfaces;
 
 namespace StudyAssist.Services.Interfaces
 {
-    public interface IProblemService
+    public interface IStudyAssistCatalog
     {
-        IResult<IProblem> GetProblems();
+        IResult<ICategory> GetCatalog();
     }
 }
