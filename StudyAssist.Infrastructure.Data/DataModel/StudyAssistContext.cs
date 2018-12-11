@@ -11,7 +11,7 @@ namespace StudyAssist.Infrastructure.Data.DataModel
 
         public StudyAssistContext()
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         #endregion Constructors

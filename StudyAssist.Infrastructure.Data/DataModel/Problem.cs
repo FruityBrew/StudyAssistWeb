@@ -20,7 +20,7 @@ namespace StudyAssist.Infrastructure.Data.DataModel
         /// Текст вопроса.
         /// </summary>
         [Required]
-        [MaxLength(200)]
+        [MaxLength(250)]
         public String Question { get; set; }
 
         /// <summary>
