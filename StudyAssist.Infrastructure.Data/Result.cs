@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using StudyAssist.Domain.Interfaces;
+﻿using StudyAssist.Domain.Interfaces;
+using System;
 
 namespace StudyAssist.Infrastructure.Data
 {

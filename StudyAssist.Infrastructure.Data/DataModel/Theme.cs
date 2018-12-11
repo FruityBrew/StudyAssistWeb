@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudyAssist.Infrastructure.Data.DataModel
 {
+    [Table("Themes")]
     class Theme
     {
         public Theme()
@@ -18,11 +20,14 @@ namespace StudyAssist.Infrastructure.Data.DataModel
         /// </summary>
         public bool IsStudy { get; set; }
 
+        [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
         public int ThemeId { get; set; }
 
         /// <summary>
         /// Название темы.
         /// </summary>
+        [MaxLength(200)]
         public string Name { get; set; }
 
         /// <summary>
@@ -30,6 +35,7 @@ namespace StudyAssist.Infrastructure.Data.DataModel
         /// </summary>
         public List<Problem> Problems { get; set; }
 
+        [Required]
         public Category Category { get; set; }
 
         #endregion Properties

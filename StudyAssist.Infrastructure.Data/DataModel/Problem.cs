@@ -1,9 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudyAssist.Infrastructure.Data.DataModel
 {
+    [Table("Problems")]
     class Problem
     {
         #region Properties
@@ -11,11 +13,14 @@ namespace StudyAssist.Infrastructure.Data.DataModel
         /// <summary>
         /// Идентификатор проблемы.
         /// </summary>
-        public Int32? ProblemId { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Int32 ProblemId { get; set; }
 
         /// <summary>
         /// Текст вопроса.
         /// </summary>
+        [Required]
+        [MaxLength(200)]
         public String Question { get; set; }
 
         /// <summary>
@@ -41,18 +46,22 @@ namespace StudyAssist.Infrastructure.Data.DataModel
         /// <summary>
         /// Уровень изученности вопроса (сколько раз был повторен вопрос).
         /// </summary>
+        [Required]
         public Byte StudyLevel { get; }
 
         /// <summary>
         /// Включен ли автоматический расчет даты повторения (автоповтор).
         /// </summary>
+        [Required]
         public Boolean IsAutoRepeate { get; set; }
 
         /// <summary>
         /// Находится ли вопрос на изучении.
         /// </summary>
+        [Required]
         public Boolean IsStudy { get; set; }
 
+        [Required]
         public Theme Theme { get; set; }
 
         #endregion Properties
