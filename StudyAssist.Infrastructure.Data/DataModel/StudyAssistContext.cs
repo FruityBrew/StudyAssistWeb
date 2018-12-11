@@ -18,7 +18,7 @@ namespace StudyAssist.Infrastructure.Data.DataModel
 
         #region Properties
 
-        private DbSet<Category> Categories  { get; set; }
+        internal DbSet<Category> Categories  { get; set; }
 
         #endregion Properties
 

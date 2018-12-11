@@ -14,9 +14,15 @@ namespace StudyAssist.Infrastructure.Data
 
         public IRepository<IProblem> Problems { get; }
 
-        public UnitOfWork(IRepository<IProblem> problem)
+        public IRepository<ICategory> Categories { get; }
+
+        public IRepository<ITheme> Themes { get; }
+
+        public UnitOfWork(IRepository<IProblem> problem, 
+            IRepository<ICategory> categories)
         {
             Problems = problem;
+            Categories = categories;
         }
 
         public void Dispose()

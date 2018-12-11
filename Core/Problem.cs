@@ -70,7 +70,7 @@ namespace StudyAssist.Core
         public byte StudyLevel
         {
             get { return _studyLevel; }
-            private set { _studyLevel = value; }
+            set { _studyLevel = value; }
         }
 
         /// <summary>

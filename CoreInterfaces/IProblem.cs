@@ -27,12 +27,12 @@ namespace StudyAssist.Core.Interfaces
         /// <summary>
         /// Дата создания вопроса.
         /// </summary>
-        DateTime? CreationDate { get; }
+        DateTime? CreationDate { get; set; }
 
         /// <summary>
         /// Дата добавления на изучение.
         /// </summary>
-        DateTime? AddedToStudyDate { get; }
+        DateTime? AddedToStudyDate { get; set; }
 
         /// <summary>
         /// Расчетная дата повторения.
@@ -42,7 +42,7 @@ namespace StudyAssist.Core.Interfaces
         /// <summary>
         /// Уровень изученности вопроса (сколько раз был повторен вопрос).
         /// </summary>
-        Byte StudyLevel { get; }
+        Byte StudyLevel { get; set; }
 
         /// <summary>
         /// Включен ли автоматический расчет даты повторения (автоповтор).

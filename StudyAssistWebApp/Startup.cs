@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StudyAssist.Core;
 using StudyAssist.Core.Interfaces;
 using StudyAssist.Domain.Interfaces;
 using StudyAssist.Infrastructure.Data;
@@ -38,6 +39,8 @@ namespace StudyAssistWebApp
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddTransient<IRepository<IProblem>, ProblemRepository>();
+            services.AddTransient<IRepository<ICategory>, CategoriesRepository>();
+            services.AddTransient<ICategory, Category>();
 
         }
 

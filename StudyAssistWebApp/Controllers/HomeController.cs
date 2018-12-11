@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using StudyAssist.Core;
 using StudyAssist.Core.Interfaces;
 using StudyAssist.Domain.Interfaces;
 using StudyAssist.Infrastructure.Data;
@@ -18,20 +19,27 @@ namespace StudyAssistWebApp.Controllers
         private UnitOfWork _uw;
 
 
-        public HomeController(IRepository<IProblem> problemRepository)
+        public HomeController(
+            IRepository<IProblem> problemRepository, 
+            IRepository<ICategory> categoryRepository)
         {
-            _uw = new UnitOfWork(problemRepository);
+            _uw = new UnitOfWork(problemRepository, categoryRepository);
         }
 
         public IActionResult Index()
         {
-            IResult<IEnumerable<IProblem>> result =
-                _uw.Problems.GetList();
+            //IResult<IEnumerable<IProblem>> result =
+            //    _uw.Problems.GetList();
 
-            var problems = result.ReturnValue;
+
+            ICategory cat = new Category();
+            cat.Name = "Тест";
+
+             var res = _uw.Categories.Add(cat);
 
             return View();
         }
+
 
         public IActionResult About()
         {
