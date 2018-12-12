@@ -7,7 +7,7 @@ using System.Text;
 namespace StudyAssist.Infrastructure.Data.DataModel
 {
     [Table("Categories")]
-    class Category
+    public class Category
     {
         #region ctors
 

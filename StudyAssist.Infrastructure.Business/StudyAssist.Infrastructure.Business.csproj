@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StudyAssist.Infrastructure.Data\StudyAssist.Infrastructure.Data.csproj" />
     <ProjectReference Include="..\StudyAssist.Services.Interfaces\StudyAssist.Services.Interfaces.csproj" />
   </ItemGroup>
 

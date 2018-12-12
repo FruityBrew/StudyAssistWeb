@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace StudyAssist.Infrastructure.Data.DataModel
 {
     [Table("Themes")]
-    class Theme
+    public class Theme
     {
         public Theme()
         {

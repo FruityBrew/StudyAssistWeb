@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace StudyAssist.Infrastructure.Data.DataModel
 {
     [Table("Problems")]
-    class Problem
+    public class Problem
     {
         #region Properties
 
