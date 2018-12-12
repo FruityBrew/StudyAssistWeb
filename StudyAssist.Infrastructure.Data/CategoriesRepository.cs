@@ -109,7 +109,7 @@ namespace StudyAssist.Infrastructure.Data
         {
             Category cat = new Category
             {
-                Name = item.Name
+                Name = "Яволь"
             };
 
             _dbContext.Categories
