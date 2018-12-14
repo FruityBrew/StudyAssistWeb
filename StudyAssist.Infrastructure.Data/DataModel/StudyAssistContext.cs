@@ -20,6 +20,10 @@ namespace StudyAssist.Infrastructure.Data.DataModel
 
         public DbSet<Category> Categories  { get; set; }
 
+        public DbSet<Theme> Themes { get; set; }
+
+        public DbSet<Problem> Problems { get; set; }
+
         #endregion Properties
 
         #region MethodOverrides

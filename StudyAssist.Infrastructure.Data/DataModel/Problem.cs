@@ -31,12 +31,12 @@ namespace StudyAssist.Infrastructure.Data.DataModel
         /// <summary>
         /// Дата создания вопроса.
         /// </summary>
-        public DateTime? CreationDate { get; }
+        public DateTime? CreationDate { get; set; }
 
         /// <summary>
         /// Дата добавления на изучение.
         /// </summary>
-        public DateTime? AddedToStudyDate { get; }
+        public DateTime? AddedToStudyDate { get; set; }
 
         /// <summary>
         /// Расчетная дата повторения.
@@ -47,7 +47,7 @@ namespace StudyAssist.Infrastructure.Data.DataModel
         /// Уровень изученности вопроса (сколько раз был повторен вопрос).
         /// </summary>
         [Required]
-        public Byte StudyLevel { get; }
+        public Byte StudyLevel { get; set; }
 
         /// <summary>
         /// Включен ли автоматический расчет даты повторения (автоповтор).

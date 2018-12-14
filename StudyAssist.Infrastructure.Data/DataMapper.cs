@@ -28,6 +28,22 @@ namespace StudyAssist.Infrastructure.Data
             return problem;
         }
 
+        public Problem CreateDataFromProblem(IProblem problem)
+        {
+            Problem data = new Problem();
+
+            data.Question = problem.Question;
+            data.AddedToStudyDate = problem.AddedToStudyDate;
+            data.Answer = problem.Answer;
+            data.CreationDate = problem.CreationDate;
+            data.IsAutoRepeate = problem.IsAutoRepeate;
+            data.IsStudy = problem.IsStudy;
+            data.RepeatDate = problem.RepeatDate;
+            data.StudyLevel = problem.StudyLevel;
+
+            return data;
+        }
+
         public ITheme CreateThemeFromData(Theme data)
         {
             ITheme theme = XKernel.Instance.Get<ITheme>();
