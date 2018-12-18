@@ -28,6 +28,8 @@ namespace StudyAssist.Infrastructure.Data
         private const String ANSWER_NOT_SPECIFIED =
             "Не заполнен ответ.";
 
+        private const String NULL_ID_ERR = "Отсутсвует идентификатор проблемы";
+
         #endregion Constants
 
         #region Fields
@@ -99,9 +101,27 @@ namespace StudyAssist.Infrastructure.Data
             return result;
         }
 
-        public IResult Update(IProblem item)
+        public IResult Update(IProblem updItem)
         {
-            throw new NotImplementedException();
+            Result result = new Result();
+
+            try
+            {
+                Result check = _CheckProblem(updItem);
+
+                if (check.Success == false)
+                    return check;
+
+                _UpdateProblem(updItem);
+
+                result.Success = true;
+            }
+            catch (Exception e)
+            {
+                result.Message = _GetExceptionMessage(e);
+            }
+
+            return result;
         }
 
         public IResult Remove(IProblem item)
@@ -120,14 +140,21 @@ namespace StudyAssist.Infrastructure.Data
 
         private IProblem _GetProblem(Int32 problemId)
         {
+            Problem dbItem = _GetProblemFromDb(problemId);
+
+            return _mapper.CreateProblemFromData(dbItem);
+        }
+
+        private Problem _GetProblemFromDb(int problemId)
+        {
             Problem dbItem = _dbContext.Problems
                 .FirstOrDefault(a => a.ProblemId == problemId);
 
-            if(dbItem == null)
+            if (dbItem == null)
                 throw new InvalidOperationException(
                     "Элемент с указанным идентификатором не найден");
 
-            return _mapper.CreateProblemFromData(dbItem);
+            return dbItem;
         }
 
         private Int32 _AddProblem(IProblem addedItem)
@@ -136,7 +163,24 @@ namespace StudyAssist.Infrastructure.Data
 
             _dbContext.Problems.Add(data);
 
+            _dbContext.SaveChanges();
+
             return data.ProblemId;
+        }
+
+        private void _UpdateProblem(IProblem updItem)
+        {
+            if(updItem == null)
+                throw new ArgumentNullException(nameof(updItem));
+
+            if(updItem.ProblemId.HasValue == false)
+                throw new InvalidOperationException(NULL_ID_ERR);
+
+            Problem data = _GetProblemFromDb(updItem.ProblemId.Value);
+
+            _mapper.UpdateDataFromProblem(data, updItem);
+
+            _dbContext.SaveChanges();
         }
 
         private Result _CheckProblem(IProblem checkedItem)
@@ -159,6 +203,8 @@ namespace StudyAssist.Infrastructure.Data
 
             return new Result(String.Format(template, message), false);
         }
+
+
 
         #endregion Utilities
 

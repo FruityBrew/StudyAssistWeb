@@ -9,6 +9,9 @@ namespace StudyAssist.Infrastructure.Data
 
         public bool Success { get; set; }
 
+        public Result()
+        { }
+
         public Result(String message, Boolean success)
         {
             Message = message;
