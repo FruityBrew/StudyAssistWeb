@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using Ninject;
-using Ninject.Modules;
-using StudyAssist.Core.Interfaces;
+﻿using StudyAssist.Core.Interfaces;
 using StudyAssist.Domain.Interfaces;
 using StudyAssist.Infrastructure.Data.DataModel;
-using StudyAssist.Infrastructure.Util;
+using System;
+using System.Linq;
 
 namespace StudyAssist.Infrastructure.Data
 {
@@ -124,9 +118,22 @@ namespace StudyAssist.Infrastructure.Data
             return result;
         }
 
-        public IResult Remove(IProblem item)
+        public IResult Remove(IProblem removedItem)
         {
-            throw new NotImplementedException();
+            Result result = new Result();
+
+            try
+            {
+                _RemoveProblem(removedItem);
+
+                result.Success = true;
+            }
+            catch (Exception e)
+            {
+                result.Message = _GetExceptionMessage(e);
+            }
+
+            return result;
         }
 
         public void Save()
@@ -138,6 +145,18 @@ namespace StudyAssist.Infrastructure.Data
 
         #region  Utilities
 
+        private void _RemoveProblem(IProblem removedItem)
+        {
+            if(removedItem == null)
+                throw new ArgumentNullException(nameof(removedItem));
+
+            Problem dbItem = _GetProblemFromDb(removedItem);
+
+            _dbContext.Problems.Remove(dbItem);
+
+            _dbContext.SaveChanges();
+        }
+
         private IProblem _GetProblem(Int32 problemId)
         {
             Problem dbItem = _GetProblemFromDb(problemId);
@@ -145,7 +164,17 @@ namespace StudyAssist.Infrastructure.Data
             return _mapper.CreateProblemFromData(dbItem);
         }
 
-        private Problem _GetProblemFromDb(int problemId)
+        private Problem _GetProblemFromDb(IProblem problem)
+        {
+            if(problem.ProblemId.HasValue == false)
+                throw new InvalidOperationException(NULL_ID_ERR);
+
+            Int32 problemId = problem.ProblemId.Value;
+
+            return _GetProblemFromDb(problemId);
+        }
+
+        private Problem _GetProblemFromDb(Int32 problemId)
         {
             Problem dbItem = _dbContext.Problems
                 .FirstOrDefault(a => a.ProblemId == problemId);
@@ -173,10 +202,7 @@ namespace StudyAssist.Infrastructure.Data
             if(updItem == null)
                 throw new ArgumentNullException(nameof(updItem));
 
-            if(updItem.ProblemId.HasValue == false)
-                throw new InvalidOperationException(NULL_ID_ERR);
-
-            Problem data = _GetProblemFromDb(updItem.ProblemId.Value);
+            Problem data = _GetProblemFromDb(updItem);
 
             _mapper.UpdateDataFromProblem(data, updItem);
 
