@@ -6,6 +6,8 @@ namespace StudyAssistModel.DataModel
 {
     public class Catalog
     {
+        public int CatalogId { get; set; }
+
         public string Name { get; set; }
 
         public List<Theme> Themes { get; set; }
