@@ -15,15 +15,26 @@ namespace KnowledgeDataAccessApi.Model
 
         public DbSet<Issue> Issues { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<IssueUnderStudy> IssuesUnderStudy { get; set; }
+
         public KnowledgeContext(DbContextOptions<KnowledgeContext> options) 
             : base(options)
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         public KnowledgeContext()
         {
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
+        }
+
+        protected override void OnConfiguring(
+            DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(
+                @"Server=KOVALEVAS\SQLEXPRESS;Database=KnowledgeDb;Trusted_Connection=true;"); // todo
         }
     }
 }
