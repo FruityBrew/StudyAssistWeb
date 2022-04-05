@@ -34,7 +34,8 @@ namespace KnowledgeDataAccessApi.Model
             DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(
-                @"Server=KOVALEVAS\SQLEXPRESS;Database=KnowledgeDb;Trusted_Connection=true;"); // todo
+                //@"Server=KOVALEVAS\SQLEXPRESS;Database=KnowledgeDb;Trusted_Connection=true;"); 
+            @"workstation id=knowledgeDb.mssql.somee.com;packet size=4096;user id=FruityBrew_SQLLogin_1;pwd=4f65smahle;data source=knowledgeDb.mssql.somee.com;persist security info=False;initial catalog=knowledgeDb");
         }
     }
 }
