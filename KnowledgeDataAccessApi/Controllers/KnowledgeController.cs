@@ -18,6 +18,7 @@ namespace KnowledgeDataAccessApi.Controllers
         //}
 
         private KnowledgeContext _context;
+
         public KnowledgeController(KnowledgeContext context)
         {
             _context = context;
@@ -27,8 +28,8 @@ namespace KnowledgeDataAccessApi.Controllers
         public async Task<ActionResult> CreateDb()
         {
 
-                _context.Catalogs.Add(new Catalog { Name = "Test" });
-                await _context.SaveChangesAsync();
+            _context.Catalogs.Add(new Catalog { Name = "Test" });
+            await _context.SaveChangesAsync();
 
             return await Task.FromResult(new OkResult());
         }
