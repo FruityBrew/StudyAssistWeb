@@ -99,6 +99,19 @@ namespace Utilities
             }
         }
 
+        protected async Task<ActionResult> DoAsync(
+            Func<Task<ActionResult>> apiAction)
+        {
+            try
+            {
+                return await apiAction();
+            }
+            catch (Exception e)
+            {
+                return ToError(e);
+            }
+        }
+
         /// <summary>
         /// Возвращает результат с ошибкой
         /// </summary>
