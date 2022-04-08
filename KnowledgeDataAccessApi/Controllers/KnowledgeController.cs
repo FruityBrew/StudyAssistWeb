@@ -39,5 +39,11 @@ namespace KnowledgeDataAccessApi.Controllers
 
             return await Task.FromResult(new OkResult());
         }
+
+        [HttpGet]
+        public async Task<ActionResult<string>> Test()
+        {
+            return new ActionResult<string>("sdjosj");
+        }
     }
 }
