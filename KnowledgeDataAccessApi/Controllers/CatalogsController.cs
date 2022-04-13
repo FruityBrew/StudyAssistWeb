@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudyAssistModel.DataModel;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
 using Utilities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -27,51 +26,101 @@ namespace KnowledgeDataAccessApi.Controllers
         #region Api
 
         /// <summary>
-        /// Получить все каталоги.
+        /// Запрашивает все каталоги.
         /// </summary>
-        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<Catalog>>> Get()
+        public async Task<ActionResult<List<Catalog>>> GetCatalogs()
         {
-            return await DoAsync(async () => 
-            {
-                List<Catalog> catalogs = await _dbContext.Catalogs.ToListAsync();
-                return await ToAsyncResult(catalogs);
-            });
+            return await _dbContext.Catalogs.ToListAsync();
         }
 
         /// <summary>
-        /// Получить все темы каталога
+        /// Запрашивает каталог.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Catalog>> GetCatalog(int id)
+        {
+            Catalog targetCatalog = await _dbContext.Catalogs
+                .FirstOrDefaultAsync(item => item.CatalogId == id);
+
+            return targetCatalog;
+        }
+
+        /// <summary>
+        /// Запрашивает все темы каталога
+        /// </summary>
+        /// <param name="id">Идентификатор каталога</param>
         [HttpGet("{id}/themes")]
-        public string Get(int id)
+        public async Task<ActionResult<IEnumerable<Theme>>> GetCatalogThemes(int id)
         {
-            return "value";
+            Catalog targetCatalog = await _dbContext.Catalogs
+                .FirstOrDefaultAsync(item => item.CatalogId == id);
+
+            if (targetCatalog == null)
+                return NotFound($"Catalog with id = {id} not found");
+
+            return targetCatalog.Themes;
         }
 
         /// <summary>
-        /// Добавить пустой каталог
+        /// Запрашивает добавление пустого каталога
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">Каталог</param>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Catalog>> AddCatalog(
+            [FromBody] Catalog addedItem)
         {
+            if (addedItem == null || string.IsNullOrWhiteSpace(addedItem.Name))
+                return BadRequest("AddedItem is null or Name is empty");
+
+            var addedEntity = await _dbContext.Catalogs.AddAsync(
+                new Catalog
+                {
+                    Name = addedItem.Name
+                });
+
+            await _dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(
+                nameof(GetCatalog),
+                new {id = addedEntity.Entity.CatalogId},
+                addedEntity.Entity);
         }
 
         /// <summary>
         /// Изменяет имя каталога
         /// </summary>
         /// <param name="name"></param>
-        [HttpPatch("{name}")]
-        public void Patch(string name)
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> UpdateCatalogName(
+            int id, [FromBody] JsonPatchDocument<Catalog> updatedItem)
         {
+            Catalog targetCatalog = await _dbContext.Catalogs
+                .FirstOrDefaultAsync(item => item.CatalogId == id);
+
+            if (targetCatalog == null)
+                return NotFound($"Catalog with id = {id} not found");
+
+            updatedItem.ApplyTo(targetCatalog);
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> DeleteCatalog(int id)
         {
+            Catalog deletedCatalog = await _dbContext.Catalogs
+                .FirstOrDefaultAsync(item => item.CatalogId == id);
+
+            if (deletedCatalog == null)
+                return NotFound($"Catalog with id = {id} not found");
+
+            _dbContext.Catalogs.Remove(deletedCatalog);
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
 
         #endregion Api
