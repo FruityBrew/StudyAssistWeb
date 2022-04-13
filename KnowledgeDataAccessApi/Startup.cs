@@ -18,11 +18,12 @@ namespace KnowledgeDataAccessApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //string connectionString = @"Server=KOVALEVAS\SQLEXPRESS;Database=KnowledgeDb;Trusted_Connection=true;";
-            string connectionString = @"workstation id=knowledgeDb.mssql.somee.com;packet size=4096;user id=FruityBrew_SQLLogin_1;pwd=4f65smahle;data source=knowledgeDb.mssql.somee.com;persist security info=False;initial catalog=knowledgeDb";
+            string connectionString = @"Server=KOVALEVAS\SQLEXPRESS;Database=KnowledgeDb;Trusted_Connection=true;";
+            //string connectionString = @"workstation id=knowledgeDb.mssql.somee.com;packet size=4096;user id=FruityBrew_SQLLogin_1;pwd=4f65smahle;data source=knowledgeDb.mssql.somee.com;persist security info=False;initial catalog=knowledgeDb";
             services.AddDbContext<KnowledgeContext>(
                 opt => opt.UseSqlServer(connectionString));
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson();
             services.AddHttpClient();
         }
 
