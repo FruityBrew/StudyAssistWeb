@@ -22,7 +22,7 @@ namespace Utilities
         /// <summary>
         /// Код необработанной ошибки, возникшей по вине сервера
         /// </summary>
-        private const int SERVER_ERROR_CODE = 566;
+        private const int SERVER_ERROR_CODE = 500;
 
         private const int CLIENT_ERROR_CODE = 466;
 
