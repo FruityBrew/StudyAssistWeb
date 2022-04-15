@@ -1,21 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using KnowledgeDataAccessApi.Model;
-using StudyAssistModel.DataModel;
-using Utilities;
+﻿using KnowledgeDataAccessApi.Model;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using StudyAssistModel.DataModel;
+using System.Threading.Tasks;
+using Utilities;
 
 namespace KnowledgeDataAccessApi.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class IssuesController : DbContextController<KnowledgeContext>
     {
-
         #region Constructors
 
         public IssuesController(KnowledgeContext knowledgeDbContext) 
@@ -25,19 +21,12 @@ namespace KnowledgeDataAccessApi.Controllers
 
         #endregion Constructors
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Issue>>> Get()
-        {
-            return await DoAsync(async () =>
-            {
-                var result = await _dbContext.Issues.ToListAsync();
-
-                return await ToAsyncResult<IEnumerable<Issue>>(result);
-            });
-        }
-
+        /// <summary>
+        /// Запрашивает вопрос
+        /// </summary>
+        /// <param name="id">Идентификатор вопроса</param>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Issue>> GetAsync(int id)
+        public async Task<ActionResult<Issue>> GetIssue(int id)
         {
             return await DoAsync(async () =>
             {
@@ -48,50 +37,63 @@ namespace KnowledgeDataAccessApi.Controllers
             });
         }
 
+        /// <summary>
+        /// Запрашивает добавление нового вопроса.
+        /// </summary>
+        /// <param name="addedItem">Добавляемый вопрос</param>
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Issue item)
+        public async Task<ActionResult> AddIssue([FromBody] Issue addedItem)
         {
-            return await DoAsync(async () =>
-            {
-                _dbContext.Issues.Add(item);
-                await _dbContext.SaveChangesAsync();
+            if (addedItem == null || string.IsNullOrWhiteSpace(addedItem.Question))
+                return BadRequest("AddedItem is null or Question is empty");
 
-                return await Task.FromResult(Ok());
-            });
+            var addedEntity = _dbContext.Issues.Add(addedItem);
+            await _dbContext.SaveChangesAsync();
+
+            return CreatedAtAction(
+                nameof(GetIssue),
+                new {id = addedEntity.Entity.IssueId},
+                addedEntity.Entity);
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Issue value)
+        /// <summary>
+        /// Запрашивает обновление данных задачи.
+        /// </summary>
+        /// <param name="id">Идентификатор обновляемой задачи</param>
+        /// <param name="updatedItem">Патч обвновления</param>
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> Put(
+            int id, [FromBody] JsonPatchDocument<Issue> updatedItem)
         {
-            return await DoAsync(async () =>
-            {
-                Issue updatedItem = await _dbContext.Issues.FirstOrDefaultAsync(
-                    item => item.IssueId == id);
+            Issue targetItem = await _dbContext.Issues
+                .FirstOrDefaultAsync(item => item.IssueId == id);
 
-                updatedItem.Answer = value.Answer;
-                updatedItem.Question = value.Question;
-                
-                await _dbContext.SaveChangesAsync();
+            if(targetItem == null)
+                return NotFound($"Issue with id = {id} not found");
 
-                return await Task.FromResult(Ok());
-            });
+            updatedItem.ApplyTo(targetItem);
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
 
+        /// <summary>
+        /// Запрашивает удаление задачи.
+        /// </summary>
+        /// <param name="id">Идентификатор задачи, подлежащей удалению</param>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> DeleteIssue(int id)
         {
-            return await DoAsync(async () =>
-            {
-                Issue deletedItem = await _dbContext.Issues.FirstOrDefaultAsync(
-                    item => item.IssueId == id);
+            Issue deletedItem = await _dbContext.Issues.FirstOrDefaultAsync(
+                item => item.IssueId == id);
 
-                if (deletedItem == null)
-                    return ToError("Запись не найдена в БД", false);
+            if (deletedItem == null)
+                return NotFound($"Issue with id = {id} not found");
 
-                _dbContext.Issues.Remove(deletedItem);
+            _dbContext.Issues.Remove(deletedItem);
 
-                return await Task.FromResult(Ok());
-            });
+            return NoContent();
         }
     }
 }
