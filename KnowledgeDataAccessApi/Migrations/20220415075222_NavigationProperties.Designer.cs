@@ -4,14 +4,16 @@ using KnowledgeDataAccessApi.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KnowledgeDataAccessApi.Migrations
 {
     [DbContext(typeof(KnowledgeContext))]
-    partial class KnowledgeContextModelSnapshot : ModelSnapshot
+    [Migration("20220415075222_NavigationProperties")]
+    partial class NavigationProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
