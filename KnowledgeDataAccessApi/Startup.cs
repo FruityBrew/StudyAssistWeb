@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KnowledgeDataAccessApi.Model;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace KnowledgeDataAccessApi
 {
@@ -23,7 +24,11 @@ namespace KnowledgeDataAccessApi
             services.AddDbContext<KnowledgeContext>(
                 opt => opt.UseSqlServer(connectionString));
             services.AddControllers()
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson(opt =>
+                {
+                    opt.SerializerSettings.ReferenceLoopHandling = 
+                        ReferenceLoopHandling.Ignore;
+                });
             services.AddHttpClient();
         }
 
