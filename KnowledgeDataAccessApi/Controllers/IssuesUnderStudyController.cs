@@ -41,6 +41,9 @@ namespace KnowledgeDataAccessApi.Controllers
         public async Task<ActionResult<IssueUnderStudy>> GetIssueUnderStudy(int id)
         {
             return await _dbContext.IssuesUnderStudy
+                .Include(issueUnder => issueUnder.Issue)
+                .ThenInclude(issue => issue.Theme)
+                .ThenInclude(theme => theme.Catalog)
                 .FirstOrDefaultAsync(dbItem => dbItem.IssueUnderStudyId == id);
         }
 
