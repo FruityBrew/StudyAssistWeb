@@ -120,7 +120,7 @@ namespace KnowledgeDataAccessApi.Controllers
             _dbContext.Catalogs.Remove(deletedCatalog);
             await _dbContext.SaveChangesAsync();
 
-            return Ok();
+            return NoContent();
         }
 
         #endregion Api

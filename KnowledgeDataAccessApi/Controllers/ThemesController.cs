@@ -118,7 +118,7 @@ namespace KnowledgeDataAccessApi.Controllers
 
             await _dbContext.SaveChangesAsync();
 
-            return Ok();
+            return NoContent();
         }
 
         #endregion Api

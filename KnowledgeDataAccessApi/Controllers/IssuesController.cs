@@ -21,6 +21,8 @@ namespace KnowledgeDataAccessApi.Controllers
 
         #endregion Constructors
 
+        #region Api
+        
         /// <summary>
         /// Запрашивает вопрос
         /// </summary>
@@ -95,5 +97,7 @@ namespace KnowledgeDataAccessApi.Controllers
 
             return NoContent();
         }
+
+        #endregion Api
     }
 }
