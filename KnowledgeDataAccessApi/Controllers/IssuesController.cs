@@ -30,13 +30,8 @@ namespace KnowledgeDataAccessApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Issue>> GetIssue(int id)
         {
-            return await DoAsync(async () =>
-            {
-                var result = await _dbContext.Issues.FirstOrDefaultAsync(
-                    item => item.IssueId == id);
-
-                return await ToAsyncResult(result);
-            });
+            return await _dbContext.Issues.FirstOrDefaultAsync(
+                item => item.IssueId == id);
         }
 
         /// <summary>

@@ -86,31 +86,7 @@ namespace Utilities
             return Task.FromResult(ToResult(returnValue));
         }
 
-        protected async Task<ActionResult<R>> DoAsync<R>(
-            Func<Task<ActionResult<R>>> apiAction)
-        {
-            try
-            {
-                return await apiAction();
-            }
-            catch (Exception e)
-            {
-                return ToError(e);
-            }
-        }
 
-        protected async Task<ActionResult> DoAsync(
-            Func<Task<ActionResult>> apiAction)
-        {
-            try
-            {
-                return await apiAction();
-            }
-            catch (Exception e)
-            {
-                return ToError(e);
-            }
-        }
 
         /// <summary>
         /// Возвращает результат с ошибкой
