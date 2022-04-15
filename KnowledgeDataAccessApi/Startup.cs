@@ -7,10 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
 using KnowledgeDataAccessApi.Model;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-
+using KnowledgeDataAccessApi.Utilities;
 namespace KnowledgeDataAccessApi
 {
     public class Startup
@@ -30,6 +31,11 @@ namespace KnowledgeDataAccessApi
                         ReferenceLoopHandling.Ignore;
                 });
             services.AddHttpClient();
+            services.AddMvc()
+                .AddFluentValidation(fvConfig =>
+                    fvConfig.RegisterValidatorsFromAssemblyContaining<CatalogValidator>())
+                .AddFluentValidation(fvConfig =>
+                    fvConfig.RegisterValidatorsFromAssemblyContaining<CatalogUpdatePatchValidator>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

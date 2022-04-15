@@ -74,9 +74,6 @@ namespace KnowledgeDataAccessApi.Controllers
         public async Task<ActionResult<Catalog>> AddCatalog(
             [FromBody] Catalog addedItem)
         {
-            if (addedItem == null || string.IsNullOrWhiteSpace(addedItem.Name))
-                return BadRequest("AddedItem is null or Name is empty");
-
             var addedEntity = await _dbContext.Catalogs.AddAsync(
                 new Catalog
                 {
