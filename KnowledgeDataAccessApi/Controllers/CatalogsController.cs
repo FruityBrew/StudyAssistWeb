@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudyAssistModel.DataModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 using Utilities;
@@ -41,6 +42,9 @@ namespace KnowledgeDataAccessApi.Controllers
         public async Task<ActionResult<Catalog>> GetCatalog(int id)
         {
             Catalog targetCatalog = await _dbContext.Catalogs
+                // может понадобиться:
+                //.Include(catalog => catalog.Themes)
+                //.ThenInclude(theme => theme.Issues)
                 .FirstOrDefaultAsync(item => item.CatalogId == id);
 
             return targetCatalog;
