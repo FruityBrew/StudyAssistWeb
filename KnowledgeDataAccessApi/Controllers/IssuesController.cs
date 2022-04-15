@@ -49,7 +49,7 @@ namespace KnowledgeDataAccessApi.Controllers
             if (addedItem == null || string.IsNullOrWhiteSpace(addedItem.Question))
                 return BadRequest("AddedItem is null or Question is empty");
 
-            var addedEntity = _dbContext.Issues.Add(addedItem);
+            var addedEntity = await _dbContext.Issues.AddAsync(addedItem);
             await _dbContext.SaveChangesAsync();
 
             return CreatedAtAction(
