@@ -1,7 +1,8 @@
 ﻿using FluentValidation;
+using KnowledgeDataAccessApi.Constants;
 using StudyAssistModel.DataModel;
 
-namespace KnowledgeDataAccessApi.Utilities
+namespace KnowledgeDataAccessApi.Validators
 {
     /// <summary>
     /// Валидатор для добавления нового каталога
@@ -13,10 +14,8 @@ namespace KnowledgeDataAccessApi.Utilities
             RuleFor(cat => cat.Name).NotNull().NotEmpty();
             RuleFor(cat => cat.CatalogId)
                 .Equal(0)
-                .WithMessage("Id must be set by database");
+                .WithMessage(MessageTemplates.DB_ENTITYID_RULE);
             RuleFor(cat => cat.Themes).Null().Empty();
         }
     }
-
-
 }

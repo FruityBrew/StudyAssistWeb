@@ -11,7 +11,7 @@ using FluentValidation.AspNetCore;
 using KnowledgeDataAccessApi.Model;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using KnowledgeDataAccessApi.Utilities;
+using KnowledgeDataAccessApi.Validators;
 namespace KnowledgeDataAccessApi
 {
     public class Startup
@@ -35,7 +35,11 @@ namespace KnowledgeDataAccessApi
                 .AddFluentValidation(fvConfig =>
                     fvConfig.RegisterValidatorsFromAssemblyContaining<CatalogValidator>())
                 .AddFluentValidation(fvConfig =>
-                    fvConfig.RegisterValidatorsFromAssemblyContaining<CatalogUpdatePatchValidator>());
+                    fvConfig.RegisterValidatorsFromAssemblyContaining<CatalogUpdatePatchValidator>())
+                .AddFluentValidation(fvConfig =>
+                    fvConfig.RegisterValidatorsFromAssemblyContaining<ThemeValidator>())
+                .AddFluentValidation(fvConfig =>
+                    fvConfig.RegisterValidatorsFromAssemblyContaining<ThemeUpdatePatchValidator>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

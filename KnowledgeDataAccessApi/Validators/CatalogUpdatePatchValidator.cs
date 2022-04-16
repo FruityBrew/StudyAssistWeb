@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.JsonPatch;
 using StudyAssistModel.DataModel;
 
-namespace KnowledgeDataAccessApi.Utilities
+namespace KnowledgeDataAccessApi.Validators
 {
     /// <summary>
     /// Валидатор патча обновления каталога
@@ -10,9 +10,8 @@ namespace KnowledgeDataAccessApi.Utilities
     public class CatalogUpdatePatchValidator 
         : AbstractValidator<JsonPatchDocument<Catalog>>
     {
-        public CatalogUpdatePatchValidator()
-        {
-            RuleFor(cat => cat.Operations)
+        public CatalogUpdatePatchValidator() =>
+            RuleFor(patch => patch.Operations)
                 .NotNull()
                 .NotEmpty()
                 .Must(s => s.Count == 1)
@@ -20,6 +19,5 @@ namespace KnowledgeDataAccessApi.Utilities
                 .Must(s => s[0].path == "name")
                 .Must(s => !string.IsNullOrWhiteSpace(s[0].value.ToString()))
                 .WithMessage("JSonPatch is incorrect");
-        }
     }
 }
