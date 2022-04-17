@@ -2,11 +2,13 @@
 {
     public static class MessageTemplates
     {
-        public static string DB_ENTITYID_RULE = "Id must be set by database";
+        public const string DB_ENTITYID_RULE = "Id must be set by database";
 
-        public static string QUESTION_TEXT_CONSTRAINT_ERR = 
+        public const string QUESTION_TEXT_CONSTRAINT_ERR = 
             "Question should not be empty and length less than 200 characters"; //todo
 
-        public static string JSON_UPD_PATCH_ERR = "JSonUpdatePatch is incorrect";
+        public const string JSON_UPD_PATCH_ERR = "JSonUpdatePatch is incorrect";
+
+        public const string STUDY_LEVEL_CONSTRAINT_ERR = "Study level must be non negative";
     }
 }
