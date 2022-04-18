@@ -13,7 +13,7 @@ namespace KnowledgeDataAccessApi.Validators
         {
             RuleFor(cat => cat.Name).NotNull().NotEmpty();
             RuleFor(cat => cat.CatalogId)
-                .Equal(0)
+                .Must(c => c.HasValue == false)
                 .WithMessage(MessageTemplates.DB_ENTITYID_RULE);
             RuleFor(cat => cat.Themes).Null().Empty();
         }
