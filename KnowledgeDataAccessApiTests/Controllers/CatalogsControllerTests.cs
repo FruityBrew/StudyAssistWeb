@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using KnowledgeDataAccessApi.Controllers;
 using KnowledgeDataAccessApi.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using StudyAssistModel.DataModel;
+using OkResult = Microsoft.AspNetCore.Mvc.OkResult;
 
 namespace KnowledgeDataAccessApiTests.Controllers
 {
@@ -22,7 +24,7 @@ namespace KnowledgeDataAccessApiTests.Controllers
             {
                 new Catalog
                 {
-                    CatalogId = 1,
+                    //CatalogId = 1,
                     Name = "СуперКаталог",
                     Themes = new ()
                     {
@@ -55,6 +57,7 @@ namespace KnowledgeDataAccessApiTests.Controllers
             await _dbContext.SaveChangesAsync();
         }
 
+        [SetUp]
         public async Task Setup()
         {
             var dbOptions = new DbContextOptionsBuilder<KnowledgeContext>()
@@ -68,11 +71,39 @@ namespace KnowledgeDataAccessApiTests.Controllers
             await _GenerateDbData();
         }
 
+        /// <summary>
+        /// Arrange: Создаем контроллер с тестовой БД, содержащей данные
+        /// Act: Запрашиваем список каталогов со всеми внутренностями.
+        /// Arrange: Полученный результат должен совпадать с тем, что есть бд
+        /// </summary>
         [Test]
-        public async Task GetCatalogs_ValidData_CorrectResult()
+        public async Task GetCatalogs_ValidData_ShouldReturnsAllCatalogsWithInternalCollections()
         {
             CatalogsController codeUnderTest = new (_dbContext);
             var result = await codeUnderTest.GetCatalogs();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Result, Is.Null);
+                Assert.That(result.Value, Is.Not.Null.And.No.Empty);
+                Assert.That(result.Value.Count, Is.EqualTo(2));
+                Assert.That(result.Value[0].Name, Is.EqualTo("СуперКаталог"));
+                Assert.That(
+                    result.Value[0].Themes, 
+                    Is.Not.Null.And.Not.Empty.And.Count.EqualTo(1));
+                Assert.That(
+                    result.Value[0].Themes[0].Name, Is.EqualTo("ТемаТем"));
+                Assert.That(
+                    result.Value[0].Themes[0].Issues, 
+                    Is.Not.Null.And.Not.Empty.And.Count.EqualTo(2));
+                Assert.That(
+                    result.Value[0].Themes[0].Issues[0].Question,
+                    Is.EqualTo("Вопрос"));
+                Assert.That(
+                    result.Value[0].Themes[0].Issues[0].Answer,
+                    Is.EqualTo("Ответ"));
+            });
 
         }
     }
