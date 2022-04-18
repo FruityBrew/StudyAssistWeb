@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Utilities\**" />
+    <Content Remove="Utilities\**" />
+    <EmbeddedResource Remove="Utilities\**" />
+    <None Remove="Utilities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml.user" />
   </ItemGroup>
 
@@ -21,10 +28,6 @@
   <ItemGroup>
     <ProjectReference Include="..\StudyAssistModel\StudyAssistModel.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Utilities\" />
   </ItemGroup>
 
 </Project>
