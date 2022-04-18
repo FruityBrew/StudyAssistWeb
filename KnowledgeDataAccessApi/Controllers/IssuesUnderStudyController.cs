@@ -77,7 +77,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 .FirstOrDefaultAsync(dbItem => dbItem.IssueUnderStudyId == id);
 
             if (targetItem == null)
-                return NotFound($"IssueUnderStudy with id = {id} not found");
+                return NotFound();
 
             updatedPatch.ApplyTo(targetItem);
             await _dbContext.SaveChangesAsync();
@@ -96,7 +96,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 .FirstOrDefaultAsync(dbItem => dbItem.IssueUnderStudyId == id);
 
             if (targetItem == null)
-                return NotFound($"IssueUnderStudy with id = {id} not found");
+                return NotFound();
 
             _dbContext.IssuesUnderStudy.Remove(targetItem);
             await _dbContext.SaveChangesAsync();

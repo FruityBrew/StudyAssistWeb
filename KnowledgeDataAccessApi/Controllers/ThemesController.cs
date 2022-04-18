@@ -37,7 +37,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 .FirstOrDefaultAsync(item => item.ThemeId == id);
 
             if (targetTheme == null)
-                return NotFound($"Theme with id = {id} not found");
+                return NotFound();
 
             return targetTheme.Issues;
         }
@@ -61,9 +61,6 @@ namespace KnowledgeDataAccessApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Theme>> AddTheme([FromBody] Theme addedItem)
         {
-            if (addedItem == null || string.IsNullOrWhiteSpace(addedItem.Name))
-                return BadRequest("AddedItem is null or Name is empty");
-
             var addedEntity = await _dbContext.Themes.AddAsync(
                 new Theme()
                 {
@@ -92,7 +89,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 .FirstOrDefaultAsync(item => item.ThemeId == id);
 
             if (targetTheme == null)
-                return NotFound($"Theme with id = {id} not found");
+                return NotFound();
 
             updatedItem.ApplyTo(targetTheme);
 
@@ -112,7 +109,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 .FirstOrDefaultAsync(item => item.ThemeId == id);
 
             if (targetTheme == null)
-                return NotFound($"Theme with id = {id} not found");
+                return NotFound();
 
             _dbContext.Themes.Remove(targetTheme);
 

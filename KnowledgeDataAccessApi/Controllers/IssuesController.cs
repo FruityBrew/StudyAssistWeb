@@ -41,9 +41,6 @@ namespace KnowledgeDataAccessApi.Controllers
         [HttpPost]
         public async Task<ActionResult> AddIssue([FromBody] Issue addedItem)
         {
-            if (addedItem == null || string.IsNullOrWhiteSpace(addedItem.Question))
-                return BadRequest("AddedItem is null or Question is empty");
-
             var addedEntity = await _dbContext.Issues.AddAsync(addedItem);
             await _dbContext.SaveChangesAsync();
 
@@ -66,7 +63,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 .FirstOrDefaultAsync(item => item.IssueId == id);
 
             if(targetItem == null)
-                return NotFound($"Issue with id = {id} not found");
+                return NotFound();
 
             updatedItem.ApplyTo(targetItem);
 
@@ -86,7 +83,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 item => item.IssueId == id);
 
             if (deletedItem == null)
-                return NotFound($"Issue with id = {id} not found");
+                return NotFound();
 
             _dbContext.Issues.Remove(deletedItem);
 

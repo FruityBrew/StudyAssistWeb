@@ -5,6 +5,7 @@ using StudyAssistModel.DataModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using KnowledgeDataAccessApi.Constants;
 using Microsoft.AspNetCore.JsonPatch;
 using Utilities;
 
@@ -61,7 +62,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 .FirstOrDefaultAsync(item => item.CatalogId == id);
 
             if (targetCatalog == null)
-                return NotFound($"Catalog with id = {id} not found");
+                return NotFound();
 
             return targetCatalog.Themes;
         }
@@ -100,7 +101,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 .FirstOrDefaultAsync(item => item.CatalogId == id);
 
             if (targetCatalog == null)
-                return NotFound($"Catalog with id = {id} not found");
+                return NotFound();
 
             updatedItem.ApplyTo(targetCatalog);
 
@@ -116,7 +117,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 .FirstOrDefaultAsync(item => item.CatalogId == id);
 
             if (deletedCatalog == null)
-                return NotFound($"Catalog with id = {id} not found");
+                return NotFound();
 
             _dbContext.Catalogs.Remove(deletedCatalog);
             await _dbContext.SaveChangesAsync();
