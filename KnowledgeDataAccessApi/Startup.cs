@@ -43,7 +43,11 @@ namespace KnowledgeDataAccessApi
                 .AddFluentValidation(fvConfig =>
                     fvConfig.RegisterValidatorsFromAssemblyContaining<IssueValidator>())
                 .AddFluentValidation(fvConfig =>
-                    fvConfig.RegisterValidatorsFromAssemblyContaining<IssueUpdatePatchValidator>());
+                    fvConfig.RegisterValidatorsFromAssemblyContaining<IssueUpdatePatchValidator>())
+                .AddFluentValidation(fvConfig =>
+                    fvConfig.RegisterValidatorsFromAssemblyContaining<IssueUnderStudyValidator>())
+                .AddFluentValidation(fvConfig =>
+                    fvConfig.RegisterValidatorsFromAssemblyContaining<IssueUnderStudyUpdatePatchValidtor>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
