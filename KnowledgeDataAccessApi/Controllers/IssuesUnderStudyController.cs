@@ -55,8 +55,6 @@ namespace KnowledgeDataAccessApi.Controllers
         public async Task<ActionResult<IssueUnderStudy>> AddIssueUnderStudy(
             [FromBody] IssueUnderStudy addedItem)
         {
-            // добавить валидашку
-
             var addedEntity = await _dbContext.IssuesUnderStudy.AddAsync(addedItem);
             await _dbContext.SaveChangesAsync();
 
@@ -75,8 +73,6 @@ namespace KnowledgeDataAccessApi.Controllers
         public async Task<ActionResult> UpdateIssueUnderStudy(
             int id, [FromBody] JsonPatchDocument<IssueUnderStudy> updatedPatch)
         {
-            // добавить валидашку
-
             IssueUnderStudy targetItem = await _dbContext.IssuesUnderStudy
                 .FirstOrDefaultAsync(dbItem => dbItem.IssueUnderStudyId == id);
 
