@@ -7,7 +7,7 @@ namespace StudyAssistModel.DataModel
     /// </summary>
     public class Issue
     {
-        public int IssueId { get; set; }
+        public int? IssueId { get; set; }
 
         public int ThemeId { get; set; }
 

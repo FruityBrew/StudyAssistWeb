@@ -8,7 +8,7 @@ namespace StudyAssistModel.DataModel
     /// </summary>
     public class Catalog
     {
-        public int CatalogId { get; set; }
+        public int? CatalogId { get; set; }
 
         [MaxLength(50)]
         public string Name { get; set; }

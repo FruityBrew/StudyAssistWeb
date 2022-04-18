@@ -4,14 +4,16 @@ using KnowledgeDataAccessApi.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KnowledgeDataAccessApi.Migrations
 {
     [DbContext(typeof(KnowledgeContext))]
-    partial class KnowledgeContextModelSnapshot : ModelSnapshot
+    [Migration("20220418102329_TryNullableId")]
+    partial class TryNullableId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +39,7 @@ namespace KnowledgeDataAccessApi.Migrations
 
             modelBuilder.Entity("StudyAssistModel.DataModel.Issue", b =>
                 {
-                    b.Property<int?>("IssueId")
+                    b.Property<int>("IssueId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -61,7 +63,7 @@ namespace KnowledgeDataAccessApi.Migrations
 
             modelBuilder.Entity("StudyAssistModel.DataModel.IssueUnderStudy", b =>
                 {
-                    b.Property<int?>("IssueUnderStudyId")
+                    b.Property<int>("IssueUnderStudyId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -87,7 +89,7 @@ namespace KnowledgeDataAccessApi.Migrations
 
             modelBuilder.Entity("StudyAssistModel.DataModel.Theme", b =>
                 {
-                    b.Property<int?>("ThemeId")
+                    b.Property<int>("ThemeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -108,7 +110,7 @@ namespace KnowledgeDataAccessApi.Migrations
 
             modelBuilder.Entity("StudyAssistModel.DataModel.User", b =>
                 {
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
