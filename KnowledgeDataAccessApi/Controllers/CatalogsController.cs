@@ -48,6 +48,9 @@ namespace KnowledgeDataAccessApi.Controllers
                 //.ThenInclude(theme => theme.Issues)
                 .FirstOrDefaultAsync(item => item.CatalogId == id);
 
+            if(targetCatalog == null) 
+                return NotFound();
+
             return targetCatalog;
         }
 
@@ -56,7 +59,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// </summary>
         /// <param name="id">Идентификатор каталога</param>
         [HttpGet("{id}/themes")]
-        public async Task<ActionResult<IEnumerable<Theme>>> GetCatalogThemes(int id)
+        public async Task<ActionResult<List<Theme>>> GetCatalogThemes(int id)
         {
             Catalog targetCatalog = await _dbContext.Catalogs
                 .FirstOrDefaultAsync(item => item.CatalogId == id);
@@ -75,11 +78,7 @@ namespace KnowledgeDataAccessApi.Controllers
         public async Task<ActionResult<Catalog>> AddCatalog(
             [FromBody] Catalog addedItem)
         {
-            var addedEntity = await _dbContext.Catalogs.AddAsync(
-                new Catalog
-                {
-                    Name = addedItem.Name
-                });
+            var addedEntity = await _dbContext.Catalogs.AddAsync(addedItem);
 
             await _dbContext.SaveChangesAsync();
 
