@@ -5,7 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using StudyAssistModel.DataModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Newtonsoft.Json.Serialization;
 
 namespace KnowledgeDataAccessApiTests.Controllers
 {
@@ -225,8 +230,7 @@ namespace KnowledgeDataAccessApiTests.Controllers
         /// <summary>
         /// Arrange: Создаем контроллер с пустой БД. Создаем добавлемую сущность
         /// Act: вызываем добавление новой сущности
-        /// Arrange: в бд дожна появиться запись и должен вернуться
-        /// CreatedAtActionResult с добавленным каталогом и ссылкой на ресурс
+        /// Arrange: должен вернуться CreatedAtActionResult с добавленным каталогом и ссылкой на ресурс
         /// с добавленным каталогом
         /// </summary>
         [Test]
@@ -245,35 +249,137 @@ namespace KnowledgeDataAccessApiTests.Controllers
                 Assert.That(result, Is.Not.Null);
                 Assert.That(result.Value, Is.Null);
                 Assert.That(result.Result, Is.InstanceOf(typeof(CreatedAtActionResult)));
-            });
-
-            var createdAtActionResult = result.Result as CreatedAtActionResult;
-
-            Assert.Multiple(() =>
-            {
+                var createdAtActionResult = result.Result as CreatedAtActionResult;
                 Assert.That(createdAtActionResult, Is.Not.Null);
                 Assert.That(
                     createdAtActionResult.Value, 
                     Is.Not.Null.And.InstanceOf(typeof(Catalog)));
 
                 Catalog addedItem = createdAtActionResult.Value as Catalog;
-
                 Assert.That(addedItem.Name, Is.EqualTo("ДжаваСкрипт"));
                 Assert.That(addedItem.CatalogId, Is.EqualTo(1));
-
                 Assert.That(
-                    createdAtActionResult.ActionName, 
+                    createdAtActionResult.ActionName,
                     Is.EqualTo("GetCatalog"));
                 Assert.That(
                     createdAtActionResult.RouteValues.TryGetValue(
-                        "id", out object result), 
+                        "id", out object routValueResult),
                     Is.True);
-
-                createdAtActionResult.RouteValues.TryGetValue(
-                    "id", out object routValueResult);
                 Assert.That(routValueResult.ToString(), Is.EqualTo("1"));
             });
+        }
 
+        /// <summary>
+        /// Arrange: Создаем контроллер с пустой БД. Создаем добавлемую сущность
+        /// Act: вызываем добавление новой сущности
+        /// Arrange: в бд дожна появиться запись с добавленным каталогом
+        /// </summary>
+        [Test]
+        public async Task AddCatalog_RegularWorkFlow_ShouldBeAddedItemInDb()
+        {
+            CatalogsController codeUnderTest = new(_dbContext);
+            Catalog addedItem = new()
+            {
+                Name = "ДжаваСкрипт"
+            };
+
+            var result = await codeUnderTest.AddCatalog(addedItem);
+            var addedItemRes = await codeUnderTest.GetCatalog(1);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(addedItemRes, Is.Not.Null);
+                Assert.That(addedItemRes.Result, Is.Null);
+                Assert.That(addedItemRes.Value.Name, Is.EqualTo("ДжаваСкрипт"));
+            });
+        }
+
+        /// <summary>
+        /// Arrange: Создаем базу с данными, контроллер, патч обновления имени каталога
+        /// Act: Вызываем обновление имени существующего каталога.
+        /// Assert: Должен вернуться OK
+        /// </summary>
+        /// <returns></returns>
+        [Test]
+        public async Task UpdateCatalog_RegularWorkFlow_ShuldReturnsOk()
+        {
+            await GenerateDbData();
+            CatalogsController codeUnderTest = new (_dbContext);
+
+            JsonPatchDocument<Catalog> patch = new JsonPatchDocument<Catalog>(
+                new List<Operation<Catalog>>
+                {
+                    new ("replace", "name", string.Empty, "newName"),
+                }, 
+                new DefaultContractResolver());
+
+            var result = await codeUnderTest.UpdateCatalogName(1, patch);
+
+            Assert.That(result, Is.InstanceOf<OkResult>());
+        }
+
+        /// <summary>
+        /// Arrange: Создаем базу с данными, контроллер, патч обновления имени каталога
+        /// Act: Вызываем обновление имени существующего каталога.
+        /// Assert: Должен вернуться OK
+        /// </summary>
+        [Test]
+        public async Task UpdateCatalog_NotExistsCatalogId_ShouldReturnsNotFound()
+        {
+            await GenerateDbData();
+            CatalogsController codeUnderTest = new(_dbContext);
+
+            JsonPatchDocument<Catalog> patch = new JsonPatchDocument<Catalog>(
+                new List<Operation<Catalog>>
+                {
+                    new ("replace", "name", string.Empty, "newName"),
+                },
+                new DefaultContractResolver());
+
+            var result = await codeUnderTest.UpdateCatalogName(100, patch);
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
+        }
+
+        /// <summary>
+        /// Arange: Создаем базу с данными, контроллер
+        /// Act: Запрашиваем удаление каталога
+        /// Assert: Ожидаем НоуКонтентРезалт и отсутсвие в бд сущностей, связанных
+        /// с удаляемым каталогом.
+        /// </summary>
+        [Test]
+        public async Task DeleteCatalog_RegularWorkFlow_ShouldReturnsNoContent()
+        {
+            await GenerateDbData();
+            CatalogsController codeUnderTest = new(_dbContext);
+            var result = await codeUnderTest.DeleteCatalog(1);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.InstanceOf<NoContentResult>());
+                Assert.That(
+                    _dbContext.Catalogs.Where(cat => cat.CatalogId == 1), 
+                    Is.Empty);
+                Assert.That(
+                    _dbContext.Themes.Where(th => th.CatalogId == 1),
+                    Is.Empty);
+            });
+        }
+
+        /// <summary>
+        /// Arange: Создаем базу с данными, контроллер
+        /// Act: Запрашиваем удаление каталога
+        /// Assert: Ожидаем НоуКонтентРезалт и отсутсвие в бд сущностей, связанных
+        /// с удаляемым каталогом.
+        /// </summary>
+        [Test]
+        public async Task DeleteCatalog_NotExistsCatalogId_ShouldReturnsNotFound()
+        {
+            await GenerateDbData();
+            CatalogsController codeUnderTest = new(_dbContext);
+            var result = await codeUnderTest.DeleteCatalog(100);
+
+            Assert.That(result, Is.InstanceOf<NotFoundResult>());
         }
     }
 }

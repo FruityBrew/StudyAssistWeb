@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Utilities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+#nullable enable
 
 namespace KnowledgeDataAccessApi.Controllers
 {
@@ -91,7 +92,6 @@ namespace KnowledgeDataAccessApi.Controllers
         /// <summary>
         /// Изменяет имя каталога
         /// </summary>
-        /// <param name="name"></param>
         [HttpPatch("{id}")]
         public async Task<ActionResult> UpdateCatalogName(
             int id, [FromBody] JsonPatchDocument<Catalog> updatedItem)
@@ -109,6 +109,9 @@ namespace KnowledgeDataAccessApi.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Запрашивает удаление каталога
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCatalog(int id)
         {
