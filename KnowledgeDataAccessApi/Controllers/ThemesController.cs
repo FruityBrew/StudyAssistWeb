@@ -31,7 +31,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// </summary>
         /// <param name="id">Идентификатор темы</param>
         [HttpGet("{id}/issues")]
-        public async Task<ActionResult<IEnumerable<Issue>>> GetThemeIssues(int id)
+        public async Task<ActionResult<List<Issue>>> GetThemeIssues(int id)
         {
             Theme targetTheme = await _dbContext.Themes
                 .FirstOrDefaultAsync(item => item.ThemeId == id);
@@ -39,7 +39,7 @@ namespace KnowledgeDataAccessApi.Controllers
             if (targetTheme == null)
                 return NotFound();
 
-            return targetTheme.Issues;
+            return targetTheme.Issues ?? Enumerable.Empty<Issue>().ToList();
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace KnowledgeDataAccessApi.Controllers
             var addedEntity = await _dbContext.Themes.AddAsync(
                 new Theme()
                 {
-                    ThemeId = addedItem.ThemeId,
+                    CatalogId = addedItem.CatalogId,
                     Name = addedItem.Name
                 });
 

@@ -68,7 +68,7 @@ namespace KnowledgeDataAccessApi.Controllers
             if (targetCatalog == null)
                 return NotFound();
 
-            return targetCatalog.Themes;
+            return targetCatalog.Themes ?? Enumerable.Empty<Theme>().ToList();
         }
 
         /// <summary>
