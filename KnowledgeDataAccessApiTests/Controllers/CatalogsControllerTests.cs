@@ -1,82 +1,20 @@
 ﻿using KnowledgeDataAccessApi.Controllers;
-using KnowledgeDataAccessApi.Model;
+using KnowledgeDataAccessApiTests.Utilities;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using StudyAssistModel.DataModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Newtonsoft.Json.Serialization;
 
 namespace KnowledgeDataAccessApiTests.Controllers
 {
     [TestFixture]
-    public class CatalogsControllerTests
+    public class CatalogsControllerTests : TestsBase
     {
-        private KnowledgeContext _dbContext;
-
-        public async Task GenerateDbData()
-        {
-            List<Catalog> catalogs = new() 
-            {
-                new Catalog
-                {
-                    //CatalogId = 1,
-                    Name = "СуперКаталог",
-                    Themes = new ()
-                    {
-                        new Theme()
-                        {
-                            Name = "ТемаТем",
-                            Issues = new()
-                            {
-                                new Issue()
-                                {
-                                    Answer = "Ответ",
-                                    Question = "Вопрос"
-                                },
-                                new Issue()
-                                {
-                                    Answer = "ОтветЩ",
-                                    Question = "ВопросНН"
-                                }
-                            }
-                        }
-                    }
-                },
-                new Catalog
-                {
-                    Name = "Идемп"
-                }
-            };
-
-            await _dbContext.Catalogs.AddRangeAsync(catalogs);
-            await _dbContext.SaveChangesAsync();
-        }
-
-        [SetUp]
-        public async Task Setup()
-        {
-            var dbOptions = new DbContextOptionsBuilder<KnowledgeContext>()
-                .UseInMemoryDatabase(databaseName: "Knowledge DataBase")
-                .Options;
-
-            _dbContext = new KnowledgeContext(dbOptions);
-            await _dbContext.Database.EnsureDeletedAsync();
-            await _dbContext.Database.EnsureCreatedAsync();
-
-        }
-
-        /// <summary>
-        /// Arrange:
-        /// Act: 
-        /// Arrange: 
-        /// </summary>
-
         /// <summary>
         /// Arrange: Создаем контроллер с тестовой БД, содержащей данные
         /// Act: Запрашиваем список каталогов.
