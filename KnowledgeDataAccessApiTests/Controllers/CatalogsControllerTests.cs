@@ -145,6 +145,28 @@ namespace KnowledgeDataAccessApiTests.Controllers
         }
 
         /// <summary>
+        /// Arrange: В бд есть каталог без тем
+        /// Act: Запрашиваем список тем по идентификатору каталога, у которого нет тем.
+        /// Arrange: Ок резалт с пустой коллекцией
+        /// </summary>
+        [Test]
+        public async Task GetCatalogs_NoThemeInCatalog_ShouldReturnsEmptyResult()
+        {
+            await GenerateDbData();
+
+            CatalogsController codeUnderTest = new(_dbContext);
+
+            var result = await codeUnderTest.GetCatalogThemes(2);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Result, Is.Null);
+                Assert.That(result.Value, Is.Not.Null.And.Empty);
+            });
+        }
+
+        /// <summary>
         /// Arrange: Создаем контроллер с тестовой БД, содержащей данные
         /// Act: Запрашиваем список тем несуществующего в бд каталога 
         /// Arrange: Not found result
@@ -258,11 +280,11 @@ namespace KnowledgeDataAccessApiTests.Controllers
 
         /// <summary>
         /// Arrange: Создаем базу с данными, контроллер, патч обновления имени каталога
-        /// Act: Вызываем обновление имени существующего каталога.
-        /// Assert: Должен вернуться OK
+        /// Act: Вызываем обновление имени НЕ существующего каталога.
+        /// Assert: Должен вернуться NotFoundResult
         /// </summary>
         [Test]
-        public async Task UpdateCatalog_NotExistsCatalogId_ShouldReturnsNotFound()
+        public async Task UpdateCatalogName_NotExistsCatalogId_ShouldReturnsNotFound()
         {
             await GenerateDbData();
             CatalogsController codeUnderTest = new(_dbContext);
@@ -306,9 +328,8 @@ namespace KnowledgeDataAccessApiTests.Controllers
 
         /// <summary>
         /// Arange: Создаем базу с данными, контроллер
-        /// Act: Запрашиваем удаление каталога
-        /// Assert: Ожидаем НоуКонтентРезалт и отсутсвие в бд сущностей, связанных
-        /// с удаляемым каталогом.
+        /// Act: Запрашиваем удаление каталога с несуществующей id
+        /// Assert: Ожидаем NotFoundResult
         /// </summary>
         [Test]
         public async Task DeleteCatalog_NotExistsCatalogId_ShouldReturnsNotFound()
