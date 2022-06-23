@@ -30,8 +30,13 @@ namespace KnowledgeDataAccessApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Issue>> GetIssue(int id)
         {
-            return await _dbContext.Issues.FirstOrDefaultAsync(
+            Issue targetIssue = await _dbContext.Issues.FirstOrDefaultAsync(
                 item => item.IssueId == id);
+
+            if (targetIssue == null)
+                return NotFound();
+
+            return targetIssue;
         }
 
         /// <summary>
@@ -39,7 +44,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// </summary>
         /// <param name="addedItem">Добавляемый вопрос</param>
         [HttpPost]
-        public async Task<ActionResult> AddIssue([FromBody] Issue addedItem)
+        public async Task<ActionResult<Issue>> AddIssue([FromBody] Issue addedItem)
         {
             var addedEntity = await _dbContext.Issues.AddAsync(addedItem);
             await _dbContext.SaveChangesAsync();
@@ -56,7 +61,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// <param name="id">Идентификатор обновляемой задачи</param>
         /// <param name="updatedItem">Патч обвновления</param>
         [HttpPatch("{id}")]
-        public async Task<ActionResult> Put(
+        public async Task<ActionResult> UpdateIssue(
             int id, [FromBody] JsonPatchDocument<Issue> updatedItem)
         {
             Issue targetItem = await _dbContext.Issues
@@ -86,6 +91,7 @@ namespace KnowledgeDataAccessApi.Controllers
                 return NotFound();
 
             _dbContext.Issues.Remove(deletedItem);
+            await _dbContext.SaveChangesAsync();
 
             return NoContent();
         }
