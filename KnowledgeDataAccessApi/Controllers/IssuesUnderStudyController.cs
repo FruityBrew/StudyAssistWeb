@@ -27,7 +27,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Запрашивает список вопросов на изучении
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<IssueUnderStudy>>> GetIssuesUnderStudy()
+        public async Task<ActionResult<List<IssueUnderStudy>>> GetIssuesUnderStudy()
         {
             return await _dbContext.IssuesUnderStudy.ToListAsync();
         }
@@ -40,11 +40,16 @@ namespace KnowledgeDataAccessApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IssueUnderStudy>> GetIssueUnderStudy(int id)
         {
-            return await _dbContext.IssuesUnderStudy
+            IssueUnderStudy targetItem = await _dbContext.IssuesUnderStudy
                 .Include(issueUnder => issueUnder.Issue)
                 .ThenInclude(issue => issue.Theme)
                 .ThenInclude(theme => theme.Catalog)
                 .FirstOrDefaultAsync(dbItem => dbItem.IssueUnderStudyId == id);
+
+            if (targetItem == null)
+                return NotFound();
+
+            return targetItem;
         }
 
         /// <summary>
