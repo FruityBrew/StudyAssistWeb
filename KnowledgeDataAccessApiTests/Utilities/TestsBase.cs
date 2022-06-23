@@ -32,12 +32,12 @@ namespace KnowledgeDataAccessApiTests.Utilities
                                 new Issue()
                                 {
                                     Answer = "Ответ",
-                                    Question = "Вопрос"
+                                    Question = "Вопрос",
                                 },
                                 new Issue()
                                 {
                                     Answer = "ОтветЩ",
-                                    Question = "ВопросНН"
+                                    Question = "ВопросНН",
                                 }
                             }
                         }
@@ -49,7 +49,24 @@ namespace KnowledgeDataAccessApiTests.Utilities
                 }
             };
 
+            List<IssueUnderStudy> ius = new()
+            {
+                new()
+                {
+                    IssueId = 1,
+                    RepeateDate = DateTime.MinValue,
+                    StudyLevel = 2,
+                },
+                new()
+                {
+                    IssueId = 2,
+                    RepeateDate = DateTime.MaxValue,
+                    StudyLevel = 1,
+                },
+            };
+
             await _dbContext.Catalogs.AddRangeAsync(catalogs);
+            await _dbContext.IssuesUnderStudy.AddRangeAsync(ius);
             await _dbContext.SaveChangesAsync();
         }
 

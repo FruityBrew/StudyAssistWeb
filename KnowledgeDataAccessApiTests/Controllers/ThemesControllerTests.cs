@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using StudyAssistModel.DataModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace KnowledgeDataAccessApiTests.Controllers
@@ -49,7 +47,7 @@ namespace KnowledgeDataAccessApiTests.Controllers
         /// Arrange: Ок резалт с пустой коллекцией
         /// </summary>
         [Test]
-        public async Task GetCatalogs_NoIssuesInTheme_ShouldReturnsEmptyResult()
+        public async Task GetThemeIssues_NoIssuesInTheme_ShouldReturnsEmptyResult()
         {
             await GenerateDbData();
             _dbContext.Themes.Add(new Theme

@@ -6,10 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
 using StudyAssistModel.DataModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace KnowledgeDataAccessApiTests.Controllers
@@ -64,11 +62,11 @@ namespace KnowledgeDataAccessApiTests.Controllers
         /// <summary>
         /// Arrange: Создаем контроллер со сгенерированной БД. Создаем добавлемую сущность
         /// Act: вызываем добавление новой сущности
-        /// Arrange: должен вернуться CreatedAtActionResult с добавленной темой и ссылкой на ресурс
-        /// с добавленной задачей
+        /// Arrange: должен вернуться CreatedAtActionResult с добавленной задачей и 
+        /// ссылкой на ресурс с добавленной задачей
         /// </summary>
         [Test]
-        public async Task AddIssue_RegularWorkFlow_ShouldReturnAddeItem()
+        public async Task AddIssue_RegularWorkFlow_ShouldReturnAddedItem()
         {
             await GenerateDbData();
             IssuesController codeUnderTest = new(_dbContext);
@@ -193,8 +191,8 @@ namespace KnowledgeDataAccessApiTests.Controllers
 
         /// <summary>
         /// Arrange: Создаем базу с данными, контроллер, патч обновления задачи
-        /// Act: Вызываем обновление существующей задачи.
-        /// Assert: Должен вернуться OK
+        /// Act: Вызываем обновление задачи с несуществующим Id
+        /// Assert: Должен вернуться NotFoundResult
         /// </summary>
         [Test]
         public async Task UpdateIssueNotExistIssueId_ShouldReturnsNotFound()
@@ -234,7 +232,7 @@ namespace KnowledgeDataAccessApiTests.Controllers
                     _dbContext.Issues.Where(iss => iss.IssueId == 1),
                     Is.Empty);
                 Assert.That(
-                    _dbContext.Issues.Where(iss => iss.IssueId == 1),
+                    _dbContext.IssuesUnderStudy.Where(iss => iss.IssueId == 1),
                     Is.Empty);
             });
         }
