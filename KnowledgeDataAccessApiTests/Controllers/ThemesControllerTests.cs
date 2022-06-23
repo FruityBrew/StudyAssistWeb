@@ -86,7 +86,7 @@ namespace KnowledgeDataAccessApiTests.Controllers
             Assert.Multiple(() =>
             {
                 Assert.That(result, Is.Not.Null);
-                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Value, Is.Null);
                 Assert.That(result.Result, Is.Not.Null);
                 Assert.That(result.Result, Is.InstanceOf(typeof(NotFoundResult)));
             });
@@ -189,12 +189,41 @@ namespace KnowledgeDataAccessApiTests.Controllers
         }
 
         /// <summary>
+        /// Arrange: Создаем базу с данными, контроллер, патч обновления темы
+        /// Act: Вызываем обновление существующей темы.
+        /// Assert: Сущность должна обновиться в БД
+        /// </summary>
+        [Test]
+        public async Task UpdateTheme_RegularWorkFlow_ShouldBeUpdatedInDb()
+        {
+            await GenerateDbData();
+            ThemesController codeUnderTest = new(_dbContext);
+
+            JsonPatchDocument<Theme> patch = new JsonPatchDocument<Theme>(
+                new List<Operation<Theme>>
+                {
+                    new ("replace", "name", string.Empty, "newName"),
+                },
+                new DefaultContractResolver());
+
+            var result = await codeUnderTest.UpdateThemeName(1, patch);
+
+            var updIssue = _dbContext.Themes.FirstOrDefault(f => f.ThemeId == 1);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(updIssue, Is.Not.Null);
+                Assert.That(updIssue.Name, Is.EqualTo("newName"));
+            });
+        }
+
+        /// <summary>
         /// Arrange: Создаем базу с данными, контроллер, патч обновления имени темы
         /// Act: Вызываем обновление имени существующей темы.
         /// Assert: Должен вернуться NotFoundResult
         /// </summary>
         [Test]
-        public async Task UpdateThemeName_NoExistsThemeId_ShuldReturnsNotFound()
+        public async Task UpdateThemeName_NoExistsThemeId_ShouldReturnsNotFound()
         {
             await GenerateDbData();
             ThemesController codeUnderTest = new(_dbContext);
