@@ -12,18 +12,32 @@ using KnowledgeDataAccessApi.Model;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using KnowledgeDataAccessApi.Validators;
+using Microsoft.Extensions.Configuration;
 namespace KnowledgeDataAccessApi
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        private IWebHostEnvironment _webHostEnvironment;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+        {
+            Configuration = configuration;
+            _webHostEnvironment = environment;
+
+            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = @"Server=KOVALEVAS\SQLEXPRESS;Database=KnowledgeDb;Trusted_Connection=true;";
-            //string connectionString = @"workstation id=knowledgeDb.mssql.somee.com;packet size=4096;user id=FruityBrew_SQLLogin_1;pwd=4f65smahle;data source=knowledgeDb.mssql.somee.com;persist security info=False;initial catalog=knowledgeDb";
+            string connectionString = this.Configuration.GetConnectionString("RemoteKnowledgeConnection");
             services.AddDbContext<KnowledgeContext>(
                 opt => opt.UseSqlServer(connectionString));
+
             services.AddControllers()
                 .AddNewtonsoftJson(opt =>
                 {
