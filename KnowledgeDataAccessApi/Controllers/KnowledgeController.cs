@@ -29,11 +29,11 @@ namespace KnowledgeDataAccessApi.Controllers
         {
 
             _context.Catalogs.Add(new Catalog { Name = "Test" });
-            _context.Issues.Add(new Issue
-            {
-                Question = "Вопрос",
-                Answer = "ответ",
-            });
+            //_context.Issues.Add(new Issue
+            //{
+            //    Question = "Вопрос",
+            //    Answer = "ответ",
+            //});
 
             await _context.SaveChangesAsync();
 

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31005.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssistApi", "StudyAssistApi\StudyAssistApi.csproj", "{5D0DAB3C-69D0-47A5-9223-57F86416AAF6}"
 EndProject
@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowledgeDataAccessApi", "K
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{935DAE04-A107-4E8B-B744-B90C9E35B718}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnowledgeDataAccessApiTests", "KnowledgeDataAccessApiTests\KnowledgeDataAccessApiTests.csproj", "{33570CAA-684E-4B51-933B-3B56351B4765}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowledgeDataAccessApiTests", "KnowledgeDataAccessApiTests\KnowledgeDataAccessApiTests.csproj", "{33570CAA-684E-4B51-933B-3B56351B4765}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
