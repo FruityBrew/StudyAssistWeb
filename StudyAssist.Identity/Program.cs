@@ -8,7 +8,10 @@ namespace StudyAssist.Identity
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			builder.Services.AddIdentityServer()
+			builder.Services.AddIdentityServer(options =>
+				{
+					options.KeyManagement.Enabled = false;
+				})
 				.AddInMemoryClients(IdentityConfiguration.GetClients())
 				.AddInMemoryApiResources(IdentityConfiguration.GetApiResources())
 				.AddInMemoryIdentityResources(IdentityConfiguration.GetIdentityResources())
