@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using KnowledgeDataAccessApi.Validators;
 using Microsoft.Extensions.Configuration;
+using IdentityServer4.AccessTokenValidation;
 namespace KnowledgeDataAccessApi
 {
     public class Startup
@@ -44,6 +45,28 @@ namespace KnowledgeDataAccessApi
                     opt.SerializerSettings.ReferenceLoopHandling = 
                         ReferenceLoopHandling.Ignore;
                 });
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = Configuration.GetValue<string>("AuthConfig:IdentityServerAuthorityUrl");
+                    options.Audience = Configuration.GetValue<string>("AuthConfig:IdentityServerResourcesUrl"); ;
+                    options.RequireHttpsMetadata = Configuration.GetValue<string>("AuthConfig:IdentityServerAuthorityUrl").Contains("https");
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("KnowledgeApi.Read", policyUser =>
+                {
+                    policyUser.RequireClaim("scope", "Author", "User");
+                });
+
+				options.AddPolicy("KnowledgeApi.Write", policyUser =>
+				{
+					policyUser.RequireClaim("scope", "Author");
+				});
+			});
+
             services.AddHttpClient();
             services.AddMvc()
                 .AddFluentValidation(fvConfig =>
@@ -59,6 +82,9 @@ namespace KnowledgeDataAccessApi
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

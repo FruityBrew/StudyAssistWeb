@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using KnowledgeDataAccessApi.Constants;
 using Microsoft.AspNetCore.JsonPatch;
 using Utilities;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 #nullable enable
@@ -32,6 +33,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Запрашивает все каталоги.
         /// </summary>
         [HttpGet]
+		[Authorize("KnowledgeApi.Read")]
         public async Task<ActionResult<List<Catalog>>> GetCatalogs()
         {
             return await _dbContext.Catalogs.ToListAsync();
@@ -41,6 +43,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Запрашивает каталог.
         /// </summary>
         [HttpGet("{id}")]
+        [Authorize("KnowledgeApi.Read")]
         public async Task<ActionResult<Catalog>> GetCatalog(int id)
         {
             Catalog targetCatalog = await _dbContext.Catalogs
@@ -60,6 +63,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// </summary>
         /// <param name="id">Идентификатор каталога</param>
         [HttpGet("{id}/themes")]
+		[Authorize("KnowledgeApi.Read")]
         public async Task<ActionResult<List<Theme>>> GetCatalogThemes(int id)
         {
             Catalog targetCatalog = await _dbContext.Catalogs
@@ -76,7 +80,8 @@ namespace KnowledgeDataAccessApi.Controllers
         /// </summary>
         /// <param name="value">Каталог</param>
         [HttpPost]
-        public async Task<ActionResult<Catalog>> AddCatalog(
+        [Authorize("KnowledgeApi.Write")]
+		public async Task<ActionResult<Catalog>> AddCatalog(
             [FromBody] Catalog addedItem)
         {
             var addedEntity = await _dbContext.Catalogs.AddAsync(addedItem);
@@ -93,7 +98,8 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Изменяет имя каталога
         /// </summary>
         [HttpPatch("{id}")]
-        public async Task<ActionResult> UpdateCatalogName(
+		[Authorize("KnowledgeApi.Write")]
+		public async Task<ActionResult> UpdateCatalogName(
             int id, [FromBody] JsonPatchDocument<Catalog> updatedItem)
         {
             Catalog targetCatalog = await _dbContext.Catalogs
@@ -113,7 +119,8 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Запрашивает удаление каталога
         /// </summary>
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCatalog(int id)
+		[Authorize("KnowledgeApi.Write")]
+		public async Task<ActionResult> DeleteCatalog(int id)
         {
             Catalog deletedCatalog = await _dbContext.Catalogs
                 .FirstOrDefaultAsync(item => item.CatalogId == id);
