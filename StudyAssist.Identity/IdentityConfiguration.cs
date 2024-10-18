@@ -1,5 +1,7 @@
 ﻿using Duende.IdentityServer.Models;
 using IdentityModel;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace StudyAssist.Identity
 {
@@ -11,13 +13,39 @@ namespace StudyAssist.Identity
 			{
 				new Client()
 				{
+					ClientName = "FruityBrew",
+					ClientId = "fruityBrew_id",
+					ClientSecrets = {new Secret("fruityBrew_secret".ToSha256()) },
+					AllowedGrantTypes = GrantTypes.ClientCredentials,
+				
+					AllowedScopes =
+					{
+						"Author"
+					},
+				},
+				new Client()
+				{
+					ClientName = "SomeUser",
+					ClientId = "someUser_id",
+					ClientSecrets = {new Secret("someUser_secret".ToSha256()) },
+					AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+					AllowedScopes =
+					{
+						"User"
+					},
+				},
+				new Client()
+				{
+					ClientName = "studyAssist",
 					ClientId = "studyAssist_id",
 					ClientSecrets = {new Secret("studyAssist_secret".ToSha256()) },
 					AllowedGrantTypes = GrantTypes.ClientCredentials,
+
 					AllowedScopes =
 					{
-						"KnowledgeApi"
-					}
+						"Author", "User"
+					},
 				}
 			};
 		}
@@ -26,7 +54,9 @@ namespace StudyAssist.Identity
 		{
 			return new List<ApiResource>
 			{
-				new ApiResource("KnowledgeApi")
+				new ApiResource("KnowledgeApi.Read", new List<string>{"Author", "User"}),
+				new ApiResource("KnowledgeApi.Write", new List<string>{"Author"}),
+
 			};
 		}
 
@@ -34,8 +64,13 @@ namespace StudyAssist.Identity
 		{
 			return new List<IdentityResource>
 			{
-				new IdentityResources.OpenId()
+				new IdentityResources.OpenId(),
 			};
+		}
+
+		internal static IEnumerable<ApiScope> GetApiScopes()
+		{
+			return new List<ApiScope> { new ApiScope("Author"), new ApiScope("User") };
 		}
 	}
 }

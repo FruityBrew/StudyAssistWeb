@@ -11,8 +11,10 @@ namespace StudyAssist.Identity
 			builder.Services.AddIdentityServer(options =>
 				{
 					options.KeyManagement.Enabled = false;
+					options.EmitStaticAudienceClaim = true;
 				})
 				.AddInMemoryClients(IdentityConfiguration.GetClients())
+				.AddInMemoryApiScopes(IdentityConfiguration.GetApiScopes())
 				.AddInMemoryApiResources(IdentityConfiguration.GetApiResources())
 				.AddInMemoryIdentityResources(IdentityConfiguration.GetIdentityResources())
 				.AddDeveloperSigningCredential();
