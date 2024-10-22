@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssistApi", "StudyAssistApi\StudyAssistApi.csproj", "{5D0DAB3C-69D0-47A5-9223-57F86416AAF6}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssistModel", "StudyAssistModel\StudyAssistModel.csproj", "{BBFA38DD-98F5-401D-8611-08D65D372367}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowledgeDataAccessApi", "KnowledgeDataAccessApi\KnowledgeDataAccessApi.csproj", "{0048A9BC-F699-4AC1-880B-7BC7555C8D36}"
@@ -13,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Util
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowledgeDataAccessApiTests", "KnowledgeDataAccessApiTests\KnowledgeDataAccessApiTests.csproj", "{33570CAA-684E-4B51-933B-3B56351B4765}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.Identity", "StudyAssist.Identity\StudyAssist.Identity.csproj", "{3BFD1DE6-6B2F-43C8-94FE-2FD82E9B7C83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssist.Identity", "StudyAssist.Identity\StudyAssist.Identity.csproj", "{3BFD1DE6-6B2F-43C8-94FE-2FD82E9B7C83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.App.Api", "StudyAssist.App.Api\StudyAssist.App.Api.csproj", "{85E55BEC-1E9C-4C29-91D1-9E89DB0C50E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5D0DAB3C-69D0-47A5-9223-57F86416AAF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D0DAB3C-69D0-47A5-9223-57F86416AAF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D0DAB3C-69D0-47A5-9223-57F86416AAF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D0DAB3C-69D0-47A5-9223-57F86416AAF6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BBFA38DD-98F5-401D-8611-08D65D372367}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BBFA38DD-98F5-401D-8611-08D65D372367}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBFA38DD-98F5-401D-8611-08D65D372367}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +41,10 @@ Global
 		{3BFD1DE6-6B2F-43C8-94FE-2FD82E9B7C83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BFD1DE6-6B2F-43C8-94FE-2FD82E9B7C83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BFD1DE6-6B2F-43C8-94FE-2FD82E9B7C83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85E55BEC-1E9C-4C29-91D1-9E89DB0C50E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85E55BEC-1E9C-4C29-91D1-9E89DB0C50E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85E55BEC-1E9C-4C29-91D1-9E89DB0C50E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85E55BEC-1E9C-4C29-91D1-9E89DB0C50E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
