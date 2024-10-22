@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Serialization;
 using NUnit.Framework;
-using StudyAssistModel.DataModel;
+using StudyAssist.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

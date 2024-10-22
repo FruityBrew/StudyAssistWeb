@@ -1,18 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KnowledgeDataAccessApi.Model;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.EntityFrameworkCore;
+using StudyAssist.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KnowledgeDataAccessApi.Model;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.EntityFrameworkCore;
-using StudyAssistModel.DataModel;
 using Utilities;
 
 namespace KnowledgeDataAccessApi.Controllers
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
     public class ThemesController : DbContextController<KnowledgeContext>
     {

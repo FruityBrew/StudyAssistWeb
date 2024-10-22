@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StudyAssist.DataModel
+namespace StudyAssist.Model
 {
     /// <summary>
     /// Элемент вопроса темы
@@ -9,13 +9,13 @@ namespace StudyAssist.DataModel
     {
         public int? IssueId { get; set; }
 
-        public int ThemeId { get; set; }
+        public int? ThemeId { get; set; }
 
         [MaxLength(200)]
-        public string Question { get; set; }
+        public required string Question { get; set; }
 
-        public string Answer { get; set; }
+        public string? Answer { get; set; }
 
-        public Theme Theme { get; set; }
+        public Theme? Theme { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StudyAssistModel.DataModel
+namespace StudyAssist.DataModel
 {
     /// <summary>
     /// Элемент вопроса на изучении

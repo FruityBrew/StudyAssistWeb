@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using KnowledgeDataAccessApi.Model;
 using Microsoft.AspNetCore.Mvc;
-using StudyAssistModel.DataModel;
+using StudyAssist.Model;
 
 namespace KnowledgeDataAccessApi.Controllers
 {

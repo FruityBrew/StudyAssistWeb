@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StudyAssistModel.DataModel;
+using StudyAssist.Model;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities;

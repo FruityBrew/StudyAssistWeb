@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.JsonPatch;
-using StudyAssistModel.DataModel;
+using StudyAssist.Model;
 
 namespace KnowledgeDataAccessApi.Validators
 {

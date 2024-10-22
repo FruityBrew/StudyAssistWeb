@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using KnowledgeDataAccessApi.Constants;
 using Microsoft.AspNetCore.JsonPatch;
-using StudyAssistModel.DataModel;
+using StudyAssist.Model;
 using System;
 using System.Linq;
 

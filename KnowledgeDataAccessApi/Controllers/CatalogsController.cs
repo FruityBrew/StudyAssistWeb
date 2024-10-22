@@ -1,7 +1,6 @@
 ﻿using KnowledgeDataAccessApi.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StudyAssistModel.DataModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +8,8 @@ using KnowledgeDataAccessApi.Constants;
 using Microsoft.AspNetCore.JsonPatch;
 using Utilities;
 using Microsoft.AspNetCore.Authorization;
+using StudyAssist.Model;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 #nullable enable

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using StudyAssistModel.DataModel;
+﻿using Microsoft.EntityFrameworkCore;
+using StudyAssist.Model;
 
 namespace KnowledgeDataAccessApi.Model
 {
-    public class KnowledgeContext : DbContext
+	public class KnowledgeContext : DbContext
     {
         public DbSet<Catalog> Catalogs { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using KnowledgeDataAccessApi.Constants;
-using StudyAssistModel.DataModel;
+using StudyAssist.Model;
 
 namespace KnowledgeDataAccessApi.Validators
 {

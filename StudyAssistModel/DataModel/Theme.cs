@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace StudyAssistModel.DataModel
+namespace StudyAssist.DataModel
 {
     /// <summary>
     /// Элемент темы раздела

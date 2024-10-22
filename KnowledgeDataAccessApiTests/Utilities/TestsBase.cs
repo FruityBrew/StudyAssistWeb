@@ -1,7 +1,7 @@
 ﻿using KnowledgeDataAccessApi.Model;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
-using StudyAssistModel.DataModel;
+using StudyAssist.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
