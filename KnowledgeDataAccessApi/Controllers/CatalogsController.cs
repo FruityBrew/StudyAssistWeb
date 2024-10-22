@@ -34,7 +34,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Запрашивает все каталоги.
         /// </summary>
         [HttpGet]
-		[Authorize("KnowledgeApi.Read")]
+		//[Authorize("KnowledgeApi.Read")]
         public async Task<ActionResult<List<Catalog>>> GetCatalogs()
         {
             return await _dbContext.Catalogs.ToListAsync();
@@ -44,7 +44,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Запрашивает каталог.
         /// </summary>
         [HttpGet("{id}")]
-        [Authorize("KnowledgeApi.Read")]
+        //[Authorize("KnowledgeApi.Read")]
         public async Task<ActionResult<Catalog>> GetCatalog(int id)
         {
             Catalog targetCatalog = await _dbContext.Catalogs
@@ -64,7 +64,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// </summary>
         /// <param name="id">Идентификатор каталога</param>
         [HttpGet("{id}/themes")]
-		[Authorize("KnowledgeApi.Read")]
+		//[Authorize("KnowledgeApi.Read")]
         public async Task<ActionResult<List<Theme>>> GetCatalogThemes(int id)
         {
             Catalog targetCatalog = await _dbContext.Catalogs
@@ -81,7 +81,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// </summary>
         /// <param name="value">Каталог</param>
         [HttpPost]
-        [Authorize("KnowledgeApi.Write")]
+        //[Authorize("KnowledgeApi.Write")]
 		public async Task<ActionResult<Catalog>> AddCatalog(
             [FromBody] Catalog addedItem)
         {
@@ -99,7 +99,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Изменяет имя каталога
         /// </summary>
         [HttpPatch("{id}")]
-		[Authorize("KnowledgeApi.Write")]
+		//[Authorize("KnowledgeApi.Write")]
 		public async Task<ActionResult> UpdateCatalogName(
             int id, [FromBody] JsonPatchDocument<Catalog> updatedItem)
         {
@@ -120,7 +120,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Запрашивает удаление каталога
         /// </summary>
         [HttpDelete("{id}")]
-		[Authorize("KnowledgeApi.Write")]
+		//[Authorize("KnowledgeApi.Write")]
 		public async Task<ActionResult> DeleteCatalog(int id)
         {
             Catalog deletedCatalog = await _dbContext.Catalogs
