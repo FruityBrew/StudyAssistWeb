@@ -34,7 +34,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// Запрашивает все каталоги.
         /// </summary>
         [HttpGet]
-		//[Authorize("KnowledgeApi.Read")]
+        [Authorize("KnowledgeApi.Read")]
         public async Task<ActionResult<List<Catalog>>> GetCatalogs()
         {
             return await _dbContext.Catalogs.ToListAsync();
