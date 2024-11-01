@@ -10,7 +10,7 @@ namespace StudyAssist.BlazorApp
 
 			builder.Services.AddRazorComponents()
 				.AddInteractiveServerComponents();
-			//builder.Services.AddBlazorBootstrap();
+			builder.Services.AddBlazorBootstrap();
 
 
 			var app = builder.Build();
