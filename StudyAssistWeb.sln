@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KnowledgeDataAccessApiTests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssist.Identity", "StudyAssist.Identity\StudyAssist.Identity.csproj", "{3BFD1DE6-6B2F-43C8-94FE-2FD82E9B7C83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.App.Api", "StudyAssist.App.Api\StudyAssist.App.Api.csproj", "{85E55BEC-1E9C-4C29-91D1-9E89DB0C50E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssist.App.Api", "StudyAssist.App.Api\StudyAssist.App.Api.csproj", "{85E55BEC-1E9C-4C29-91D1-9E89DB0C50E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.Model", "StudyAssist.Model\StudyAssist.Model.csproj", "{18F6269B-DC37-4FC9-9720-C12BE387A5A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudyAssist.Model", "StudyAssist.Model\StudyAssist.Model.csproj", "{18F6269B-DC37-4FC9-9720-C12BE387A5A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudyAssist.BlazorApp", "StudyAssist.BlazorApp\StudyAssist.BlazorApp.csproj", "{84FA5955-7CCB-4011-AAB3-EABCCB262077}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{18F6269B-DC37-4FC9-9720-C12BE387A5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18F6269B-DC37-4FC9-9720-C12BE387A5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18F6269B-DC37-4FC9-9720-C12BE387A5A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84FA5955-7CCB-4011-AAB3-EABCCB262077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84FA5955-7CCB-4011-AAB3-EABCCB262077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84FA5955-7CCB-4011-AAB3-EABCCB262077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84FA5955-7CCB-4011-AAB3-EABCCB262077}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
