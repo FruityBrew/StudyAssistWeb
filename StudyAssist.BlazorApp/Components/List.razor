@@ -1,0 +1,96 @@
+﻿@page "/"
+@rendermode InteractiveServer
+<div>
+    <ul class="list-group">
+        @foreach (var item in categories)
+        {
+            <Button 
+                Color="ButtonColor.Dark" 
+                TooltipTitle="@item.Id"
+                
+            @onclick="((args) => OnClick(args, item.Id))">
+                @item.Name
+            </Button>
+        }
+    </ul>
+    <p>Themes</p>
+    <ul class="list-group">
+        @foreach (var item in _currentCategory?.Themes ?? new List<RT>())
+        {
+            <Button Color="ButtonColor.Info"
+                    TooltipTitle="@item.Id"
+                    @onclick="((args) => OnClick(args, item.Id))">
+                @item.Name
+            </Button>
+
+        }
+    </ul>
+
+    <Button Color="ButtonColor.Link"
+            @onclick="((args) => OnClick1(args))">
+        das;alskd;lk
+    </Button>
+
+</div>
+
+@code {
+
+    class RT
+    {
+        public string Name{ get; set; }
+        public string Id { get; set; }
+        public List<RT> Themes { get; set; }
+
+        public RT(string name, string id, List<RT> themes = null)
+        {
+            Name = name;
+            Id = id;
+            Themes = themes;
+
+        }
+    }
+
+    private RT _currentCategory;
+
+    protected void OnClick1(EventArgs args)
+    {
+        var a = "SDASD";
+    }
+
+    protected void OnClick(EventArgs args, string id)
+    {
+        _currentCategory = categories.FirstOrDefault(f => f.Id == id);
+
+    }
+
+    List<RT> categories = new List<RT>
+    {
+        new RT("qweqwe", "1", new List<RT>
+        {
+            new RT("theme11", "1"),
+            new RT("theme21","2"),
+            new RT("theme31","3")
+        }),
+        new RT("ssssss","2",new List<RT>
+        {
+            new RT("theme12", "1"),
+            new RT("theme22","2"),
+            new RT("theme32","3")
+        }
+        ),
+        new RT("alksdelasd","3",
+        new List<RT>
+        {
+            new RT("theme13", "1"),
+            new RT("theme23","2"),
+            new RT("theme33","3")
+        })
+    };
+
+    List<RT> themes = new List<RT>
+    {
+        new RT("theme1", "1"),
+        new RT("theme2","2"),
+        new RT("theme3","3")
+    };
+}
