@@ -1,3 +1,4 @@
+using Radzen;
 using StudyAssist.BlazorApp.Components;
 
 namespace StudyAssist.BlazorApp
@@ -11,9 +12,9 @@ namespace StudyAssist.BlazorApp
 			builder.Services.AddRazorComponents()
 				.AddInteractiveServerComponents();
 			builder.Services.AddBlazorBootstrap();
+            builder.Services.AddRadzenComponents();
 
-
-			var app = builder.Build();
+            var app = builder.Build();
 			
 			app.UseAntiforgery();
 
