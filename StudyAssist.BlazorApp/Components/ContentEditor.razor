@@ -1,0 +1,30 @@
+﻿@page "/contentEditor"
+@using StudyAssist.BlazorApp.ViewModels
+@rendermode InteractiveServer
+
+
+<RadzenRow class="rz-text-align-center" >
+    <RadzenColumn class="  rz-p-6">
+            <RadzenTree Data=@_catalogs>
+                <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
+                <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
+                <RadzenTreeLevel TextProperty="@nameof(IssueVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
+
+
+
+            </RadzenTree>
+    </RadzenColumn>
+    <RadzenColumn class=" rz-p-6">
+        <RadzenHtmlEditor @bind-Value=@_htmlValue />
+    </RadzenColumn>
+</RadzenRow>
+
+@code {
+    private string _htmlValue = string.Empty;
+    private List<CatalogVm> _catalogs;
+    protected override async Task OnInitializedAsync()
+    {
+        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        _htmlValue = await AppDtoReseiver.GetIssue(1);
+    }
+}
