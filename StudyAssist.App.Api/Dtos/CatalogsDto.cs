@@ -13,6 +13,6 @@
 
         public Dictionary<int, (int CatalogId, string Name)> Themes { get; set; }
 
-        public Dictionary<int, (int CatalogId, int ThemeId, string Name)> Issues { get; set; }
+        public Dictionary<int, (int ThemeId, string Name)> Issues { get; set; }
     }
 }
