@@ -18,7 +18,7 @@ namespace StudyAssist.BlazorApp
 			
 			app.UseAntiforgery();
 
-			app.MapRazorComponents<App>()
+			app.MapRazorComponents<Components.App>()
 				.AddInteractiveServerRenderMode();
 
 			app.UseStaticFiles();
