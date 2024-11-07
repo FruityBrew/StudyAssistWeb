@@ -64,5 +64,10 @@ namespace StudyAssist.BlazorApp
 
             return await Task.FromResult(catalogs);
         }
+
+        internal static async Task<string> GetIssue(int issueId)
+        {
+            return await Task.FromResult(@"<p>Текст ответа</p>");
+        }
     }
 }
