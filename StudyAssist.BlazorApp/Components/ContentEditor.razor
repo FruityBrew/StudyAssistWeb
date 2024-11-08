@@ -4,18 +4,15 @@
 @using Radzen.Blazor;
 
 
-<RadzenRow class="rz-text-align-center" >
+<RadzenRow class="rz-text-align-left" >
     <RadzenColumn class="  rz-p-6 " Size="3">
         <RadzenTree Data=@_catalogs Style="float:left">
                 <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
                 <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
                 <RadzenTreeLevel TextProperty="@nameof(IssueVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
-
-
-
-            </RadzenTree>
+        </RadzenTree>
     </RadzenColumn>
-    <RadzenColumn class=" rz-p-6">
+    <RadzenColumn class="rz-p-6">
         <RadzenHtmlEditor @bind-Value=@_htmlValue />
     </RadzenColumn>
 </RadzenRow>

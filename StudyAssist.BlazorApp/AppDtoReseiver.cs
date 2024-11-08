@@ -28,7 +28,7 @@ namespace StudyAssist.BlazorApp
                 {
                     {1, (ThemeId:1, Name:"Issue111") },
                     {2, (ThemeId:1, Name:"Issue112") },
-                    {3, (ThemeId:2, Name:"Issue123") },
+                    {3, (ThemeId:2, Name:"Issue123 Очень длинное название Очень длинное название Очень длинное название Очень длинное название ") },
                     {4, (ThemeId:3, Name:"Issue134") },
                     {5, (ThemeId:3, Name:"Issue135") },
                     {6, (ThemeId:4, Name:"Issue246") },
