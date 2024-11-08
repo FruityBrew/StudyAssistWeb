@@ -5,15 +5,30 @@
 
 
 <RadzenRow class="rz-text-align-left" >
-    <RadzenColumn class="  rz-p-6 " Size="3">
-        <RadzenTree Data=@_catalogs Style="float:left">
-                <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
-                <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
-                <RadzenTreeLevel TextProperty="@nameof(IssueVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
-        </RadzenTree>
+    <RadzenColumn class=" rz-background-color-info-lighter rz-p-6 " Size="3">
+        <RadzenRow>
+            <input/>
+        </RadzenRow>
+        <RadzenRow class="rz-background-color-warning-lighter">
+            <RadzenTree Data=@_catalogs Style="float:left">
+                    <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
+                    <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
+                    <RadzenTreeLevel TextProperty="@nameof(IssueVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
+            </RadzenTree>
+        </RadzenRow>
     </RadzenColumn>
-    <RadzenColumn class="rz-p-6">
-        <RadzenHtmlEditor @bind-Value=@_htmlValue />
+    <RadzenColumn class="rz-p-6 rz-background-color-success-lighter">
+        <RadzenRow AlignItems="AlignItems.Normal" class="rz-background-color-danger-lighter">
+            <RadzenCard Variant="Variant.Filled" class="rz-my-2 rz-mx-2 " Style="max-width: 420px">
+                <RadzenStack >
+                    <RadzenText>Количество повторений: 0</RadzenText>
+                    <RadzenText>Дата повтора: 0</RadzenText>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenHtmlEditor @bind-Value=@_htmlValue />
+        </RadzenRow>
     </RadzenColumn>
 </RadzenRow>
 
