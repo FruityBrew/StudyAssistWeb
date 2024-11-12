@@ -69,5 +69,32 @@ namespace StudyAssist.BlazorApp
         {
             return await Task.FromResult(@"<p>Текст ответа</p>");
         }
+
+        internal static async Task<EditingIssueVm> GetEditingIssue(int issueId)
+        {
+            return await Task.FromResult(_editingIssueVms.FirstOrDefault(f => f.Id == issueId));
+        }
+
+        private static List<EditingIssueVm> _editingIssueVms = new List<EditingIssueVm>
+        {
+            new EditingIssueVm
+            {
+                Id = 2,
+                Name = "Issue112",
+                RepeatCount = 1,
+                RepeatDate = DateTime.Today,
+                IsStudy = true,
+                AnswerText = @"<p>Много текста<p/>"
+            },
+            new EditingIssueVm
+            {
+                Id = 3,
+                Name = "Issue123 Очень длинное название Очень длинное название Очень длинное название Очень длинное название ",
+                RepeatCount = 1,
+                RepeatDate = DateTime.Today,
+                IsStudy = true,
+                AnswerText = @"<p>Очень много текста очень Много текста Ну очнь много текста Прям девать некуда сколько текста<p/>"
+            }
+        };
     }
 }
