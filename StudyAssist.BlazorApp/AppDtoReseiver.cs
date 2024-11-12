@@ -52,7 +52,7 @@ namespace StudyAssist.BlazorApp
                             Name = theme.Value.Name,
                             Issues = catalogsDto.Issues
                                 .Where(issue=> issue.Value.ThemeId == theme.Key)
-                                .Select(issue => new IssueVm()
+                                .Select(issue => new IssueItemVm()
                                 {
                                     Id= issue.Key,
                                     Name = issue.Value.Name,
