@@ -11,7 +11,7 @@
             <RadzenTree Data=@_catalogs>
                 <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
                 <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
-                <RadzenTreeLevel TextProperty="@nameof(IssueVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
+                <RadzenTreeLevel TextProperty="@nameof(IssueItemVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
 
 
 
