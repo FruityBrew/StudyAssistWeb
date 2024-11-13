@@ -5,17 +5,20 @@
 
 
 <RadzenRow class="rz-text-align-left" >
-    <RadzenColumn class=" rz-background-color-info-lighter rz-p-6 " Size="3">
-        <RadzenRow>
-            <input/>
-        </RadzenRow>
-        <RadzenRow class="rz-background-color-warning-lighter">
+    <RadzenColumn class=" rz-background-color-info-lighter rz-p-6" Size="3">
+        <RadzenStack Orientation="Orientation.Vertical" class="rz-overflow-hidden" JustifyContent="JustifyContent.Start" Gap="0rem">
+
+            <RadzenStack Orientation="Orientation.Horizontal"  Gap="0rem">
+                <RadzenTextBox Placeholder="Search." Name="Search" class="rz-w-stretch" />
+                    <RadzenButton ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Icon="close"></RadzenButton>
+            </RadzenStack>
+                
             <RadzenTree Data=@_catalogs Style="float:left">
                     <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
                     <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
                     <RadzenTreeLevel TextProperty="@nameof(IssueVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
             </RadzenTree>
-        </RadzenRow>
+        </RadzenStack>
     </RadzenColumn>
     <RadzenColumn class="rz-p-6 rz-background-color-success-lighter">
         <RadzenRow AlignItems="AlignItems.Normal" class="rz-background-color-danger-lighter">
