@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using StudyAssist.Model;
 using StudyAssistInterfaces;
 using StudyAssistModel;
 
@@ -15,20 +16,19 @@ namespace StudyAssist.KnowledgeDataConverter
     internal static class FromFileToDbConvertor
     {
         private static string _knowledgeDirectoryPath = 
-            @"D:\OneDrive\_Код\StudyAssistRelease_Actual_V_3\CategoriesStorage";
+            @"C:\OneDrive\_Код\StudyAssistRelease_Actual_V_3\CategoriesStorage";
 
         internal static void Convert()
         {
             List<int> catalogsIds = [15];
 
-            var res = ConvertFileDataToOldModel(
-                GetDataFiles());
-
-                
-
+            IEnumerable<FileInfo> files = _GetDataFiles();
+            IEnumerable<ICategory> oldModels = _ConvertFileDataToOldModel(files);
+            IEnumerable<Catalog> actualModels = _ConvertOldModelToModel(oldModels)
+                .ToList();
         }
 
-        private static IEnumerable<FileInfo> GetDataFiles()
+        private static IEnumerable<FileInfo> _GetDataFiles()
         {
             try
             {
@@ -44,14 +44,14 @@ namespace StudyAssist.KnowledgeDataConverter
             }
         }
 
-        private static IEnumerable<XCategory> ConvertFileDataToOldModel(
+        private static IEnumerable<ICategory> _ConvertFileDataToOldModel(
             IEnumerable<FileInfo> files)
         {
-            List<XCategory> categories = new List<XCategory>();
+            List<ICategory> categories = new List<ICategory>();
 
             foreach(FileInfo file in files.Take(2))
             {
-                XCategory xCategory = new ();
+                ICategory xCategory = new XCategory();
 #pragma warning disable SYSLIB5005 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 var binaryCategory = NrbfDecoder.DecodeClassRecord(file.OpenRead());
                 var b = binaryCategory.MemberNames;
@@ -59,10 +59,6 @@ namespace StudyAssist.KnowledgeDataConverter
                 
                 xCategory.Name = categoryName;
 
-                //object? x = d.GetRawValue("_themes");
-                //var ddd = x as ObservableCollection<ITheme>;
-
-                //var binaryThemes = binaryCategory.GetClassRecord("_themes");
                 var binaryThemesRecords = binaryCategory
                     .GetClassRecord("_themes")
                     .GetClassRecord("Collection`1+items")
@@ -76,7 +72,7 @@ namespace StudyAssist.KnowledgeDataConverter
 
                     string themeName = theme.GetString("_name");
 
-                    XTheme xTheme = new XTheme();
+                    ITheme xTheme = new XTheme();
                     xTheme.Name = themeName;
 
                     var binaryProblemRecords = theme
@@ -93,7 +89,7 @@ namespace StudyAssist.KnowledgeDataConverter
                         string problemQuestion = problem.GetString("_question");
                         string promlemAnswer = problem.GetString("_answer");
 
-                        XProblem xProblem = new XProblem();
+                        IProblem xProblem = new XProblem();
                         xProblem.Question = problemQuestion;
                         xProblem.Answer = promlemAnswer; 
                         
@@ -103,12 +99,6 @@ namespace StudyAssist.KnowledgeDataConverter
                     xCategory.Themes.Add(xTheme);
                 }
 
-                //for(int i = 0; i < binaryThemesArray.Length; i++)
-                //{
-                //    var d = binaryThemesArray.
-                //}
-                //var u = th.GetArrayRecord("_themes");
-
                 var y = b.ToString();
 #pragma warning restore SYSLIB5005 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
@@ -117,6 +107,50 @@ namespace StudyAssist.KnowledgeDataConverter
 
 
             return categories;
+        }
+
+        private static IEnumerable<Catalog> _ConvertOldModelToModel(
+            IEnumerable<ICategory> source)
+        {
+            foreach (ICategory category in source)
+                yield return _ConvertToCatalog(category);
+        }
+
+        private static Catalog _ConvertToCatalog(ICategory source)
+        {
+            Catalog target = new()
+            {
+                Name = source.Name,
+                Themes = source.Themes
+                    .Select(_ConvertToTheme)
+                    .ToList(),
+            };
+
+            return target;
+        }
+
+        private static Theme _ConvertToTheme(ITheme source)
+        {
+            Theme target = new()
+            {
+                Name = source.Name,
+                Issues = source.Problems
+                    .Select(_ConvertToIssue)
+                    .ToList()
+            };
+
+            return target;
+        }
+
+        private static Issue _ConvertToIssue(IProblem source)
+        {
+            Issue target = new()
+            {
+                Question = source.Question,
+                Answer = source.Answer,
+            };
+
+            return target;
         }
     }
 }
