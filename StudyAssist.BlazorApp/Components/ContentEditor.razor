@@ -4,25 +4,28 @@
 @using Radzen.Blazor;
 
 
-<RadzenRow class="rz-text-align-left" >
-    <RadzenColumn class=" rz-background-color-info-lighter rz-p-6" Size="3" >
-        <RadzenStack Orientation="Orientation.Vertical"   Gap="0rem">
+<RadzenRow class=" rz-text-align-left" >
+    <RadzenColumn Size="3" Gap="0rem" class="rz-py-2">
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0rem">
 
             <RadzenStack Orientation="Orientation.Horizontal" Gap="0rem"  >
                 <RadzenTextBox Placeholder="Search..." Name="Search" Style="width:100%"/>
-                    <RadzenButton ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Icon="close"></RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Icon="close"></RadzenButton>
             </RadzenStack>
-                
-            <RadzenTree Data=@_catalogs Style="float:left">
+            <RadzenStack Orientation="Orientation.Vertical" class="rz-my-5">
+                <RadzenLabel  Text="Каталог:" class="rz-my-2 rz-mx-2"/>
+                <RadzenTree Data=@_catalogs  Style="float:left">
                     <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
                     <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
                     <RadzenTreeLevel TextProperty="@nameof(IssueItemVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
-            </RadzenTree>
+                </RadzenTree>
+            </RadzenStack>
+            
         </RadzenStack>
     </RadzenColumn>
-    <RadzenColumn class="rz-p-6 rz-background-color-success-lighter">
-        <RadzenRow AlignItems="AlignItems.Normal" class="rz-background-color-danger-lighter">
-            <RadzenCard Variant="Variant.Filled" class="rz-my-2 rz-mx-2 " Style="max-width: 420px">
+    <RadzenColumn Gap="0rem">
+        <RadzenRow AlignItems="AlignItems.Normal" >
+            <RadzenCard Variant="Variant.Filled" class="rz-my-2 " Style="max-width: 420px">
                 <RadzenStack >
                     <RadzenText>Количество повторений: 0</RadzenText>
                     <RadzenText>Дата повтора: 0</RadzenText>
