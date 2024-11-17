@@ -78,7 +78,7 @@ namespace StudyAssist.BlazorApp
                 Id = 2,
                 Name = "Issue112",
                 RepeatCount = 1,
-                RepeatDate = DateTime.Today,
+                RepeatDate = DateTime.Today.AddDays(-10),
                 IsStudy = true,
                 AnswerText = @"<p>Много текста<p/>"
             },
@@ -86,7 +86,7 @@ namespace StudyAssist.BlazorApp
             {
                 Id = 3,
                 Name = "Issue123 Очень длинное название Очень длинное название Очень длинное название Очень длинное название ",
-                RepeatCount = 1,
+                RepeatCount = 110,
                 RepeatDate = DateTime.Today,
                 IsStudy = true,
                 AnswerText = @"<p>Очень много текста очень Много текста Ну очнь много текста Прям девать некуда сколько текста<p/>"

@@ -27,8 +27,8 @@
         <RadzenRow AlignItems="AlignItems.Normal" >
             <RadzenCard Variant="Variant.Filled" class="rz-my-2 " Style="max-width: 420px">
                 <RadzenStack >
-                    <RadzenText>Количество повторений: 0</RadzenText>
-                    <RadzenText>Дата повтора: 0</RadzenText>
+                    <RadzenText Text=@_repeatCountText></RadzenText>
+                    <RadzenText Text=@_repeatDateText></RadzenText>
                 </RadzenStack>
             </RadzenCard>
         </RadzenRow>
@@ -44,6 +44,9 @@
     private EditingIssueVm _editingIssue;
     private EditingIssueVm _defaultIssue;
     private object _currentItem;
+    private string _repeatCountText = @"Количество повторений: -";
+    private string _repeatDateText = @"Дата повтора: -";
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -64,9 +67,20 @@
         {
             var res = await AppDtoReseiver.GetEditingIssue(issueItem.Id);
             if (res == null)
+            {
                 _editingIssue = _defaultIssue;
+                _repeatCountText = @"Количество повторений: -";
+                _repeatDateText = @"Дата повтора: -";
+            }
             else
+            {
                 _editingIssue = res;
+                _repeatCountText = @"Количество повторений: " + _editingIssue.RepeatCount;
+                _repeatDateText = @"Дата повтора: " + 
+                    (_editingIssue.RepeatDate.HasValue 
+                        ? _editingIssue.RepeatDate.Value.ToString("dd.MM.yyyy")
+                        : "-");
+            }
         }
     }
 }
