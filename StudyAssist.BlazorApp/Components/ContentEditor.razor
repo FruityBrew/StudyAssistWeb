@@ -14,10 +14,10 @@
             </RadzenStack>
             <RadzenStack Orientation="Orientation.Vertical" class="rz-my-5">
                 <RadzenLabel  Text="Каталог:" class="rz-my-2 rz-mx-2"/>
-                <RadzenTree Data=@_catalogs  Style="float:left">
-                    <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
+                <RadzenTree Data=@_catalogs Change="@CurrentItemChanged" @bind-Value=@_currentItem Style="float:left">
+                    <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)"  ChildrenProperty="Themes"></RadzenTreeLevel>
                     <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
-                    <RadzenTreeLevel TextProperty="@nameof(IssueItemVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
+                    <RadzenTreeLevel TextProperty="@nameof(IssueItemVm.Name)"  HasChildren=@(ch => false )></RadzenTreeLevel>
                 </RadzenTree>
             </RadzenStack>
             
@@ -33,17 +33,40 @@
             </RadzenCard>
         </RadzenRow>
         <RadzenRow>
-            <RadzenHtmlEditor @bind-Value=@_htmlValue />
+            <RadzenHtmlEditor @bind-Value=@_editingIssue.AnswerText />
         </RadzenRow>
     </RadzenColumn>
 </RadzenRow>
 
 @code {
-    private string _htmlValue = string.Empty;
+    // private string _htmlValue = string.Empty;
     private List<CatalogVm> _catalogs;
+    private EditingIssueVm _editingIssue;
+    private EditingIssueVm _defaultIssue;
+    private object _currentItem;
+
     protected override async Task OnInitializedAsync()
     {
         _catalogs = await AppDtoReseiver.GetCatalogsAsync();
-        _htmlValue = await AppDtoReseiver.GetIssue(1);
+        _editingIssue = new EditingIssueVm();
+        _defaultIssue = new EditingIssueVm
+            {
+                AnswerText = string.Empty,
+                IsStudy = false,
+                RepeatDate = null
+            };
+
+    }
+
+    internal async void CurrentItemChanged()
+    {
+        if(_currentItem is IssueItemVm issueItem)
+        {
+            var res = await AppDtoReseiver.GetEditingIssue(issueItem.Id);
+            if (res == null)
+                _editingIssue = _defaultIssue;
+            else
+                _editingIssue = res;
+        }
     }
 }
