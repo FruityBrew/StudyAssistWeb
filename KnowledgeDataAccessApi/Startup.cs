@@ -35,7 +35,8 @@ namespace KnowledgeDataAccessApi
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = this.Configuration.GetConnectionString("RemoteKnowledgeConnection");
+            //string connectionString = this.Configuration.GetConnectionString("RemoteKnowledgeConnection");
+            string connectionString = this.Configuration.GetConnectionString("LocalKnowledgeConnection");
             services.AddDbContext<KnowledgeContext>(
                 opt => opt.UseSqlServer(connectionString));
 

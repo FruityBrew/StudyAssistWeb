@@ -1,3 +1,9 @@
-﻿using StudyAssist.KnowledgeDataConverter;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using StudyAssist.KnowledgeDataConverter;
 
-FromFileToDbConvertor.Convert();
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpClient();
+var app = builder.Build();
+app.Run();
+await FromFileToDbConvertor.Convert();

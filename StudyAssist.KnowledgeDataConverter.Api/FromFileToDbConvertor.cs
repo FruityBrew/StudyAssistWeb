@@ -12,7 +12,7 @@ using StudyAssistInterfaces;
 using StudyAssistModel;
 using Utilities.Interfaces;
 
-namespace StudyAssist.KnowledgeDataConverter
+namespace StudyAssist.KnowledgeDataConverter.Api
 {
     internal static class FromFileToDbConvertor
     {
