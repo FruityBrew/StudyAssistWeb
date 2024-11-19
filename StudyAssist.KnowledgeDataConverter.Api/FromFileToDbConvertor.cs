@@ -14,12 +14,19 @@ using Utilities.Interfaces;
 
 namespace StudyAssist.KnowledgeDataConverter.Api
 {
-    internal static class FromFileToDbConvertor
+    internal class FromFileToDbConvertor : IKnowledgeDataConverter
     {
         private static string _knowledgeDirectoryPath = 
             @"D:\OneDrive\_Код\StudyAssistRelease_Actual_V_3\CategoriesStorage";
 
-        internal static async Task Convert()
+        private IKnowledgeDataProvider _knowledgeDataProvider;
+
+        public FromFileToDbConvertor(IKnowledgeDataProvider knowledgeDataProvider)
+        {
+            _knowledgeDataProvider = knowledgeDataProvider;
+        }
+
+        public async Task Convert()
         {
             List<int> catalogsIds = [15];
 
@@ -28,8 +35,7 @@ namespace StudyAssist.KnowledgeDataConverter.Api
             IEnumerable<Catalog> actualModels = _ConvertOldModelToModel(oldModels)
                 .ToList();
 
-            IKnowledgeDataProvider dataProvider = new KnowledgeDataProvider();
-            await dataProvider.SaveCatalog(actualModels.First());
+            await _knowledgeDataProvider.SaveCatalog(actualModels.First());
         }
 
         private static IEnumerable<FileInfo> _GetDataFiles()
@@ -156,5 +162,7 @@ namespace StudyAssist.KnowledgeDataConverter.Api
 
             return target;
         }
+
+
     }
 }

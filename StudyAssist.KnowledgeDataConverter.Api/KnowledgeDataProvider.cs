@@ -11,6 +11,7 @@ using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using Utilities.Interfaces;
 using static IdentityModel.OidcConstants;
+using static System.Net.WebRequestMethods;
 
 namespace StudyAssist.KnowledgeDataConverter.Api
 {
@@ -21,7 +22,12 @@ namespace StudyAssist.KnowledgeDataConverter.Api
 
         private string _identityServerUri = @"AuthConfig:IdentityServerAuthorityUrl";
 
-        private string _dataAccessUri = @"WebApiUrls:KnowledgeDataAccessApi";
+        private string _dataAccessUri = @"KnowledgeDataAccessApi";
+
+        public KnowledgeDataProvider(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
 
         public async Task<int> SaveCatalog(Catalog catalog)
         {
@@ -43,12 +49,13 @@ namespace StudyAssist.KnowledgeDataConverter.Api
 
             HttpClient dataAccessClient = _httpClientFactory.CreateClient();
             //dataAccessClient.SetBearerToken(tokenResponse.AccessToken);
+            catalog.Themes = null;
+            // разобраться почему с темами не проходит
+            HttpContent content = JsonContent.Create(catalog, typeof(Catalog));
 
-            HttpContent content = JsonContent.Create(catalog);
-
-
+            string uri = @"http://localhost:5000/api/catalogs";
             var response = await dataAccessClient.PostAsync(
-                _dataAccessUri, content);
+                uri, content);
 
             return 1;
         }

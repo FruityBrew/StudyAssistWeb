@@ -82,6 +82,7 @@ namespace KnowledgeDataAccessApi.Controllers
         /// <param name="value">Каталог</param>
         [HttpPost]
         //[Authorize("KnowledgeApi.Write")]
+        [AllowAnonymous]
 		public async Task<ActionResult<Catalog>> AddCatalog(
             [FromBody] Catalog addedItem)
         {
