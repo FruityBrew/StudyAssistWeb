@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using StudyAssist.Model;
 using System;
@@ -49,13 +50,64 @@ namespace StudyAssist.KnowledgeDataConverter.Api
 
             HttpClient dataAccessClient = _httpClientFactory.CreateClient();
             //dataAccessClient.SetBearerToken(tokenResponse.AccessToken);
-            catalog.Themes = null;
-            // разобраться почему с темами не проходит
-            HttpContent content = JsonContent.Create(catalog, typeof(Catalog));
 
-            string uri = @"http://localhost:5000/api/catalogs";
+            Catalog addingCatalog = new()
+            {
+                Name = catalog.Name,
+            };
+            
+            HttpContent catalogContent = JsonContent.Create(addingCatalog);
+
+            string apiUri = @"http://localhost:5000/api/";
             var response = await dataAccessClient.PostAsync(
-                uri, content);
+                apiUri + "catalogs", catalogContent);
+
+            Catalog? addedCatalog = await response.Content.ReadFromJsonAsync<Catalog>();
+
+            if(addedCatalog != null)
+            {
+
+                // здесь можно распараллелить запросы!
+
+                foreach(Theme theme in catalog.Themes)
+                {
+                    Theme addingTheme = new Theme()
+                    {
+                        Name = theme.Name,
+                        CatalogId = addedCatalog.CatalogId,
+                        ThemeId = null,
+                        Issues = null
+                    };
+
+                    HttpResponseMessage addingThemeResponseMessage = await dataAccessClient.PostAsync(
+                        apiUri + "themes", JsonContent.Create(addingTheme));
+
+                    string prob = await addingThemeResponseMessage.Content.ReadAsStringAsync();
+
+                    Theme? addedTheme = await addingThemeResponseMessage.Content.ReadFromJsonAsync<Theme>();
+                    
+                    
+                    if(addedTheme != null && theme.Issues is not null)
+                    {
+                        foreach(Issue issue in theme.Issues)
+                        {
+                            Issue addingIssue = new()
+                            {
+                                Question = issue.Question,
+                                Answer = issue.Answer,
+                                ThemeId = issue.ThemeId,
+                            };
+
+                            HttpResponseMessage addingIssueResponseMessage = await dataAccessClient.PostAsync(
+                                apiUri + "issues", JsonContent.Create(addingIssue));
+
+                            string possibleErr = await addingIssueResponseMessage.Content.ReadAsStringAsync();
+
+                            Issue? addedIssue = await addingIssueResponseMessage.Content.ReadFromJsonAsync<Issue>();
+                        }
+                    }
+                }
+            }
 
             return 1;
         }

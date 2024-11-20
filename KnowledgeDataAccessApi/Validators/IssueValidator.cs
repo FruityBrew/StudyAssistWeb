@@ -9,7 +9,7 @@ namespace KnowledgeDataAccessApi.Validators
         public IssueValidator()
         {
             RuleFor(issue => issue.IssueId)
-                .Equal(0)
+                .Null()
                 .WithMessage(MessageTemplates.DB_ENTITYID_RULE);
             RuleFor(issue => issue.Question)
                 .NotNull()
