@@ -16,18 +16,100 @@ using static System.Net.WebRequestMethods;
 
 namespace StudyAssist.KnowledgeDataConverter.Api
 {
-    internal class KnowledgeDataProvider : IKnowledgeDataProvider
+    internal class KnowledgeDataProvider : IKnowledgeDataProvider, IDisposable
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        //private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         private string _identityServerUri = @"AuthConfig:IdentityServerAuthorityUrl";
 
-        private string _dataAccessUri = @"KnowledgeDataAccessApi";
+        private string _dataAccessUri = @"WebApiUrls:KnowledgeDataAccessApi";
 
-        public KnowledgeDataProvider(IHttpClientFactory httpClientFactory)
+        private HttpClient _httpClient;
+
+        public KnowledgeDataProvider(
+            IHttpClientFactory httpClientFactory,
+            IConfiguration configuration)
         {
+            _configuration = configuration;
             _httpClientFactory = httpClientFactory;
+        }
+
+        public Task<Catalog> SaveCatalogAsync(Catalog catalog)
+        {
+            ArgumentNullException.ThrowIfNull(catalog);
+
+            Catalog addingCatalog = new()
+            {
+                Name = catalog.Name,
+                CatalogId = 0
+            };
+
+            try
+            {
+                return _SaveItem<Catalog>(addingCatalog, "catalogs");
+            }
+            catch(Exception ex)
+            {
+                throw new InvalidOperationException("Saving catalog error.", ex);
+            }
+        }
+
+        private async Task<T> _SaveItem<T>(T addingItem, string controllerUriSegment)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(controllerUriSegment);
+
+            _SetHttpClient();
+
+            HttpContent catalogContent = JsonContent.Create(addingItem);
+
+            HttpResponseMessage response = await _httpClient.PostAsync(
+                controllerUriSegment, catalogContent);
+
+            if(response.IsSuccessStatusCode == false)
+                throw new InvalidOperationException(
+                    await _CreateErrorMessageFromResponse(response));
+
+            T? addedCatalog = await response.Content.ReadFromJsonAsync<T>();
+
+            if(addedCatalog == null)
+                throw new InvalidOperationException(
+                    "Null response result was received from dataAccessApi");
+
+            return addedCatalog;
+        }
+
+        private async Task<string> _CreateErrorMessageFromResponse(HttpResponseMessage response)
+        {
+            ProblemDetails? problem = await response.Content.ReadFromJsonAsync<ProblemDetails>();
+            string probMsg = string.Empty;
+
+            if(problem == null)
+                return string.Empty;
+
+            string errors = problem.Extensions
+                .FirstOrDefault(ext => ext.Key == "errors")
+                .Value?.ToString() ?? string.Empty;
+
+            probMsg = $"Incorrect response was received from dataAccessApi:" +
+                $" Status:{problem.Status}. Title: {problem.Title ?? string.Empty} {errors}";
+
+            return probMsg;
+        }
+
+        private void _SetHttpClient()
+        {
+            if(_httpClient != null)
+                return;
+            
+            _httpClient = _httpClientFactory.CreateClient();
+
+            string? knowledgeDataApiBaseUri = _configuration.GetValue<string>(_dataAccessUri);
+
+            if(knowledgeDataApiBaseUri is null || knowledgeDataApiBaseUri == string.Empty)
+                throw new InvalidOperationException("DataAccess uri not found");
+
+            _httpClient.BaseAddress = new Uri(knowledgeDataApiBaseUri);
         }
 
         public async Task<int> SaveCatalog(Catalog catalog)
@@ -116,6 +198,12 @@ namespace StudyAssist.KnowledgeDataConverter.Api
             }
 
             return 1;
+        }
+
+        public void Dispose()
+        {
+            if(_httpClient != null)
+                _httpClient.Dispose();
         }
     }
 }

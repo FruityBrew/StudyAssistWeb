@@ -35,7 +35,7 @@ namespace StudyAssist.KnowledgeDataConverter.Api
             IEnumerable<Catalog> actualModels = _ConvertOldModelToModel(oldModels)
                 .ToList();
 
-            await _knowledgeDataProvider.SaveCatalog(actualModels.First());
+           Catalog cat = await _knowledgeDataProvider.SaveCatalogAsync(actualModels.First());
         }
 
         private static IEnumerable<FileInfo> _GetDataFiles()

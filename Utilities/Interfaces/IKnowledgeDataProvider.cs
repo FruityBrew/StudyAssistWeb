@@ -6,5 +6,7 @@ namespace Utilities.Interfaces
     public interface IKnowledgeDataProvider
     {
         Task<int> SaveCatalog(Catalog catalog);
+
+        Task<Catalog> SaveCatalogAsync(Catalog catalog);
     }
 }
