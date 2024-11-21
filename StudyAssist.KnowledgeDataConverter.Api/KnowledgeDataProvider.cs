@@ -47,7 +47,7 @@ namespace StudyAssist.KnowledgeDataConverter.Api
 
             try
             {
-                return _SaveItem<Catalog>(addingCatalog, "catalogs");
+                return _SaveItem(addingCatalog, "catalogs");
             }
             catch(Exception ex)
             {
