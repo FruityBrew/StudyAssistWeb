@@ -71,6 +71,9 @@ namespace StudyAssist.KnowledgeDataConverter.Api
 
                 foreach(Theme theme in catalog.Themes)
                 {
+                    if(theme.Name == null || theme.Name == string.Empty)
+                        continue;
+
                     Theme addingTheme = new Theme()
                     {
                         Name = theme.Name,
@@ -91,11 +94,14 @@ namespace StudyAssist.KnowledgeDataConverter.Api
                     {
                         foreach(Issue issue in theme.Issues)
                         {
+                            if(issue.Question is null || issue.Question == string.Empty)
+                                continue;
+
                             Issue addingIssue = new()
                             {
                                 Question = issue.Question,
                                 Answer = issue.Answer,
-                                ThemeId = issue.ThemeId,
+                                ThemeId = addedTheme.ThemeId,
                             };
 
                             HttpResponseMessage addingIssueResponseMessage = await dataAccessClient.PostAsync(
