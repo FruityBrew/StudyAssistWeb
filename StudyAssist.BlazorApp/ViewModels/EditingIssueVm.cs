@@ -1,6 +1,6 @@
 ﻿namespace StudyAssist.BlazorApp.ViewModels
 {
-    public class EditingIssueVm : IssueItemVm
+    public class EditingIssueVm : ItemVm
     {
         public string AnswerText { get; set; }
 

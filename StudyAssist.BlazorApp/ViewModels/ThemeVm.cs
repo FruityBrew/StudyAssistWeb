@@ -1,10 +1,7 @@
 ﻿namespace StudyAssist.BlazorApp.ViewModels
 {
-    public class ThemeVm
+    public class ThemeVm : ItemVm
     {
-        public int Id { get; set; } 
-        public string Name { get; set; }
-
-        public List<IssueItemVm> Issues { get; set; }
+        public List<ItemVm> Issues { get; set; }
     }
 }
