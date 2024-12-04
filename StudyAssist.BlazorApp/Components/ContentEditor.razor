@@ -14,10 +14,10 @@
             </RadzenStack>
             <RadzenStack Orientation="Orientation.Vertical" class="rz-my-5">
                 <RadzenLabel  Text="Каталог:" class="rz-my-2 rz-mx-2"/>
-                <RadzenTree Data=@_catalogs Change="@CurrentItemChanged" @bind-Value=@_currentItem Style="float:left">
+                <RadzenTree Data=@_catalogs Change="@CurrentItemChanged"  @bind-Value=@_currentItem Style="float:left">
                     <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)"  ChildrenProperty="Themes"></RadzenTreeLevel>
                     <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
-                    <RadzenTreeLevel TextProperty="@nameof(IssueItemVm.Name)"  HasChildren=@(ch => false )></RadzenTreeLevel>
+                    <RadzenTreeLevel TextProperty="@nameof(ItemVm.Name)"  HasChildren=@(ch => false )></RadzenTreeLevel>
                 </RadzenTree>
             </RadzenStack>
             
@@ -25,12 +25,17 @@
     </RadzenColumn>
     <RadzenColumn Gap="0rem">
         <RadzenRow AlignItems="AlignItems.Normal" >
-            <RadzenCard Variant="Variant.Filled" class="rz-my-2 " Style="max-width: 420px">
-                <RadzenStack >
-                    <RadzenText Text=@_repeatCountText></RadzenText>
-                    <RadzenText Text=@_repeatDateText></RadzenText>
-                </RadzenStack>
-            </RadzenCard>
+            <RadzenStack Orientation="Orientation.Horizontal">
+                <RadzenCard Variant="Variant.Filled" class="rz-my-2 " Style="max-width: 420px">
+                    <RadzenStack>
+                        <RadzenText Text=@_repeatCountText></RadzenText>
+                        <RadzenText Text=@_repeatDateText></RadzenText>
+                    </RadzenStack>
+                </RadzenCard>
+                <RadzenFormField Text="Наименование каталога" Variant="Variant.Text" Style="width: 100%;">
+                    <RadzenTextBox @bind-Value="@_selectedCatalog.Name"/>
+                </RadzenFormField>
+            </RadzenStack>
         </RadzenRow>
         <RadzenRow>
             <RadzenHtmlEditor @bind-Value=@_editingIssue.AnswerText />
@@ -46,7 +51,7 @@
     private object _currentItem;
     private string _repeatCountText = @"Количество повторений: -";
     private string _repeatDateText = @"Дата повтора: -";
-
+    private CatalogVm _selectedCatalog;
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,13 +64,23 @@
                 RepeatDate = null
             };
 
+        _selectedCatalog = new CatalogVm();
+
     }
 
     internal async void CurrentItemChanged()
     {
-        if(_currentItem is IssueItemVm issueItem)
+        if (_currentItem is CatalogVm || _currentItem is ThemeVm)
+        {
+            // todo заменить!!
+            _selectedCatalog = new CatalogVm();
+            return;
+        }
+
+        if(_currentItem is ItemVm issueItem)
         {
             var res = await AppDtoReseiver.GetEditingIssue(issueItem.Id);
+
             if (res == null)
             {
                 _editingIssue = _defaultIssue;
@@ -74,6 +89,12 @@
             }
             else
             {
+                ThemeVm selectedItemTheme = _FindThemeBy(issueItem.ParentId)!;
+                _selectedCatalog = _catalogs
+                    .FirstOrDefault(cat => cat.Id == selectedItemTheme.ParentId)!; 
+
+
+
                 _editingIssue = res;
                 _repeatCountText = @"Количество повторений: " + _editingIssue.RepeatCount;
                 _repeatDateText = @"Дата повтора: " + 
@@ -82,5 +103,12 @@
                         : "-");
             }
         }
+    }
+
+    private ThemeVm? _FindThemeBy(int themeId)
+    {
+        return _catalogs
+            .SelectMany(cat => cat.Themes)
+            .FirstOrDefault(th => th.Id == themeId);
     }
 }

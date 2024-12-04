@@ -13,7 +13,8 @@ namespace StudyAssist.BlazorApp
                 {
                     {1, "First" },
                     {2, "Second" },
-                    {3,  "Third"}
+                    {3,  "Third"},
+                    {4, "Create new catalog" }
                 },
                 Themes =
                 {
@@ -50,12 +51,14 @@ namespace StudyAssist.BlazorApp
                         {
                             Id = theme.Key,
                             Name = theme.Value.Name,
+                            ParentId = catalog.Key,
                             Issues = catalogsDto.Issues
                                 .Where(issue=> issue.Value.ThemeId == theme.Key)
-                                .Select(issue => new IssueItemVm()
+                                .Select(issue => new ItemVm()
                                 {
-                                    Id= issue.Key,
+                                    Id = issue.Key,
                                     Name = issue.Value.Name,
+                                    ParentId = theme.Key
                                 }).ToList()
                         }).ToList(),
                 })
