@@ -35,6 +35,12 @@
                 <RadzenFormField Text="Наименование каталога" Variant="Variant.Text" Style="width: 100%;">
                     <RadzenTextBox @bind-Value="@_selectedCatalog.Name"/>
                 </RadzenFormField>
+                <RadzenFormField Text="Наименование темы" Variant="Variant.Text" Style="width: 100%;">
+                    <RadzenTextBox @bind-Value="@_selectedTheme.Name" />
+                </RadzenFormField>
+                <RadzenFormField Text="Наименование заметки" Variant="Variant.Text" Style="width: 100%;">
+                    <RadzenTextBox @bind-Value="@_selectedItem.Name" @bind-Disabled=@f/>
+                </RadzenFormField>
             </RadzenStack>
         </RadzenRow>
         <RadzenRow>
@@ -52,6 +58,10 @@
     private string _repeatCountText = @"Количество повторений: -";
     private string _repeatDateText = @"Дата повтора: -";
     private CatalogVm _selectedCatalog;
+    private ThemeVm _selectedTheme;
+    private ItemVm _selectedItem;
+
+    private bool f = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -65,21 +75,48 @@
             };
 
         _selectedCatalog = new CatalogVm();
+        _selectedTheme = new ThemeVm();
+        _selectedItem = new ItemVm();
 
+    }
+
+    internal bool Getf()
+    {
+        return _selectedItem == null;
     }
 
     internal async void CurrentItemChanged()
     {
-        if (_currentItem is CatalogVm || _currentItem is ThemeVm)
+        if (_currentItem is CatalogVm catalog)
         {
+            _selectedCatalog = _catalogs
+                .FirstOrDefault(cat => cat.Id == catalog.Id)!;
             // todo заменить!!
-            _selectedCatalog = new CatalogVm();
+            _selectedTheme = new ThemeVm();
+            _selectedItem = new ItemVm();
+        }
+        else if( _currentItem is ThemeVm theme)
+        {
+            _selectedCatalog = _catalogs
+                .FirstOrDefault(cat => cat.Id == theme.ParentId)!;
+            _selectedTheme = _selectedCatalog.Themes
+                .FirstOrDefault(th => th.Id == theme.Id)!;
+
+            // todo заменить!!
+            _selectedItem = new ItemVm();
+
             return;
         }
-
-        if(_currentItem is ItemVm issueItem)
+        else if(_currentItem is ItemVm issueItem)
         {
+            _selectedItem = issueItem;
+            _selectedTheme = _FindThemeBy(issueItem.ParentId)!;
+            _selectedCatalog = _catalogs
+                .FirstOrDefault(cat => cat.Id == _selectedTheme.ParentId)!;
+
+
             var res = await AppDtoReseiver.GetEditingIssue(issueItem.Id);
+
 
             if (res == null)
             {
@@ -89,12 +126,6 @@
             }
             else
             {
-                ThemeVm selectedItemTheme = _FindThemeBy(issueItem.ParentId)!;
-                _selectedCatalog = _catalogs
-                    .FirstOrDefault(cat => cat.Id == selectedItemTheme.ParentId)!; 
-
-
-
                 _editingIssue = res;
                 _repeatCountText = @"Количество повторений: " + _editingIssue.RepeatCount;
                 _repeatDateText = @"Дата повтора: " + 
