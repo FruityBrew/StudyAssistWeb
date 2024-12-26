@@ -23,28 +23,33 @@
             
         </RadzenStack>
     </RadzenColumn>
-    <RadzenColumn Gap="0rem">
-        <RadzenRow AlignItems="AlignItems.Normal" >
-            <RadzenStack Orientation="Orientation.Horizontal">
-                <RadzenCard Variant="Variant.Filled" class="rz-my-2 " Style="max-width: 420px">
+    <RadzenColumn Gap="0rem" >
+        <RadzenRow class="rz-my-2 ">
+            <RadzenStack Orientation="Orientation.Horizontal" class="rz-w-100">
+                <RadzenCard Variant="Variant.Filled"  Style="max-width: 420px">
                     <RadzenStack>
                         <RadzenText Text=@_repeatCountText></RadzenText>
                         <RadzenText Text=@_repeatDateText></RadzenText>
                     </RadzenStack>
                 </RadzenCard>
-                <RadzenFormField Text="Наименование каталога" Variant="Variant.Text" Style="width: 100%;">
-                    <RadzenTextBox @bind-Value="@_selectedCatalog.Name"/>
-                </RadzenFormField>
-                <RadzenFormField Text="Наименование темы" Variant="Variant.Text" Style="width: 100%;">
-                    <RadzenTextBox @bind-Value="@_selectedTheme.Name" />
-                </RadzenFormField>
-                <RadzenFormField Text="Наименование заметки" Variant="Variant.Text" Style="width: 100%;">
-                    <RadzenTextBox @bind-Value="@_selectedItem.Name" @bind-Disabled=@f/>
-                </RadzenFormField>
+                <RadzenStack Orientation="Orientation.Vertical" class="rz-w-75">
+                    <RadzenStack Orientation="Orientation.Horizontal" >
+                        <RadzenFormField Text="Наименование каталога" Variant="Variant.Text" class="rz-w-25">
+                            <RadzenTextBox @bind-Value="@_selectedCatalog.Name" />
+                        </RadzenFormField>
+                        <RadzenFormField Text="Наименование темы" Variant="Variant.Text" class="rz-w-25">
+                            <RadzenTextBox @bind-Value="@_selectedTheme.Name"  />
+                        </RadzenFormField>
+                    </RadzenStack>
+                    <RadzenFormField Text="Наименование заметки" Variant="Variant.Text"  >
+                        <RadzenTextBox @bind-Value="@_selectedItem.Name" @bind-Disabled=@f/>
+                    </RadzenFormField>
+                </RadzenStack>
+
             </RadzenStack>
         </RadzenRow>
         <RadzenRow>
-            <RadzenHtmlEditor @bind-Value=@_editingIssue.AnswerText />
+            <RadzenHtmlEditor @bind-Value=@_editingIssue.AnswerText class="rz-w-100" />
         </RadzenRow>
     </RadzenColumn>
 </RadzenRow>
@@ -61,7 +66,7 @@
     private ThemeVm _selectedTheme;
     private ItemVm _selectedItem;
 
-    private bool f = true;
+    private bool f = false;
 
     protected override async Task OnInitializedAsync()
     {
