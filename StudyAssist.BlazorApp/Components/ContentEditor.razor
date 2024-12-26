@@ -26,25 +26,21 @@
     <RadzenColumn Gap="0rem" >
         <RadzenRow class="rz-my-2 ">
             <RadzenStack Orientation="Orientation.Horizontal" class="rz-w-100">
-                <RadzenCard Variant="Variant.Filled"  Style="max-width: 420px">
+                <RadzenCard Variant="Variant.Filled"  Style="width:max-content; max-width: 420px">
                     <RadzenStack>
                         <RadzenText Text=@_repeatCountText></RadzenText>
                         <RadzenText Text=@_repeatDateText></RadzenText>
                     </RadzenStack>
                 </RadzenCard>
-                <RadzenStack Orientation="Orientation.Vertical" class="rz-w-100">
-                    <RadzenStack Orientation="Orientation.Horizontal" >
-                        <RadzenFormField Text="Наименование каталога" Variant="Variant.Text" class="rz-w-25">
-                            <RadzenTextBox @bind-Value="@_selectedCatalog.Name" />
+                <RadzenFormField Text="Наименование каталога" Variant="Variant.Text" @bind-Visible=@_isCatalogVisible class="rz-w-25 rz-my-10">
+                            <RadzenTextBox @bind-Value="@_selectedCatalog.Name"  />
                         </RadzenFormField>
-                        <RadzenFormField Text="Наименование темы" Variant="Variant.Text" class="rz-w-25">
+                <RadzenFormField Text="Наименование темы" Variant="Variant.Text" @bind-Visible=@_isThemeVisible class="rz-w-25 rz-my-10">
                             <RadzenTextBox @bind-Value="@_selectedTheme.Name"  />
                         </RadzenFormField>
-                    </RadzenStack>
-                    <RadzenFormField Text="Наименование заметки" Variant="Variant.Text"  >
-                        <RadzenTextBox @bind-Value="@_selectedItem.Name" @bind-Disabled=@f/>
-                    </RadzenFormField>
-                </RadzenStack>
+                <RadzenFormField Text="Наименование заметки" Variant="Variant.Text" @bind-Visible=@_isIssueVisible class="rz-w-100 rz-my-10">
+                            <RadzenTextBox @bind-Value="@_selectedItem.Name" />
+                        </RadzenFormField>
 
             </RadzenStack>
         </RadzenRow>
@@ -67,6 +63,17 @@
     private ItemVm _selectedItem;
 
     private bool f = false;
+
+    private bool _isThemeVisible = false;
+    private bool _isIssueVisible = false;
+    private bool _isCatalogVisible = false;
+
+    private bool _isCatalogDisabled = true;
+    private bool _isThemeDisabled = false;
+    private bool _isIssueDisabled = false;
+
+
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -96,9 +103,20 @@
         {
             _selectedCatalog = _catalogs
                 .FirstOrDefault(cat => cat.Id == catalog.Id)!;
+            // _isCatalogSelected = true;
             // todo заменить!!
             _selectedTheme = new ThemeVm();
             _selectedItem = new ItemVm();
+
+            _isThemeVisible = false;
+            _isIssueVisible = false;
+            _isCatalogVisible = true;
+            // _isCatalogDisabled = false;
+            _editingIssue = _defaultIssue;
+
+            _repeatCountText = @"Количество повторений: -";
+            _repeatDateText = @"Дата повтора: -";
+
         }
         else if( _currentItem is ThemeVm theme)
         {
@@ -109,6 +127,15 @@
 
             // todo заменить!!
             _selectedItem = new ItemVm();
+            _isThemeVisible = true;
+            _isIssueVisible = false;
+            _isCatalogVisible = false;
+            // _isCatalogDisabled = true;
+            // _isThemeDisabled = false;
+            _editingIssue = _defaultIssue;
+
+            _repeatCountText = @"Количество повторений: -";
+            _repeatDateText = @"Дата повтора: -";
 
             return;
         }
@@ -138,6 +165,11 @@
                         ? _editingIssue.RepeatDate.Value.ToString("dd.MM.yyyy")
                         : "-");
             }
+
+            _isIssueVisible = true;
+            _isCatalogVisible = false;
+            _isThemeVisible = false;
+
         }
     }
 
