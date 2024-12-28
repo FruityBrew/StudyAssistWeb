@@ -32,6 +32,7 @@
                         <RadzenText Text=@_repeatDateText></RadzenText>
                     </RadzenStack>
                 </RadzenCard>
+
                 <RadzenFormField Text="Наименование каталога" Variant="Variant.Text" @bind-Visible=@_isCatalogVisible class="rz-w-25 rz-my-10">
                             <RadzenTextBox @bind-Value="@_selectedCatalog.Name"  />
                         </RadzenFormField>
@@ -41,6 +42,18 @@
                 <RadzenFormField Text="Наименование заметки" Variant="Variant.Text" @bind-Visible=@_isIssueVisible class="rz-w-100 rz-my-10">
                             <RadzenTextBox @bind-Value="@_selectedItem.Name" />
                         </RadzenFormField>
+                        <RadzenButton 
+                            Text="Create new theme" 
+                            Icon="add" 
+                            Variant="Variant.Text" 
+                            ButtonStyle="ButtonStyle.Primary" 
+                            Size="ButtonSize.Small"
+                           
+                              class="rz-my-10"
+                            @bind-Visible=@_isCatalogVisible
+                                  >
+
+                        </RadzenButton>
 
             </RadzenStack>
         </RadzenRow>
