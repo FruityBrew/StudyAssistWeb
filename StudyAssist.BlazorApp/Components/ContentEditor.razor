@@ -55,6 +55,9 @@
     private List<CatalogVm> _catalogs;
     private EditingIssueVm _editingIssue;
     private EditingIssueVm _defaultIssue;
+    private ThemeVm _defaultTheme;
+    private CatalogVm _defaultCatalog;
+    private ItemVm _defaultItem;
     private object _currentItem;
     private string _repeatCountText = @"Количество повторений: -";
     private string _repeatDateText = @"Дата повтора: -";
@@ -78,6 +81,9 @@
     protected override async Task OnInitializedAsync()
     {
         _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        _defaultCatalog = new CatalogVm();
+        _defaultTheme = new ThemeVm();
+        _defaultItem = new ItemVm();
         _editingIssue = new EditingIssueVm();
         _defaultIssue = new EditingIssueVm
             {
@@ -104,9 +110,8 @@
             _selectedCatalog = _catalogs
                 .FirstOrDefault(cat => cat.Id == catalog.Id)!;
             // _isCatalogSelected = true;
-            // todo заменить!!
-            _selectedTheme = new ThemeVm();
-            _selectedItem = new ItemVm();
+            _selectedTheme = _defaultTheme;
+            _selectedItem = _defaultItem;
 
             _isThemeVisible = false;
             _isIssueVisible = false;
@@ -125,8 +130,7 @@
             _selectedTheme = _selectedCatalog.Themes
                 .FirstOrDefault(th => th.Id == theme.Id)!;
 
-            // todo заменить!!
-            _selectedItem = new ItemVm();
+            _selectedItem = _defaultItem;
             _isThemeVisible = true;
             _isIssueVisible = false;
             _isCatalogVisible = false;
