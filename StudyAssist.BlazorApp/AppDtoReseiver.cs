@@ -5,18 +5,16 @@ namespace StudyAssist.BlazorApp
 {
     public static class AppDtoReseiver
     {
-        internal static async Task<List<CatalogVm>> GetCatalogsAsync()
+        private static CatalogsDto _catalogsDto = new CatalogsDto()
         {
-            CatalogsDto catalogsDto = new CatalogsDto()
-            {
-                Catalogs = new Dictionary<int, string>
+            Catalogs = new Dictionary<int, string>
                 {
                     {1, "First" },
                     {2, "Second" },
                     {3,  "Third"},
                     {4, "Create new catalog" }
                 },
-                Themes =
+            Themes =
                 {
                     {1, (CatalogId:1, Name:"Theme11") },
                     {2, (CatalogId:1, Name:"Theme12") },
@@ -25,7 +23,7 @@ namespace StudyAssist.BlazorApp
                     {5, (CatalogId:2, Name:"Theme25") },
                     {6, (CatalogId:3, Name:"Theme36") },
                 },
-                Issues =
+            Issues =
                 {
                     {1, (ThemeId:1, Name:"Issue111") },
                     {2, (ThemeId:1, Name:"Issue112") },
@@ -37,22 +35,23 @@ namespace StudyAssist.BlazorApp
                     {8, (ThemeId:1, Name:"Issue118") },
                     {9, (ThemeId:1, Name:"Issue119") },
                 }
-            };
+        };
 
-
-            List<CatalogVm> catalogs = catalogsDto.Catalogs
+        internal static async Task<List<CatalogVm>> GetCatalogsAsync()
+        {
+            List<CatalogVm> catalogs = _catalogsDto.Catalogs
                 .Select(catalog => new CatalogVm 
                 { 
                     Id = catalog.Key,
                     Name = catalog.Value,
-                    Themes = catalogsDto.Themes
+                    Themes = _catalogsDto.Themes
                         .Where(theme => theme.Value.CatalogId == catalog.Key)
                         .Select(theme => new ThemeVm
                         {
                             Id = theme.Key,
                             Name = theme.Value.Name,
                             ParentId = catalog.Key,
-                            Issues = catalogsDto.Issues
+                            Issues = _catalogsDto.Issues
                                 .Where(issue=> issue.Value.ThemeId == theme.Key)
                                 .Select(issue => new ItemVm()
                                 {
@@ -73,6 +72,23 @@ namespace StudyAssist.BlazorApp
         {
             return await Task.FromResult(_editingIssueVms.FirstOrDefault(f => f.Id == issueId));
         }
+
+        internal static async Task<int> AddThemeAsync(ThemeVm theme)
+        {
+            int themeId = _catalogsDto.Themes.Max(th => th.Key) + 1;
+            _catalogsDto.Themes.Add(themeId, (theme.ParentId, theme.Name));
+            return themeId;
+        }
+
+        internal static async Task UpdateThemeName(ThemeVm source)
+        {
+            var target = _catalogsDto.Themes
+                .FirstOrDefault(t => t.Key == source.Id);
+
+            _catalogsDto.Themes.Remove(source.Id);
+            _catalogsDto.Themes.Add(source.Id, (source.ParentId, source.Name));
+        }
+
 
         private static List<EditingIssueVm> _editingIssueVms = new List<EditingIssueVm>
         {

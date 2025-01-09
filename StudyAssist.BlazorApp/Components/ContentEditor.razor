@@ -14,8 +14,8 @@
             </RadzenStack>
             <RadzenStack Orientation="Orientation.Vertical" class="rz-my-5">
                 <RadzenLabel  Text="Каталог:" class="rz-my-2 rz-mx-2"/>
-                <RadzenTree Data=@_catalogs Change="@CurrentItemChanged"  @bind-Value=@_currentItem Style="float:left">
-                    <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)"  ChildrenProperty="Themes"></RadzenTreeLevel>
+                <RadzenTree Data=@_catalogs Change="@CurrentItemChanged" @bind-Value=@_currentItem Style="float:left">
+                    <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" Expanded=@(value => _ExpandCatalog(value)) ChildrenProperty="Themes"></RadzenTreeLevel>
                     <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
                     <RadzenTreeLevel TextProperty="@nameof(ItemVm.Name)"  HasChildren=@(ch => false )></RadzenTreeLevel>
                 </RadzenTree>
@@ -34,10 +34,10 @@
                 </RadzenCard>
 
                 <RadzenFormField Text="Наименование каталога" Variant="Variant.Text" @bind-Visible=@_isCatalogVisible class="rz-w-25 rz-my-10">
-                            <RadzenTextBox @bind-Value="@_selectedCatalog.Name"  />
+                            <RadzenTextBox @bind-Value="@_selectedCatalog.Name" />
                         </RadzenFormField>
                 <RadzenFormField Text="Наименование темы" Variant="Variant.Text" @bind-Visible=@_isThemeVisible class="rz-w-25 rz-my-10">
-                            <RadzenTextBox @bind-Value="@_selectedTheme.Name"  />
+                            <RadzenTextBox @bind-Value="@_selectedTheme.Name"  Change=@(args=> _ThemeNameOnChange(args)) />
                         </RadzenFormField>
                 <RadzenFormField Text="Наименование заметки" Variant="Variant.Text" @bind-Visible=@_isIssueVisible class="rz-w-100 rz-my-10">
                             <RadzenTextBox @bind-Value="@_selectedItem.Name" />
@@ -48,13 +48,22 @@
                             Variant="Variant.Text" 
                             ButtonStyle="ButtonStyle.Primary" 
                             Size="ButtonSize.Small"
-                           
+                           Click=@(arg => _CreateNewTheme())
                               class="rz-my-10"
-                            @bind-Visible=@_isCatalogVisible
-                                  >
+                            @bind-Visible=@_isCatalogVisible >
 
                         </RadzenButton>
+                                                <RadzenButton 
+                            Text="Create new issue" 
+                            Icon="add" 
+                            Variant="Variant.Text" 
+                            ButtonStyle="ButtonStyle.Primary" 
+                            Size="ButtonSize.Small"
+                           
+                              class="rz-my-10"
+                            @bind-Visible=@_isThemeVisible >
 
+                        </RadzenButton>
             </RadzenStack>
         </RadzenRow>
         <RadzenRow>
@@ -78,7 +87,7 @@
     private ThemeVm _selectedTheme;
     private ItemVm _selectedItem;
 
-    private bool f = false;
+    private bool f = true;
 
     private bool _isThemeVisible = false;
     private bool _isIssueVisible = false;
@@ -88,7 +97,7 @@
     private bool _isThemeDisabled = false;
     private bool _isIssueDisabled = false;
 
-
+    private string _expandedCatalog;
 
 
     protected override async Task OnInitializedAsync()
@@ -195,5 +204,37 @@
         return _catalogs
             .SelectMany(cat => cat.Themes)
             .FirstOrDefault(th => th.Id == themeId);
+    }
+
+    private async void _CreateNewTheme()
+    {
+        // _selectedTheme = new ThemeVm();
+
+        ThemeVm newTheme = new ThemeVm
+            {
+                ParentId = _selectedCatalog.Id,
+                Name = "Введите наименование темы...",
+            };
+
+        int newThemeId = await AppDtoReseiver.AddThemeAsync(newTheme);
+
+        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+
+        _expandedCatalog = _catalogs.FirstOrDefault(cat => cat.Id == _selectedCatalog.Id).Name;
+
+        _currentItem = _FindThemeBy(newThemeId)!;
+
+        CurrentItemChanged();
+    }
+
+    private bool _ExpandCatalog(object value)
+    {
+        return (value as CatalogVm)?.Name == _expandedCatalog;
+    }
+
+    private async void _ThemeNameOnChange(string args)
+    {
+        await AppDtoReseiver.UpdateThemeName(_selectedTheme);
+        // _catalogs = await AppDtoReseiver.GetCatalogsAsync();
     }
 }
