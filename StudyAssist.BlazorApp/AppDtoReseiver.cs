@@ -80,7 +80,7 @@ namespace StudyAssist.BlazorApp
             return themeId;
         }
 
-        internal static async Task UpdateThemeName(ThemeVm source)
+        internal static async Task UpdateThemeNameAsync(ThemeVm source)
         {
             var target = _catalogsDto.Themes
                 .FirstOrDefault(t => t.Key == source.Id);
@@ -89,6 +89,13 @@ namespace StudyAssist.BlazorApp
             _catalogsDto.Themes.Add(source.Id, (source.ParentId, source.Name));
         }
 
+        internal static async Task<int> AddIssueAsync(EditingIssueVm issue)
+        {
+            int issueId = _catalogsDto.Issues.Max(i => i.Key) + 1;
+            _catalogsDto.Issues.Add(issueId, (issue.ParentId, issue.Name));
+
+            return issueId;
+        }
 
         private static List<EditingIssueVm> _editingIssueVms = new List<EditingIssueVm>
         {

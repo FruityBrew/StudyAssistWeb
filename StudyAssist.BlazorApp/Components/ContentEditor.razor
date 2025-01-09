@@ -15,9 +15,20 @@
             <RadzenStack Orientation="Orientation.Vertical" class="rz-my-5">
                 <RadzenLabel  Text="Каталог:" class="rz-my-2 rz-mx-2"/>
                 <RadzenTree Data=@_catalogs Change="@CurrentItemChanged" @bind-Value=@_currentItem Style="float:left">
-                    <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" Expanded=@(value => _ExpandCatalog(value)) ChildrenProperty="Themes"></RadzenTreeLevel>
-                    <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
-                    <RadzenTreeLevel TextProperty="@nameof(ItemVm.Name)"  HasChildren=@(ch => false )></RadzenTreeLevel>
+                    <RadzenTreeLevel 
+                        TextProperty="@nameof(CatalogVm.Name)" 
+                        Expanded=@(value => _ExpandCatalog(value)) 
+                        ChildrenProperty="Themes">
+                    </RadzenTreeLevel>
+                    <RadzenTreeLevel 
+                        TextProperty="@nameof(ThemeVm.Name)" 
+                        Expanded=@(value => _ExpandTheme(value))
+                        ChildrenProperty="Issues">
+                    </RadzenTreeLevel>
+                    <RadzenTreeLevel 
+                        TextProperty="@nameof(ItemVm.Name)"  
+                        HasChildren=@(ch => false )>
+                    </RadzenTreeLevel>
                 </RadzenTree>
             </RadzenStack>
             
@@ -53,13 +64,13 @@
                             @bind-Visible=@_isCatalogVisible >
 
                         </RadzenButton>
-                                                <RadzenButton 
+                        <RadzenButton 
                             Text="Create new issue" 
                             Icon="add" 
                             Variant="Variant.Text" 
                             ButtonStyle="ButtonStyle.Primary" 
                             Size="ButtonSize.Small"
-                           
+                           Click=@(arg => _CreateNewIssue())
                               class="rz-my-10"
                             @bind-Visible=@_isThemeVisible >
 
@@ -98,6 +109,8 @@
     private bool _isIssueDisabled = false;
 
     private string _expandedCatalog;
+    private string _expandedTheme;
+
 
 
     protected override async Task OnInitializedAsync()
@@ -206,6 +219,14 @@
             .FirstOrDefault(th => th.Id == themeId);
     }
 
+    private ItemVm? _FindIssueBy(int issueId)
+    {
+        return _catalogs
+            .SelectMany(cat => cat.Themes)
+            .SelectMany(t => t.Issues)
+            .FirstOrDefault(th => th.Id == issueId);
+    }
+
     private async void _CreateNewTheme()
     {
         // _selectedTheme = new ThemeVm();
@@ -220,7 +241,7 @@
 
         _catalogs = await AppDtoReseiver.GetCatalogsAsync();
 
-        _expandedCatalog = _catalogs.FirstOrDefault(cat => cat.Id == _selectedCatalog.Id).Name;
+        _expandedCatalog = _selectedCatalog.Name;
 
         _currentItem = _FindThemeBy(newThemeId)!;
 
@@ -232,9 +253,34 @@
         return (value as CatalogVm)?.Name == _expandedCatalog;
     }
 
+    private bool _ExpandTheme(object value)
+    {
+        return (value as ThemeVm)?.Name == _expandedTheme;
+    }
+
     private async void _ThemeNameOnChange(string args)
     {
-        await AppDtoReseiver.UpdateThemeName(_selectedTheme);
+        await AppDtoReseiver.UpdateThemeNameAsync(_selectedTheme);
         // _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+    }
+
+    private async void _CreateNewIssue()
+    {
+        EditingIssueVm newIssue = new EditingIssueVm
+            {
+                ParentId = _selectedTheme.Id,
+                Name = "Введите наименование вопроса..."
+            };
+
+        int newIssueId = await AppDtoReseiver.AddIssueAsync(newIssue);
+
+        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+
+        _expandedCatalog = _catalogs.FirstOrDefault(cat => cat.Id == _selectedTheme.ParentId).Name;
+        _expandedTheme = _selectedTheme.Name;
+
+        _currentItem = _FindIssueBy(newIssueId);
+
+        CurrentItemChanged();
     }
 }
