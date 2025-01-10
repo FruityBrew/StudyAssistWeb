@@ -44,14 +44,32 @@
                     </RadzenStack>
                 </RadzenCard>
 
-                <RadzenFormField Text="Наименование каталога" Variant="Variant.Text" @bind-Visible=@_isCatalogVisible class="rz-w-25 rz-my-10">
-                            <RadzenTextBox @bind-Value="@_selectedCatalog.Name" />
+                <RadzenFormField 
+                    Text="Наименование каталога" 
+                    Variant="Variant.Text" 
+                    @bind-Visible=@_isCatalogVisible class="rz-w-25 rz-my-10">
+                        <RadzenTextBox 
+                            @bind-Value="@_selectedCatalog.Name"
+                            Change=@(args => _CatalogNameOnChange(args))>
+                        </RadzenTextBox>
+                </RadzenFormField>
+                <RadzenFormField 
+                    Text="Наименование темы" 
+                    Variant="Variant.Text" 
+                    @bind-Visible=@_isThemeVisible 
+                    class="rz-w-25 rz-my-10">
+                        <RadzenTextBox 
+                            @bind-Value="@_selectedTheme.Name"  
+                            Change=@(args=> _ThemeNameOnChange(args)) />
                         </RadzenFormField>
-                <RadzenFormField Text="Наименование темы" Variant="Variant.Text" @bind-Visible=@_isThemeVisible class="rz-w-25 rz-my-10">
-                            <RadzenTextBox @bind-Value="@_selectedTheme.Name"  Change=@(args=> _ThemeNameOnChange(args)) />
-                        </RadzenFormField>
-                <RadzenFormField Text="Наименование заметки" Variant="Variant.Text" @bind-Visible=@_isIssueVisible class="rz-w-100 rz-my-10">
-                            <RadzenTextBox @bind-Value="@_selectedItem.Name" />
+                <RadzenFormField 
+                    Text="Наименование заметки" 
+                    Variant="Variant.Text" 
+                    @bind-Visible=@_isIssueVisible 
+                    class="rz-w-100 rz-my-10">
+                        <RadzenTextBox 
+                            @bind-Value="@_selectedItem.Name"
+                            Change=@(args => _IssueNameOnChange(args)) />
                         </RadzenFormField>
                         <RadzenButton 
                             Text="Create new theme" 
@@ -262,6 +280,14 @@
     {
         await AppDtoReseiver.UpdateThemeNameAsync(_selectedTheme);
         // _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+    }
+    private async void _CatalogNameOnChange(string args)
+    {
+        await AppDtoReseiver.UpdateCatalogNameAsync(_selectedCatalog);
+    }
+    private async void _IssueNameOnChange(string args)
+    {
+        await AppDtoReseiver.UpdateIssueNameAsync(_selectedItem);
     }
 
     private async void _CreateNewIssue()

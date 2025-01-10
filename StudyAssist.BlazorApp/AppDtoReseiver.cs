@@ -89,6 +89,24 @@ namespace StudyAssist.BlazorApp
             _catalogsDto.Themes.Add(source.Id, (source.ParentId, source.Name));
         }
 
+        internal static async Task UpdateCatalogNameAsync(CatalogVm source)
+        {
+            var target = _catalogsDto.Catalogs
+                .FirstOrDefault(t => t.Key == source.Id);
+
+            _catalogsDto.Catalogs.Remove(source.Id);
+            _catalogsDto.Catalogs.Add(source.Id, source.Name);
+        }
+
+        internal static async Task UpdateIssueNameAsync(ItemVm source)
+        {
+            var target = _catalogsDto.Issues
+                .FirstOrDefault(t => t.Key == source.Id);
+
+            _catalogsDto.Issues.Remove(source.Id);
+            _catalogsDto.Issues.Add(source.Id, (source.ParentId, source.Name));
+        }
+
         internal static async Task<int> AddIssueAsync(EditingIssueVm issue)
         {
             int issueId = _catalogsDto.Issues.Max(i => i.Key) + 1;
