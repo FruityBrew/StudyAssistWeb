@@ -72,25 +72,24 @@
                         Change=@(args => _IssueNameOnChange(args)) />
                 </RadzenFormField>
                 <RadzenButton 
-                    Text="Create new theme" 
-                    Icon="add" 
-                    Variant="Variant.Text" 
-                    ButtonStyle="ButtonStyle.Primary" 
-                    Size="ButtonSize.Small"
-                    Click=@(arg => _CreateNewTheme())
-                        class="rz-my-10"
-                    @bind-Visible=@_isCatalogVisible >
+                        Text="Create new theme" 
+                        Icon="add" 
+                        Variant="Variant.Text" 
+                        ButtonStyle="ButtonStyle.Primary" 
+                        Size="ButtonSize.Small"
+                        Click=@(arg => _CreateNewTheme())
+                            class="rz-my-10"
+                        @bind-Visible=@_isCatalogVisible >
 
                 </RadzenButton>
-                <RadzenButton 
-                    Text="Create new issue" 
-                    Icon="add" 
-                    Variant="Variant.Text" 
-                    ButtonStyle="ButtonStyle.Primary" 
-                    Size="ButtonSize.Small"
-                    Click=@(arg => _CreateNewIssue())
-                        class="rz-my-10"
-                    @bind-Visible=@_isThemeVisible >
+                <RadzenButton   Text="Create new issue" 
+                                Icon="add" 
+                                Variant="Variant.Text" 
+                                ButtonStyle="ButtonStyle.Primary" 
+                                Size="ButtonSize.Small"
+                                Click=@(arg => _CreateNewIssue())
+                                    class="rz-my-10"
+                                @bind-Visible=@_isThemeVisible >
 
                 </RadzenButton>
                 <RadzenButton Text="Delete catalog"
@@ -101,6 +100,16 @@
                               Click=@(arg => _DeleteCatalog())
                               class="rz-my-10"
                               @bind-Visible=@_isCatalogVisible>
+
+                </RadzenButton>
+                <RadzenButton Text="Delete theme"
+                              Icon="delete"
+                              Variant="Variant.Text"
+                              ButtonStyle="ButtonStyle.Danger"
+                              Size="ButtonSize.Small"
+                              Click=@(arg => _DeleteTheme())
+                              class="rz-my-10"
+                              @bind-Visible=@_isThemeVisible>
 
                 </RadzenButton>
             </RadzenStack>
@@ -324,5 +333,13 @@
     {
         await AppDtoReseiver.DeleteCatalogAsync(_selectedCatalog);
         _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        _selectedCatalog = null;
+    }
+
+    private async void _DeleteTheme()
+    {
+        await AppDtoReseiver.DeleteThemeAsync(_selectedTheme);
+        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        _selectedTheme = _defaultTheme;
     }
 }
