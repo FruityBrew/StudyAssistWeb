@@ -82,20 +82,38 @@ namespace StudyAssist.BlazorApp
 
         internal static async Task UpdateThemeNameAsync(ThemeVm source)
         {
-            var target = _catalogsDto.Themes
-                .FirstOrDefault(t => t.Key == source.Id);
-
             _catalogsDto.Themes.Remove(source.Id);
             _catalogsDto.Themes.Add(source.Id, (source.ParentId, source.Name));
         }
 
         internal static async Task UpdateCatalogNameAsync(CatalogVm source)
         {
-            var target = _catalogsDto.Catalogs
-                .FirstOrDefault(t => t.Key == source.Id);
 
             _catalogsDto.Catalogs.Remove(source.Id);
             _catalogsDto.Catalogs.Add(source.Id, source.Name);
+        }
+
+        internal static async Task DeleteCatalogAsync(CatalogVm source)
+        {
+            var themes = _catalogsDto.Themes
+                .Where(th => th.Value.CatalogId == source.Id)
+                .Select(th => th.Key);
+
+            var issues = _catalogsDto.Issues
+                .Where(i => themes.Contains(i.Value.ThemeId))
+                .Select(i => i.Key);
+
+            foreach(var issue in issues)
+            {
+                _catalogsDto.Issues.Remove(issue);
+            }
+
+            foreach(var theme in themes)
+            {
+                _catalogsDto.Themes.Remove(theme);
+            }
+            _catalogsDto.Catalogs.Remove(source.Id);
+
         }
 
         internal static async Task UpdateIssueNameAsync(ItemVm source)
