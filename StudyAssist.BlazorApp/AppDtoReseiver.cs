@@ -130,6 +130,18 @@ namespace StudyAssist.BlazorApp
             _catalogsDto.Themes.Remove(source.Id);
         }
 
+        internal static async Task DeleteIssueAsync(ItemVm deleted)
+        {
+            var delItem = _catalogsDto.Issues
+                .FirstOrDefault(i => i.Key == deleted.Id);
+
+            _catalogsDto.Issues.Remove(delItem.Key);
+
+            var delIssue = _editingIssueVms.First(f => f.Id == deleted.Id);
+            _editingIssueVms.Remove(delIssue);
+        }
+
+
         internal static async Task UpdateIssueNameAsync(ItemVm source)
         {
             var target = _catalogsDto.Issues
