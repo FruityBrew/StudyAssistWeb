@@ -137,7 +137,9 @@ namespace StudyAssist.BlazorApp
 
             _catalogsDto.Issues.Remove(delItem.Key);
 
-            var delIssue = _editingIssueVms.First(f => f.Id == deleted.Id);
+            var delIssue = _editingIssueVms.FirstOrDefault(f => f.Id == deleted.Id);
+
+            if(delIssue != null)
             _editingIssueVms.Remove(delIssue);
         }
 

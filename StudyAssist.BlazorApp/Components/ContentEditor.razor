@@ -357,9 +357,18 @@
     {
         await AppDtoReseiver.DeleteIssueAsync(_selectedItem);
         _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+
+        ThemeVm selectedTheme = _FindThemeBy(_selectedItem.ParentId);
+
         _selectedItem = _defaultItem;
         _editingIssue = _defaultIssue;
 
+        _selectedTheme = selectedTheme;
+        _currentItem = selectedTheme;
+        CurrentItemChanged();
+        _expandedCatalog = _catalogs.FirstOrDefault(f => f.Id == _selectedTheme.Id).Name;
+
+        _expandedTheme = _selectedTheme.Name;
         // todo заселектить тему
     }
 }
