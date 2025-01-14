@@ -37,7 +37,10 @@
     <RadzenColumn Gap="0rem" >
         <RadzenRow class="rz-my-2 ">
             <RadzenStack Orientation="Orientation.Horizontal" class="rz-w-100">
-                <RadzenCard Variant="Variant.Filled"  Style="width:max-content; max-width: 420px">
+                <RadzenCard 
+                    Variant="Variant.Filled"  
+                    Style="width:max-content; max-width: 420px"
+                    @bind-Visible=@_isIssueVisible>
                     <RadzenStack>
                         <RadzenText Text=@_repeatCountText></RadzenText>
                         <RadzenText Text=@_repeatDateText></RadzenText>
@@ -125,7 +128,9 @@
             </RadzenStack>
         </RadzenRow>
         <RadzenRow>
-            <RadzenHtmlEditor @bind-Value=@_editingIssue.AnswerText class="rz-w-100" />
+            <RadzenHtmlEditor @bind-Visible=@_isIssueVisible
+                              @bind-Value=@_editingIssue.AnswerText 
+                class="rz-w-100" />
         </RadzenRow>
     </RadzenColumn>
 </RadzenRow>
@@ -369,6 +374,5 @@
         _expandedCatalog = _catalogs.FirstOrDefault(f => f.Id == _selectedTheme.Id).Name;
 
         _expandedTheme = _selectedTheme.Name;
-        // todo заселектить тему
     }
 }
