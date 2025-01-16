@@ -31,8 +31,16 @@
                         HasChildren=@(ch => false )>
                     </RadzenTreeLevel>
                 </RadzenTree>
+                <RadzenButton Text="create new catalog"
+                              Icon="add"
+                              Variant="Variant.Text"
+                              ButtonStyle="ButtonStyle.Success"
+                              Click=@(arg => _CreateNewCatalog())
+                              Size="ButtonSize.Small"
+                              @bind-Visible=@_IsNotStudy>
+
+                </RadzenButton>
             </RadzenStack>
-            
         </RadzenStack>
     </RadzenColumn>
     <RadzenColumn Gap="0rem" >
@@ -435,5 +443,10 @@
         await AppDtoReseiver.UpdateIssueStudyAsync(_editingIssue);
         CurrentItemChanged();
 
+    }
+
+    private async void _CreateNewCatalog()
+    {
+        
     }
 }
