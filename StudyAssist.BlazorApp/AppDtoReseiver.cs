@@ -162,6 +162,25 @@ namespace StudyAssist.BlazorApp
             editingIssue.AnswerText = issueVm.AnswerText;
         }
 
+        internal static async Task UpdateIssueStudyAsync(EditingIssueVm issueVm)
+        {
+            EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
+            if(editingIssue == null)
+                return;
+
+            editingIssue.IsStudy = issueVm.IsStudy;
+
+            if(editingIssue.IsStudy == false)
+            {
+                editingIssue.RepeatDate = null;
+                editingIssue.RepeatCount = 0;
+            }
+            else
+            {
+                editingIssue.RepeatDate = DateTime.Now.AddDays(7);
+            }
+        }
+
         internal static async Task<int> AddIssueAsync(EditingIssueVm issue)
         {
             int issueId = _catalogsDto.Issues.Max(i => i.Key) + 1;

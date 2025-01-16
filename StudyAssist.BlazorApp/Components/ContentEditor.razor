@@ -49,6 +49,7 @@
                                       Icon="list_alt_add"
                                       Variant="Variant.Text"
                                       ButtonStyle="ButtonStyle.Success"
+                                      Click=@(arg => _AddToStudy())
                                       Size="ButtonSize.Small"
                                       @bind-Visible=@_IsNotStudy>
 
@@ -58,6 +59,7 @@
                                       Variant="Variant.Text"
                                       ButtonStyle="ButtonStyle.Danger"
                                       Size="ButtonSize.Small"
+                                      Click=@(arg => _RemoveFromStudy())
                                       @bind-Visible=@_editingIssue.IsStudy>
 
                         </RadzenButton>
@@ -191,7 +193,7 @@
         }
         set
         {
-            
+
         }
     }
 
@@ -418,5 +420,20 @@
         _expandedCatalog = _catalogs.FirstOrDefault(f => f.Id == _selectedTheme.Id).Name;
 
         _expandedTheme = _selectedTheme.Name;
+    }
+
+    private async void _AddToStudy()
+    {
+        _editingIssue.IsStudy = true;
+        await AppDtoReseiver.UpdateIssueStudyAsync(_editingIssue);
+        CurrentItemChanged();
+    }
+
+    private async void _RemoveFromStudy()
+    {
+        _editingIssue.IsStudy = false;
+        await AppDtoReseiver.UpdateIssueStudyAsync(_editingIssue);
+        CurrentItemChanged();
+
     }
 }
