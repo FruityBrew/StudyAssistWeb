@@ -153,6 +153,15 @@ namespace StudyAssist.BlazorApp
             _catalogsDto.Issues.Add(source.Id, (source.ParentId, source.Name));
         }
 
+        internal static async Task UpdateIssueAnswerAsync(EditingIssueVm issueVm)
+        {
+            EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
+            if(editingIssue == null)
+                return;
+
+            editingIssue.AnswerText = issueVm.AnswerText;
+        }
+
         internal static async Task<int> AddIssueAsync(EditingIssueVm issue)
         {
             int issueId = _catalogsDto.Issues.Max(i => i.Key) + 1;
@@ -180,7 +189,42 @@ namespace StudyAssist.BlazorApp
                 RepeatDate = DateTime.Today,
                 IsStudy = true,
                 AnswerText = @"<p>Очень много текста очень Много текста Ну очнь много текста Прям девать некуда сколько текста<p/>"
-            }
+            },
+            new EditingIssueVm
+            {
+                Id = 1,
+                Name = "Issue111",
+            },
+            new EditingIssueVm
+            {
+                Id = 4,
+                Name = "Issue134",
+            },
+                        new EditingIssueVm
+            {
+                Id = 5,
+                Name = "Issue135",
+            },
+            new EditingIssueVm
+            {
+                Id = 6,
+                Name = "Issue246",
+            },
+                        new EditingIssueVm
+            {
+                Id = 7,
+                Name = "Issue247",
+            },
+                        new EditingIssueVm
+            {
+                Id = 8,
+                Name = "Issue118",
+            },
+            new EditingIssueVm
+            {
+                Id = 9,
+                Name = "Issue119",
+            },
         };
     }
 }

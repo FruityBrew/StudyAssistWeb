@@ -2,6 +2,7 @@
 @using StudyAssist.BlazorApp.ViewModels
 @rendermode InteractiveServer
 @using Radzen.Blazor;
+@using Utilities
 
 
 <RadzenRow class=" rz-text-align-left" >
@@ -130,6 +131,7 @@
         <RadzenRow>
             <RadzenHtmlEditor @bind-Visible=@_isIssueVisible
                               @bind-Value=@_editingIssue.AnswerText 
+                              @oninput=@(changeEventArg => _AnswerChanged(changeEventArg))
                 class="rz-w-100" />
         </RadzenRow>
     </RadzenColumn>
@@ -163,6 +165,8 @@
     private string _expandedCatalog;
     private string _expandedTheme;
 
+    private TypingTimer _timer;
+
 
 
     protected override async Task OnInitializedAsync()
@@ -183,6 +187,7 @@
         _selectedTheme = new ThemeVm();
         _selectedItem = new ItemVm();
 
+        _timer = new(3);
     }
 
     internal bool Getf()
@@ -249,6 +254,9 @@
             }
             else
             {
+                if (res.AnswerText == null)
+                    res.AnswerText = string.Empty;                    
+
                 _editingIssue = res;
                 _repeatCountText = @"Количество повторений: " + _editingIssue.RepeatCount;
                 _repeatDateText = @"Дата повтора: " + 
@@ -260,7 +268,6 @@
             _isIssueVisible = true;
             _isCatalogVisible = false;
             _isThemeVisible = false;
-
         }
     }
 
@@ -322,6 +329,17 @@
     private async void _IssueNameOnChange(string args)
     {
         await AppDtoReseiver.UpdateIssueNameAsync(_selectedItem);
+    }
+
+
+    private async void _AnswerChanged(ChangeEventArgs args)
+    {
+        if(_timer.IsActive == false)
+            _timer.Activate(async () =>
+            {
+                await AppDtoReseiver.UpdateIssueAnswerAsync(_editingIssue);
+            });
+
     }
 
     private async void _CreateNewIssue()
