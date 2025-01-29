@@ -166,7 +166,9 @@
 </RadzenRow>
 
 @code {
-    // private string _htmlValue = string.Empty;
+
+    #region fields
+
     private List<CatalogVm> _catalogs;
     private EditingIssueVm _editingIssue;
     private EditingIssueVm _defaultIssue;
@@ -179,21 +181,20 @@
     private CatalogVm _selectedCatalog;
     private ThemeVm _selectedTheme;
     private ItemVm _selectedItem;
-
     private bool f = true;
-
     private bool _isThemeVisible = false;
     private bool _isIssueVisible = false;
     private bool _isCatalogVisible = false;
-
     private bool _isCatalogDisabled = true;
     private bool _isThemeDisabled = false;
     private bool _isIssueDisabled = false;
-
     private string _expandedCatalog;
     private string _expandedTheme;
-
     private TypingTimer _timer;
+
+    #endregion fields
+
+    #region properties
 
     private bool _IsNotStudy
     {
@@ -206,6 +207,8 @@
 
         }
     }
+
+    #endregion properties
 
     protected override async Task OnInitializedAsync()
     {
@@ -228,12 +231,12 @@
         _timer = new(3);
     }
 
-    internal bool Getf()
+    private bool Getf()
     {
         return _selectedItem == null;
     }
 
-    internal async void CurrentItemChanged()
+    private async void CurrentItemChanged()
     {
         if (_currentItem is CatalogVm catalog)
         {
@@ -309,19 +312,65 @@
         }
     }
 
+    #region Catalogs
+
+    private bool _ExpandCatalog(object value)
+    {
+        return (value as CatalogVm)?.Name == _expandedCatalog;
+    }
+
+    private async void _DeleteCatalog()
+    {
+        await AppDtoReseiver.DeleteCatalogAsync(_selectedCatalog);
+        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        _selectedCatalog = null;
+    }
+
+    private async void _CreateNewCatalog()
+    {
+        CatalogVm catalog = new CatalogVm
+        {
+            Name = "Введите название каталога..."
+        };
+
+        int newCatId = await AppDtoReseiver.AddCatalogAsync(catalog);
+        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        _currentItem = _catalogs.FirstOrDefault(cat => cat.Id == newCatId);
+        CurrentItemChanged();
+    }
+
+    #endregion Catalogs
+
+    #region Themes
+
+    private async void _DeleteTheme()
+    {
+        await AppDtoReseiver.DeleteThemeAsync(_selectedTheme);
+        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        _selectedTheme = _defaultTheme;
+    }
+
+    private bool _ExpandTheme(object value)
+    {
+        return (value as ThemeVm)?.Name == _expandedTheme;
+    }
+
+    private async void _ThemeNameOnChange(string args)
+    {
+        await AppDtoReseiver.UpdateThemeNameAsync(_selectedTheme);
+        // _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+    }
+
+    private async void _CatalogNameOnChange(string args)
+    {
+        await AppDtoReseiver.UpdateCatalogNameAsync(_selectedCatalog);
+    }
+
     private ThemeVm? _FindThemeBy(int themeId)
     {
         return _catalogs
             .SelectMany(cat => cat.Themes)
             .FirstOrDefault(th => th.Id == themeId);
-    }
-
-    private ItemVm? _FindIssueBy(int issueId)
-    {
-        return _catalogs
-            .SelectMany(cat => cat.Themes)
-            .SelectMany(t => t.Issues)
-            .FirstOrDefault(th => th.Id == issueId);
     }
 
     private async void _CreateNewTheme()
@@ -345,40 +394,9 @@
         CurrentItemChanged();
     }
 
-    private bool _ExpandCatalog(object value)
-    {
-        return (value as CatalogVm)?.Name == _expandedCatalog;
-    }
+    #endregion Themes
 
-    private bool _ExpandTheme(object value)
-    {
-        return (value as ThemeVm)?.Name == _expandedTheme;
-    }
-
-    private async void _ThemeNameOnChange(string args)
-    {
-        await AppDtoReseiver.UpdateThemeNameAsync(_selectedTheme);
-        // _catalogs = await AppDtoReseiver.GetCatalogsAsync();
-    }
-    private async void _CatalogNameOnChange(string args)
-    {
-        await AppDtoReseiver.UpdateCatalogNameAsync(_selectedCatalog);
-    }
-    private async void _IssueNameOnChange(string args)
-    {
-        await AppDtoReseiver.UpdateIssueNameAsync(_selectedItem);
-    }
-
-
-    private async void _AnswerChanged(ChangeEventArgs args)
-    {
-        if(_timer.IsActive == false)
-            _timer.Activate(async () =>
-            {
-                await AppDtoReseiver.UpdateIssueAnswerAsync(_editingIssue);
-            });
-
-    }
+    #region Issues
 
     private async void _CreateNewIssue()
     {
@@ -400,18 +418,9 @@
         CurrentItemChanged();
     }
 
-    private async void _DeleteCatalog()
+    private async void _IssueNameOnChange(string args)
     {
-        await AppDtoReseiver.DeleteCatalogAsync(_selectedCatalog);
-        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
-        _selectedCatalog = null;
-    }
-
-    private async void _DeleteTheme()
-    {
-        await AppDtoReseiver.DeleteThemeAsync(_selectedTheme);
-        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
-        _selectedTheme = _defaultTheme;
+        await AppDtoReseiver.UpdateIssueNameAsync(_selectedItem);
     }
 
     private async void _DeleteIssue()
@@ -447,16 +456,23 @@
 
     }
 
-    private async void _CreateNewCatalog()
+    private async void _AnswerChanged(ChangeEventArgs args)
     {
-        CatalogVm catalog = new CatalogVm
-        {
-            Name = "Введите название каталога..."
-        };
+        if(_timer.IsActive == false)
+            _timer.Activate(async () =>
+            {
+                await AppDtoReseiver.UpdateIssueAnswerAsync(_editingIssue);
+            });
 
-        int newCatId = await AppDtoReseiver.AddCatalogAsync(catalog);
-        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
-        _currentItem = _catalogs.FirstOrDefault(cat => cat.Id == newCatId);
-        CurrentItemChanged();
     }
+
+    private ItemVm? _FindIssueBy(int issueId)
+    {
+        return _catalogs
+            .SelectMany(cat => cat.Themes)
+            .SelectMany(t => t.Issues)
+            .FirstOrDefault(th => th.Id == issueId);
+    }
+
+    #endregion Issues
 }
