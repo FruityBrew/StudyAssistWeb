@@ -12,7 +12,6 @@ namespace StudyAssist.BlazorApp
                     {1, "First" },
                     {2, "Second" },
                     {3,  "Third"},
-                    {4, "Create new catalog" }
                 },
             Themes =
                 {
@@ -84,6 +83,14 @@ namespace StudyAssist.BlazorApp
         {
             _catalogsDto.Themes.Remove(source.Id);
             _catalogsDto.Themes.Add(source.Id, (source.ParentId, source.Name));
+        }
+
+        internal static async Task<int> AddCatalogAsync(CatalogVm catalog)
+        {
+            int catalogId = _catalogsDto.Catalogs.Max(c => c.Key) + 1;
+            _catalogsDto.Catalogs.Add(catalogId, catalog.Name);
+
+            return catalogId;
         }
 
         internal static async Task UpdateCatalogNameAsync(CatalogVm source)

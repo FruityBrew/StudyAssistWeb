@@ -31,13 +31,15 @@
                         HasChildren=@(ch => false )>
                     </RadzenTreeLevel>
                 </RadzenTree>
-                <RadzenButton Text="create new catalog"
+                <RadzenButton Text="create new catalog" 
                               Icon="add"
                               Variant="Variant.Text"
                               ButtonStyle="ButtonStyle.Success"
                               Click=@(arg => _CreateNewCatalog())
                               Size="ButtonSize.Small"
-                              @bind-Visible=@_IsNotStudy>
+                              @bind-Visible=@_IsNotStudy
+                              Style="width:max-content"
+                              class="rz-text-align-left rz-my-2">
 
                 </RadzenButton>
             </RadzenStack>
@@ -447,6 +449,20 @@
 
     private async void _CreateNewCatalog()
     {
-        
+        CatalogVm catalog = new CatalogVm
+        {
+            Name = "Введите название каталога..."
+        };
+        // newTheme = new ThemeVm
+        //    {
+        //        ParentId = _selectedCatalog.Id,
+        //        Name = "Введите наименование темы...",
+        //    };
+
+
+        int newCatId = await AppDtoReseiver.AddCatalogAsync(catalog);
+        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        _currentItem = _catalogs.FirstOrDefault(cat => cat.Id == newCatId);
+        CurrentItemChanged();
     }
 }
