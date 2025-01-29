@@ -453,12 +453,6 @@
         {
             Name = "Введите название каталога..."
         };
-        // newTheme = new ThemeVm
-        //    {
-        //        ParentId = _selectedCatalog.Id,
-        //        Name = "Введите наименование темы...",
-        //    };
-
 
         int newCatId = await AppDtoReseiver.AddCatalogAsync(catalog);
         _catalogs = await AppDtoReseiver.GetCatalogsAsync();
