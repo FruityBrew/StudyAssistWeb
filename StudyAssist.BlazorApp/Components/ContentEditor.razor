@@ -356,7 +356,10 @@
     {
         await AppDtoReseiver.DeleteThemeAsync(_selectedTheme);
         _catalogs = await AppDtoReseiver.GetCatalogsAsync();
-        _selectedTheme = _defaultTheme;
+        _currentItem = _catalogs.FirstOrDefault(cat => cat.Id == _selectedTheme.ParentId);
+
+        CurrentItemChanged();
+        _expandedCatalog = _selectedCatalog.Name;
     }
 
     private bool _ExpandTheme(object value)
@@ -445,7 +448,7 @@
         _selectedTheme = selectedTheme;
         _currentItem = selectedTheme;
         CurrentItemChanged();
-        _expandedCatalog = _catalogs.FirstOrDefault(f => f.Id == _selectedTheme.Id).Name;
+        _expandedCatalog = _catalogs.FirstOrDefault(f => f.Id == _selectedTheme.ParentId).Name;
 
         _expandedTheme = _selectedTheme.Name;
     }
