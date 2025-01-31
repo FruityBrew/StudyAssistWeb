@@ -330,7 +330,9 @@
     {
         await AppDtoReseiver.DeleteCatalogAsync(_selectedCatalog);
         _catalogs = await AppDtoReseiver.GetCatalogsAsync();
-        _selectedCatalog = null;
+        // _selectedCatalog = null;
+
+        _currentItem = null;
     }
 
     private async void _CreateNewCatalog()
