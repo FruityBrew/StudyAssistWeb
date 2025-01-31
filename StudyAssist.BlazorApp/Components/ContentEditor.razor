@@ -82,7 +82,8 @@
                     @bind-Visible=@_isCatalogVisible class="rz-w-25 rz-my-10">
                         <RadzenTextBox 
                             @bind-Value="@_selectedCatalog.Name"
-                            Change=@(args => _CatalogNameOnChange(args))>
+                            Change=@(args => _CatalogNameOnChange(args))
+                            onfocus="this.select()">
                         </RadzenTextBox>
                 </RadzenFormField>
                 <RadzenFormField 
@@ -92,7 +93,8 @@
                     class="rz-w-25 rz-my-10">
                         <RadzenTextBox 
                             @bind-Value="@_selectedTheme.Name"  
-                            Change=@(args=> _ThemeNameOnChange(args)) />
+                            Change=@(args=> _ThemeNameOnChange(args))
+                            onfocus="this.select()" />
                         </RadzenFormField>
                 <RadzenFormField 
                     Text="Наименование заметки" 
@@ -101,7 +103,8 @@
                     class="rz-w-100 rz-my-10">
                     <RadzenTextBox 
                         @bind-Value="@_selectedItem.Name"
-                        Change=@(args => _IssueNameOnChange(args)) />
+                        Change=@(args => _IssueNameOnChange(args)) 
+                        onfocus="this.select()"/>
                 </RadzenFormField>
                 <RadzenButton 
                         Text="Create new theme" 
