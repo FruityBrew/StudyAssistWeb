@@ -192,6 +192,8 @@ namespace StudyAssist.BlazorApp
         {
             int issueId = _catalogsDto.Issues.Max(i => i.Key) + 1;
             _catalogsDto.Issues.Add(issueId, (issue.ParentId, issue.Name));
+            issue.Id = issueId;
+            _editingIssueVms.Add(issue);
 
             return issueId;
         }

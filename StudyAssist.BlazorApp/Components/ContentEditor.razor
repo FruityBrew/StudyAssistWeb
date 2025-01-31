@@ -210,6 +210,8 @@
 
     #endregion properties
 
+    #region utilities
+
     protected override async Task OnInitializedAsync()
     {
         _catalogs = await AppDtoReseiver.GetCatalogsAsync();
@@ -312,7 +314,9 @@
         }
     }
 
-    #region Catalogs
+    #endregion utilities
+
+    #region catalogs
 
     private bool _ExpandCatalog(object value)
     {
