@@ -415,7 +415,8 @@
         EditingIssueVm newIssue = new EditingIssueVm
             {
                 ParentId = _selectedTheme.Id,
-                Name = "Введите наименование вопроса..."
+                Name = "Введите наименование вопроса...",
+                AnswerText = String.Empty
             };
 
         int newIssueId = await AppDtoReseiver.AddIssueAsync(newIssue);
@@ -426,8 +427,6 @@
         _expandedTheme = _selectedTheme.Name;
 
         _currentItem = _FindIssueBy(newIssueId);
-
-        CurrentItemChanged();
     }
 
     private async void _IssueNameOnChange(string args)
