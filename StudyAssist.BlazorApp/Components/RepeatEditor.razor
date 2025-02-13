@@ -8,7 +8,7 @@
 <RadzenRow class="rz-p-0 rz-p-lg-12">
     <RadzenColumn Size="12" SizeLG="4">
         <RadzenCard>
-            <RadzenTree Data=@_catalogs>
+            <RadzenTree Data=@_mainVm._catalogs>
                 <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
                 <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
                 <RadzenTreeLevel TextProperty="@nameof(ItemVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
@@ -23,10 +23,10 @@
 
 
 @code {
-    private List<CatalogVm> _catalogs;
+    private MainViewModel _mainVm;
 
     protected override async Task OnInitializedAsync()
     {
-        _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        _mainVm = await MainViewModel.CreateRepeatCatalogAsync();
     }
 }

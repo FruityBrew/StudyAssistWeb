@@ -50,10 +50,34 @@ namespace StudyAssist.BlazorApp.ViewModels
         #endregion properties
 
 
-        internal async Task InitializeAsync()
+        internal async Task InitializeBaseCatalogAsync()
         {
             _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+        }
 
+        internal async Task InitializeRepeatCatalogAsync()
+        {
+            _catalogs = await AppDtoReseiver.GetRepeatCatalogsAsync();
+        }
+
+        internal static async Task<MainViewModel> CreateBaseCatalogAsync()
+        {
+            MainViewModel instance = new MainViewModel();
+            await instance.InitializeBaseCatalogAsync();
+
+            return instance;
+        }
+
+        internal static async Task<MainViewModel> CreateRepeatCatalogAsync()
+        {
+            MainViewModel instance = new MainViewModel();
+            await instance.InitializeRepeatCatalogAsync();
+
+            return instance;
+        }
+
+        private MainViewModel()
+        {
             _defaultCatalog = new CatalogVm();
             _defaultTheme = new ThemeVm();
             _defaultItem = new ItemVm();
@@ -70,19 +94,6 @@ namespace StudyAssist.BlazorApp.ViewModels
             _selectedItem = new ItemVm();
 
             _timer = new(3);
-        }
-
-        internal static async Task<MainViewModel> CreateAsync()
-        {
-            MainViewModel instance = new MainViewModel();
-            await instance.InitializeAsync();
-
-            return instance;
-        }
-
-        private MainViewModel()
-        {
-
         }
 
         #region utilities
