@@ -8,25 +8,25 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         #region fields
 
-        internal List<CatalogVm> _catalogs;
-        internal EditingIssueVm _editingIssue;
+        private List<CatalogVm> _catalogs;
+        private EditingIssueVm _editingIssue;
         internal EditingIssueVm _defaultIssue;
         internal ThemeVm _defaultTheme;
         internal CatalogVm _defaultCatalog;
         internal ItemVm _defaultItem;
-        internal object _currentItem;
-        internal string _repeatCountText = @"Количество повторений: -";
-        internal string _repeatDateText = @"Дата повтора: -";
-        internal CatalogVm _selectedCatalog;
-        internal ThemeVm _selectedTheme;
-        internal ItemVm _selectedItem;
+        private object _currentItem;
+        private string _repeatCountText = @"Количество повторений: -";
+        private string _repeatDateText = @"Дата повтора: -";
+        private CatalogVm _selectedCatalog;
+        private ThemeVm _selectedTheme;
+        private ItemVm _selectedItem;
         internal bool _f = true;
-        internal bool _isThemeVisible = false;
-        internal bool _isIssueVisible = false;
-        internal bool _isCatalogVisible = false;
-        internal bool _isCatalogDisabled = true;
-        internal bool _isThemeDisabled = false;
-        internal bool _isIssueDisabled = false;
+        private bool _isThemeVisible = false;
+        private bool _isIssueVisible = false;
+        private bool _isCatalogVisible = false;
+        private bool _isCatalogDisabled = true;
+        private bool _isThemeDisabled = false;
+        private bool _isIssueDisabled = false;
         internal string _expandedCatalog;
         internal string _expandedTheme;
         internal TypingTimer _timer;
@@ -35,11 +35,11 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         #region properties
 
-        internal bool _IsNotStudy
+        internal bool IsNotStudy
         {
             get
             {
-                return !_editingIssue.IsStudy;
+                return !EditingIssue.IsStudy;
             }
             set
             {
@@ -47,17 +47,101 @@ namespace StudyAssist.BlazorApp.ViewModels
             }
         }
 
+        internal List<CatalogVm> Catalogs 
+         { 
+            get => _catalogs; 
+            private set => _catalogs = value; 
+        }
+
+        internal EditingIssueVm EditingIssue 
+        { 
+            get => _editingIssue; 
+            set => _editingIssue = value; 
+        }
+
+        internal object CurrentItem 
+        { 
+            get => _currentItem; 
+            set => _currentItem = value; 
+        }
+
+        internal bool IsIssueVisible 
+        { 
+            get => _isIssueVisible; 
+            set => _isIssueVisible = value; 
+        }
+
+        internal string RepeatCountText 
+        { 
+            get => _repeatCountText; 
+            set => _repeatCountText = value; 
+        }
+
+        internal string RepeatDateText 
+        { 
+            get => _repeatDateText;
+            set => _repeatDateText = value; 
+        }
+
+        internal bool IsCatalogVisible 
+        { 
+            get => _isCatalogVisible;
+            set => _isCatalogVisible = value; 
+        }
+
+        internal bool IsCatalogDisabled 
+        { 
+            get => _isCatalogDisabled; 
+            set => _isCatalogDisabled = value; 
+        }
+
+        internal bool IsThemeDisabled 
+        { 
+            get => _isThemeDisabled; 
+            set => _isThemeDisabled = value; 
+        }
+
+        internal bool IsIssueDisabled 
+        { 
+            get => _isIssueDisabled; 
+            set => _isIssueDisabled = value; 
+        }
+        
+        internal CatalogVm SelectedCatalog 
+        { 
+            get => _selectedCatalog; 
+            set => _selectedCatalog = value; 
+        }
+
+        internal bool IsThemeVisible 
+        { 
+            get => _isThemeVisible; 
+            set => _isThemeVisible = value; 
+        }
+
+        internal ThemeVm SelectedTheme 
+        { 
+            get => _selectedTheme; 
+            set => _selectedTheme = value; 
+        }
+
+        internal ItemVm SelectedItem 
+        { 
+            get => _selectedItem; 
+            set => _selectedItem = value; 
+        }
+
         #endregion properties
 
 
         internal async Task InitializeBaseCatalogAsync()
         {
-            _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+            Catalogs = await AppDtoReseiver.GetCatalogsAsync();
         }
 
         internal async Task InitializeRepeatCatalogAsync()
         {
-            _catalogs = await AppDtoReseiver.GetRepeatCatalogsAsync();
+            Catalogs = await AppDtoReseiver.GetRepeatCatalogsAsync();
         }
 
         internal static async Task<MainViewModel> CreateBaseCatalogAsync()
@@ -81,7 +165,7 @@ namespace StudyAssist.BlazorApp.ViewModels
             _defaultCatalog = new CatalogVm();
             _defaultTheme = new ThemeVm();
             _defaultItem = new ItemVm();
-            _editingIssue = new EditingIssueVm();
+            EditingIssue = new EditingIssueVm();
             _defaultIssue = new EditingIssueVm
             {
                 AnswerText = string.Empty,
@@ -89,9 +173,9 @@ namespace StudyAssist.BlazorApp.ViewModels
                 RepeatDate = null
             };
 
-            _selectedCatalog = new CatalogVm();
-            _selectedTheme = new ThemeVm();
-            _selectedItem = new ItemVm();
+            SelectedCatalog = new CatalogVm();
+            SelectedTheme = new ThemeVm();
+            SelectedItem = new ItemVm();
 
             _timer = new(3);
         }
@@ -102,55 +186,55 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         internal bool Getf()
         {
-            return _selectedItem == null;
+            return SelectedItem == null;
         }
 
         internal async void CurrentItemChanged()
         {
-            if(_currentItem is CatalogVm catalog)
+            if(CurrentItem is CatalogVm catalog)
             {
-                _selectedCatalog = _catalogs
+                SelectedCatalog = Catalogs
                     .FirstOrDefault(cat => cat.Id == catalog.Id)!;
                 // _isCatalogSelected = true;
-                _selectedTheme = _defaultTheme;
-                _selectedItem = _defaultItem;
+                SelectedTheme = _defaultTheme;
+                SelectedItem = _defaultItem;
 
-                _isThemeVisible = false;
-                _isIssueVisible = false;
-                _isCatalogVisible = true;
+                IsThemeVisible = false;
+                IsIssueVisible = false;
+                IsCatalogVisible = true;
                 // _isCatalogDisabled = false;
-                _editingIssue = _defaultIssue;
+                EditingIssue = _defaultIssue;
 
                 // _repeatCountText = @"Количество повторений: -";
                 // _repeatDateText = @"Дата повтора: -";
 
             }
-            else if(_currentItem is ThemeVm theme)
+            else if(CurrentItem is ThemeVm theme)
             {
-                _selectedCatalog = _catalogs
+                SelectedCatalog = Catalogs
                     .FirstOrDefault(cat => cat.Id == theme.ParentId)!;
-                _selectedTheme = _selectedCatalog.Themes
+                SelectedTheme = SelectedCatalog.Themes
                     .FirstOrDefault(th => th.Id == theme.Id)!;
 
-                _selectedItem = _defaultItem;
-                _isThemeVisible = true;
-                _isIssueVisible = false;
-                _isCatalogVisible = false;
+                SelectedItem = _defaultItem;
+                IsThemeVisible = true;
+                IsIssueVisible = false;
+                IsCatalogVisible = false;
                 // _isCatalogDisabled = true;
                 // _isThemeDisabled = false;
-                _editingIssue = _defaultIssue;
+                EditingIssue = _defaultIssue;
 
                 // _repeatCountText = @"Количество повторений: -";
                 // _repeatDateText = @"Дата повтора: -";
 
                 return;
             }
-            else if(_currentItem is ItemVm issueItem)
+            else if(CurrentItem is ItemVm issueItem)
             {
-                _selectedItem = issueItem;
-                _selectedTheme = _FindThemeBy(issueItem.ParentId)!;
-                _selectedCatalog = _catalogs
-                    .FirstOrDefault(cat => cat.Id == _selectedTheme.ParentId)!;
+                SelectedItem = issueItem;
+                SelectedTheme = _FindThemeBy(issueItem.ParentId)!;
+                SelectedCatalog = Catalogs
+                    .FirstOrDefault(cat => cat.Id == SelectedTheme.ParentId)!;
 
 
                 var res = await AppDtoReseiver.GetEditingIssue(issueItem.Id);
@@ -158,26 +242,26 @@ namespace StudyAssist.BlazorApp.ViewModels
 
                 if(res == null)
                 {
-                    _editingIssue = _defaultIssue;
-                    _repeatCountText = @"Количество повторений: -";
-                    _repeatDateText = @"Дата повтора: -";
+                    EditingIssue = _defaultIssue;
+                    RepeatCountText = @"Количество повторений: -";
+                    RepeatDateText = @"Дата повтора: -";
                 }
                 else
                 {
                     if(res.AnswerText == null)
                         res.AnswerText = string.Empty;
 
-                    _editingIssue = res;
-                    _repeatCountText = @"Количество повторений: " + _editingIssue.RepeatCount;
-                    _repeatDateText = @"Дата повтора: " +
-                        (_editingIssue.RepeatDate.HasValue
-                            ? _editingIssue.RepeatDate.Value.ToString("dd.MM.yyyy")
+                    EditingIssue = res;
+                    RepeatCountText = @"Количество повторений: " + EditingIssue.RepeatCount;
+                    RepeatDateText = @"Дата повтора: " +
+                        (EditingIssue.RepeatDate.HasValue
+                            ? EditingIssue.RepeatDate.Value.ToString("dd.MM.yyyy")
                             : string.Empty);
                 }
 
-                _isIssueVisible = true;
-                _isCatalogVisible = false;
-                _isThemeVisible = false;
+                IsIssueVisible = true;
+                IsCatalogVisible = false;
+                IsThemeVisible = false;
             }
         }
 
@@ -185,21 +269,21 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         #region catalogs
 
-        internal bool _ExpandCatalog(object value)
+        internal bool ExpandCatalog(object value)
         {
             return (value as CatalogVm)?.Name == _expandedCatalog;
         }
 
-        internal async void _DeleteCatalog()
+        internal async void DeleteCatalog()
         {
-            await AppDtoReseiver.DeleteCatalogAsync(_selectedCatalog);
-            _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+            await AppDtoReseiver.DeleteCatalogAsync(SelectedCatalog);
+            Catalogs = await AppDtoReseiver.GetCatalogsAsync();
             // _selectedCatalog = null;
 
-            _currentItem = null;
+            CurrentItem = null;
         }
 
-        internal async void _CreateNewCatalog()
+        internal async void CreateNewCatalog()
         {
             CatalogVm catalog = new CatalogVm
             {
@@ -207,8 +291,8 @@ namespace StudyAssist.BlazorApp.ViewModels
             };
 
             int newCatId = await AppDtoReseiver.AddCatalogAsync(catalog);
-            _catalogs = await AppDtoReseiver.GetCatalogsAsync();
-            _currentItem = _catalogs.FirstOrDefault(cat => cat.Id == newCatId);
+            Catalogs = await AppDtoReseiver.GetCatalogsAsync();
+            CurrentItem = Catalogs.FirstOrDefault(cat => cat.Id == newCatId);
             CurrentItemChanged();
         }
 
@@ -216,56 +300,56 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         #region Themes
 
-        internal async void _DeleteTheme()
+        internal async void DeleteTheme()
         {
-            await AppDtoReseiver.DeleteThemeAsync(_selectedTheme);
-            _catalogs = await AppDtoReseiver.GetCatalogsAsync();
-            _currentItem = _catalogs.FirstOrDefault(cat => cat.Id == _selectedTheme.ParentId);
+            await AppDtoReseiver.DeleteThemeAsync(SelectedTheme);
+            Catalogs = await AppDtoReseiver.GetCatalogsAsync();
+            CurrentItem = Catalogs.FirstOrDefault(cat => cat.Id == SelectedTheme.ParentId);
 
             CurrentItemChanged();
-            _expandedCatalog = _selectedCatalog.Name;
+            _expandedCatalog = SelectedCatalog.Name;
         }
 
-        internal bool _ExpandTheme(object value)
+        internal bool ExpandTheme(object value)
         {
             return (value as ThemeVm)?.Name == _expandedTheme;
         }
 
-        internal async void _ThemeNameOnChange(string args)
+        internal async void ThemeNameOnChange(string args)
         {
-            await AppDtoReseiver.UpdateThemeNameAsync(_selectedTheme);
+            await AppDtoReseiver.UpdateThemeNameAsync(SelectedTheme);
             // _catalogs = await AppDtoReseiver.GetCatalogsAsync();
         }
 
-        internal async void _CatalogNameOnChange(string args)
+        internal async void CatalogNameOnChange(string args)
         {
-            await AppDtoReseiver.UpdateCatalogNameAsync(_selectedCatalog);
+            await AppDtoReseiver.UpdateCatalogNameAsync(SelectedCatalog);
         }
 
-        internal ThemeVm? _FindThemeBy(int themeId)
+        private ThemeVm? _FindThemeBy(int themeId)
         {
-            return _catalogs
+            return Catalogs
                 .SelectMany(cat => cat.Themes)
                 .FirstOrDefault(th => th.Id == themeId);
         }
 
-        internal async void _CreateNewTheme()
+        internal async void CreateNewTheme()
         {
             // _selectedTheme = new ThemeVm();
 
             ThemeVm newTheme = new ThemeVm
             {
-                ParentId = _selectedCatalog.Id,
+                ParentId = SelectedCatalog.Id,
                 Name = "Введите наименование темы...",
             };
 
             int newThemeId = await AppDtoReseiver.AddThemeAsync(newTheme);
 
-            _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+            Catalogs = await AppDtoReseiver.GetCatalogsAsync();
 
-            _expandedCatalog = _selectedCatalog.Name;
+            _expandedCatalog = SelectedCatalog.Name;
 
-            _currentItem = _FindThemeBy(newThemeId)!;
+            CurrentItem = _FindThemeBy(newThemeId)!;
 
             CurrentItemChanged();
         }
@@ -274,76 +358,76 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         #region Issues
 
-        internal async void _CreateNewIssue()
+        internal async void CreateNewIssue()
         {
             EditingIssueVm newIssue = new EditingIssueVm
             {
-                ParentId = _selectedTheme.Id,
+                ParentId = SelectedTheme.Id,
                 Name = "Введите наименование вопроса...",
                 AnswerText = String.Empty
             };
 
             int newIssueId = await AppDtoReseiver.AddIssueAsync(newIssue);
 
-            _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+            Catalogs = await AppDtoReseiver.GetCatalogsAsync();
 
-            _expandedCatalog = _catalogs.FirstOrDefault(cat => cat.Id == _selectedTheme.ParentId).Name;
-            _expandedTheme = _selectedTheme.Name;
+            _expandedCatalog = Catalogs.FirstOrDefault(cat => cat.Id == SelectedTheme.ParentId).Name;
+            _expandedTheme = SelectedTheme.Name;
 
-            _currentItem = _FindIssueBy(newIssueId);
+            CurrentItem = _FindIssueBy(newIssueId);
         }
 
-        internal async void _IssueNameOnChange(string args)
+        internal async void IssueNameOnChange(string args)
         {
-            await AppDtoReseiver.UpdateIssueNameAsync(_selectedItem);
+            await AppDtoReseiver.UpdateIssueNameAsync(SelectedItem);
         }
 
-        internal async void _DeleteIssue()
+        internal async void DeleteIssue()
         {
-            await AppDtoReseiver.DeleteIssueAsync(_selectedItem);
-            _catalogs = await AppDtoReseiver.GetCatalogsAsync();
+            await AppDtoReseiver.DeleteIssueAsync(SelectedItem);
+            Catalogs = await AppDtoReseiver.GetCatalogsAsync();
 
-            ThemeVm selectedTheme = _FindThemeBy(_selectedItem.ParentId);
+            ThemeVm selectedTheme = _FindThemeBy(SelectedItem.ParentId);
 
-            _selectedItem = _defaultItem;
-            _editingIssue = _defaultIssue;
+            SelectedItem = _defaultItem;
+            EditingIssue = _defaultIssue;
 
-            _selectedTheme = selectedTheme;
-            _currentItem = selectedTheme;
+            SelectedTheme = selectedTheme;
+            CurrentItem = selectedTheme;
             CurrentItemChanged();
-            _expandedCatalog = _catalogs.FirstOrDefault(f => f.Id == _selectedTheme.ParentId).Name;
+            _expandedCatalog = Catalogs.FirstOrDefault(f => f.Id == SelectedTheme.ParentId).Name;
 
-            _expandedTheme = _selectedTheme.Name;
+            _expandedTheme = SelectedTheme.Name;
         }
 
-        internal async void _AddToStudy()
+        internal async void AddToStudy()
         {
-            _editingIssue.IsStudy = true;
-            await AppDtoReseiver.UpdateIssueStudyAsync(_editingIssue);
+            EditingIssue.IsStudy = true;
+            await AppDtoReseiver.UpdateIssueStudyAsync(EditingIssue);
             CurrentItemChanged();
         }
 
-        internal async void _RemoveFromStudy()
+        internal async void RemoveFromStudy()
         {
-            _editingIssue.IsStudy = false;
-            await AppDtoReseiver.UpdateIssueStudyAsync(_editingIssue);
+            EditingIssue.IsStudy = false;
+            await AppDtoReseiver.UpdateIssueStudyAsync(EditingIssue);
             CurrentItemChanged();
 
         }
 
-        internal async void _AnswerChanged(ChangeEventArgs args)
+        internal async void AnswerChanged(ChangeEventArgs args)
         {
             if(_timer.IsActive == false)
                 _timer.Activate(async () =>
                 {
-                    await AppDtoReseiver.UpdateIssueAnswerAsync(_editingIssue);
+                    await AppDtoReseiver.UpdateIssueAnswerAsync(EditingIssue);
                 });
 
         }
 
-        internal ItemVm? _FindIssueBy(int issueId)
+        private ItemVm? _FindIssueBy(int issueId)
         {
-            return _catalogs
+            return Catalogs
                 .SelectMany(cat => cat.Themes)
                 .SelectMany(t => t.Issues)
                 .FirstOrDefault(th => th.Id == issueId);

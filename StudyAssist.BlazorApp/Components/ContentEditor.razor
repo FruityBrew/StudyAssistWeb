@@ -15,15 +15,15 @@
             </RadzenStack>
             <RadzenStack Orientation="Orientation.Vertical" class="rz-my-5">
                 <RadzenLabel  Text="Каталог:" class="rz-my-2 rz-mx-2"/>
-                <RadzenTree Data=@_mainVm._catalogs Change="@_mainVm.CurrentItemChanged" @bind-Value=@_mainVm._currentItem Style="float:left">
+                <RadzenTree Data=@_mainVm.Catalogs Change="@_mainVm.CurrentItemChanged" @bind-Value=@_mainVm.CurrentItem Style="float:left">
                     <RadzenTreeLevel 
                         TextProperty="@nameof(CatalogVm.Name)"
-                                     Expanded=@(value => _mainVm._ExpandCatalog(value))
+                                     Expanded=@(value => _mainVm.ExpandCatalog(value))
                                      ChildrenProperty="Themes">
                     </RadzenTreeLevel>
                     <RadzenTreeLevel 
                         TextProperty="@nameof(ThemeVm.Name)"
-                                     Expanded=@(value => _mainVm._ExpandTheme(value))
+                                     Expanded=@(value => _mainVm.ExpandTheme(value))
                         ChildrenProperty="Issues">
                     </RadzenTreeLevel>
                     <RadzenTreeLevel 
@@ -35,7 +35,7 @@
                               Icon="add"
                               Variant="Variant.Text"
                               ButtonStyle="ButtonStyle.Success"
-                              Click=@(arg => _mainVm._CreateNewCatalog())
+                              Click=@(arg => _mainVm.CreateNewCatalog())
                               Size="ButtonSize.Small"
                               Style="width:max-content"
                               class="rz-text-align-left rz-my-2">
@@ -50,17 +50,17 @@
                 <RadzenCard 
                     Variant="Variant.Filled"  
                     Style="width:max-content; max-width: 420px"
-                            @bind-Visible=@_mainVm._isIssueVisible>
+                            @bind-Visible=@_mainVm.IsIssueVisible>
                     <RadzenStack>
-                        <RadzenText Text=@_mainVm._repeatCountText></RadzenText>
-                        <RadzenText Text=@_mainVm._repeatDateText></RadzenText>
+                        <RadzenText Text=@_mainVm.RepeatCountText></RadzenText>
+                        <RadzenText Text=@_mainVm.RepeatDateText></RadzenText>
                         <RadzenButton Text="study on"
                                       Icon="list_alt_add"
                                       Variant="Variant.Text"
                                       ButtonStyle="ButtonStyle.Success"
-                                      Click=@(arg => _mainVm._AddToStudy())
+                                      Click=@(arg => _mainVm.AddToStudy())
                                       Size="ButtonSize.Small"
-                                      @bind-Visible=@_mainVm._IsNotStudy>
+                                      @bind-Visible=@_mainVm.IsNotStudy>
 
                         </RadzenButton>
                         <RadzenButton Text="study off"
@@ -68,8 +68,8 @@
                                       Variant="Variant.Text"
                                       ButtonStyle="ButtonStyle.Danger"
                                       Size="ButtonSize.Small"
-                                      Click=@(arg => _mainVm._RemoveFromStudy())
-                                      @bind-Visible=@_mainVm._editingIssue.IsStudy>
+                                      Click=@(arg => _mainVm.RemoveFromStudy())
+                                      @bind-Visible=@_mainVm.EditingIssue.IsStudy>
 
                         </RadzenButton>
                     </RadzenStack>
@@ -78,28 +78,28 @@
                 <RadzenFormField 
                     Text="Наименование каталога" 
                     Variant="Variant.Text"
-                                 @bind-Visible=@_mainVm._isCatalogVisible class="rz-w-25 rz-my-10">
-                        <RadzenTextBox @bind-Value="@_mainVm._selectedCatalog.Name"
-                                   Change=@(args => _mainVm._CatalogNameOnChange(args))
+                                 @bind-Visible=@_mainVm.IsCatalogVisible class="rz-w-25 rz-my-10">
+                        <RadzenTextBox @bind-Value="@_mainVm.SelectedCatalog.Name"
+                                   Change=@(args => _mainVm.CatalogNameOnChange(args))
                             onfocus="this.select()">
                         </RadzenTextBox>
                 </RadzenFormField>
                 <RadzenFormField 
                     Text="Наименование темы" 
                     Variant="Variant.Text"
-                                 @bind-Visible=@_mainVm._isThemeVisible
+                                 @bind-Visible=@_mainVm.IsThemeVisible
                                  class="rz-w-25 rz-my-10">
-                        <RadzenTextBox @bind-Value="@_mainVm._selectedTheme.Name"
-                                   Change=@(args=> _mainVm._ThemeNameOnChange(args))
+                        <RadzenTextBox @bind-Value="@_mainVm.SelectedTheme.Name"
+                                   Change=@(args=> _mainVm.ThemeNameOnChange(args))
                             onfocus="this.select()" />
                         </RadzenFormField>
                 <RadzenFormField 
                     Text="Наименование заметки" 
                     Variant="Variant.Text"
-                                 @bind-Visible=@_mainVm._isIssueVisible
+                                 @bind-Visible=@_mainVm.IsIssueVisible
                                  class="rz-w-100 rz-my-10">
-                    <RadzenTextBox @bind-Value="@_mainVm._selectedItem.Name"
-                                   Change=@(args => _mainVm._IssueNameOnChange(args))
+                    <RadzenTextBox @bind-Value="@_mainVm.SelectedItem.Name"
+                                   Change=@(args => _mainVm.IssueNameOnChange(args))
                                    onfocus="this.select()"/>
                 </RadzenFormField>
                 <RadzenButton 
@@ -108,9 +108,9 @@
                         Variant="Variant.Text" 
                         ButtonStyle="ButtonStyle.Primary" 
                         Size="ButtonSize.Small"
-                              Click=@(arg => _mainVm._CreateNewTheme())
+                              Click=@(arg => _mainVm.CreateNewTheme())
                             class="rz-my-10"
-                              @bind-Visible=@_mainVm._isCatalogVisible>
+                              @bind-Visible=@_mainVm.IsCatalogVisible>
 
                 </RadzenButton>
                 <RadzenButton   Text="Create new issue" 
@@ -118,9 +118,9 @@
                                 Variant="Variant.Text" 
                                 ButtonStyle="ButtonStyle.Primary" 
                                 Size="ButtonSize.Small"
-                              Click=@(arg => _mainVm._CreateNewIssue())
+                              Click=@(arg => _mainVm.CreateNewIssue())
                                     class="rz-my-10"
-                              @bind-Visible=@_mainVm._isThemeVisible>
+                              @bind-Visible=@_mainVm.IsThemeVisible>
 
                 </RadzenButton>
                 <RadzenButton Text="Delete catalog"
@@ -128,9 +128,9 @@
                               Variant="Variant.Text"
                               ButtonStyle="ButtonStyle.Danger"
                               Size="ButtonSize.Small"
-                              Click=@(arg => _mainVm._DeleteCatalog())
+                              Click=@(arg => _mainVm.DeleteCatalog())
                               class="rz-my-10"
-                              @bind-Visible=@_mainVm._isCatalogVisible>
+                              @bind-Visible=@_mainVm.IsCatalogVisible>
 
                 </RadzenButton>
                 <RadzenButton Text="Delete theme"
@@ -138,9 +138,9 @@
                               Variant="Variant.Text"
                               ButtonStyle="ButtonStyle.Danger"
                               Size="ButtonSize.Small"
-                              Click=@(arg =>_mainVm._DeleteTheme())
+                              Click=@(arg =>_mainVm.DeleteTheme())
                               class="rz-my-10"
-                              @bind-Visible=@_mainVm._isThemeVisible>
+                              @bind-Visible=@_mainVm.IsThemeVisible>
 
                 </RadzenButton>
                 <RadzenButton Text="Delete issue"
@@ -148,17 +148,17 @@
                               Variant="Variant.Text"
                               ButtonStyle="ButtonStyle.Danger"
                               Size="ButtonSize.Small"
-                              Click=@(arg => _mainVm._DeleteIssue())
+                              Click=@(arg => _mainVm.DeleteIssue())
                               class="rz-my-10"
-                              @bind-Visible=@_mainVm._isIssueVisible>
+                              @bind-Visible=@_mainVm.IsIssueVisible>
 
                 </RadzenButton>
             </RadzenStack>
         </RadzenRow>
         <RadzenRow>
-            <RadzenHtmlEditor @bind-Visible=@_mainVm._isIssueVisible
-                              @bind-Value=@_mainVm._editingIssue.AnswerText
-                              @oninput=@(changeEventArg => _mainVm._AnswerChanged(changeEventArg))
+            <RadzenHtmlEditor @bind-Visible=@_mainVm.IsIssueVisible
+                              @bind-Value=@_mainVm.EditingIssue.AnswerText
+                              @oninput=@(changeEventArg => _mainVm.AnswerChanged(changeEventArg))
                 class="rz-w-100" />
         </RadzenRow>
     </RadzenColumn>
