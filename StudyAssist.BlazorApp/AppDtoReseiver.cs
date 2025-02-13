@@ -198,6 +198,43 @@ namespace StudyAssist.BlazorApp
             return issueId;
         }
 
+        internal static async Task<List<CatalogVm>> GetRepeatCatalogsAsync()
+        {
+            List<CatalogVm> catalogs = _catalogsDto.Catalogs
+                            .Select(catalog => new CatalogVm
+                            {
+                                Id = catalog.Key,
+                                Name = catalog.Value,
+                                Themes = _catalogsDto.Themes
+                                    .Where(theme => theme.Value.CatalogId == catalog.Key)
+                                    .Select(theme => new ThemeVm
+                                    {
+                                        Id = theme.Key,
+                                        Name = theme.Value.Name,
+                                        ParentId = catalog.Key,
+                                        Issues = _catalogsDto.Issues
+                                            .Where(issue => issue.Value.ThemeId == theme.Key)
+                                            .Where(issue => _editingIssueVms
+                                                                                                    .Where(issueVm => issueVm.IsStudy)
+                                                                                                    .Select(issueVm => issueVm.Id)
+                                                                                                    .Contains(issue.Key))
+                                            .Select(issue => new ItemVm()
+                                            {
+                                                Id = issue.Key,
+                                                Name = issue.Value.Name,
+                                                ParentId = theme.Key
+                                            }).ToList()
+                                    })
+                                    .Where(theme => theme.Issues.Count > 0)
+                                    .ToList(),
+                            })
+                            .Where(catalog => catalog.Themes.Any())
+                            .ToList();
+
+
+            return await Task.FromResult(catalogs);
+        }
+
         private static List<EditingIssueVm> _editingIssueVms = new List<EditingIssueVm>
         {
             new EditingIssueVm
