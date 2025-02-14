@@ -5,20 +5,74 @@
 @rendermode InteractiveServer
 
 
-<RadzenRow class="rz-p-0 rz-p-lg-12">
-    <RadzenColumn Size="12" SizeLG="4">
-        <RadzenCard>
-            <RadzenTree Data=@_mainVm.Catalogs>
-                <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)" ChildrenProperty="Themes"></RadzenTreeLevel>
-                <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)" ChildrenProperty="Issues"></RadzenTreeLevel>
-                <RadzenTreeLevel TextProperty="@nameof(ItemVm.Name)" HasChildren=@(ch => false)></RadzenTreeLevel>
-
-
-
-            </RadzenTree>
-        </RadzenCard>
+<RadzenRow class=" rz-text-align-left">
+    <RadzenColumn Size="3" Gap="0rem" class="rz-py-2">
+        <RadzenStack Orientation="Orientation.Vertical" Gap="0rem">
+            <RadzenStack Orientation="Orientation.Vertical" class="rz-my-5">
+                <RadzenLabel Text="Повторить:" class="rz-my-2 rz-mx-2" />
+                <RadzenTree Data=@_mainVm.Catalogs Change="@_mainVm.CurrentItemChanged" @bind-Value=@_mainVm.CurrentItem Style="float:left">
+                    <RadzenTreeLevel TextProperty="@nameof(CatalogVm.Name)"
+                                     Expanded=@(value => _mainVm.ExpandCatalog(value))
+                                     ChildrenProperty="Themes">
+                    </RadzenTreeLevel>
+                    <RadzenTreeLevel TextProperty="@nameof(ThemeVm.Name)"
+                                     Expanded=@(value => _mainVm.ExpandTheme(value))
+                                     ChildrenProperty="Issues">
+                    </RadzenTreeLevel>
+                    <RadzenTreeLevel TextProperty="@nameof(ItemVm.Name)"
+                                     HasChildren=@(ch => false )>
+                    </RadzenTreeLevel>
+                </RadzenTree>
+            </RadzenStack>
+        </RadzenStack>
     </RadzenColumn>
+    <RadzenColumn Gap="0rem">
+        <RadzenRow class="rz-my-2 ">
+            <RadzenStack Orientation="Orientation.Horizontal" class="rz-w-100">
+                <RadzenCard Variant="Variant.Filled"
+                            Style="width:max-content; max-width: 420px"
+                            @bind-Visible=@_mainVm.IsIssueVisible>
+                    <RadzenStack>
+                        <RadzenText Text=@_mainVm.RepeatCountText></RadzenText>
+                        <RadzenText Text=@_mainVm.RepeatDateText></RadzenText>
+                        <RadzenButton Text="study off"
+                                      Icon="scan_delete"
+                                      Variant="Variant.Text"
+                                      ButtonStyle="ButtonStyle.Danger"
+                                      Size="ButtonSize.Small"
+                                      Click=@(arg => _mainVm.RemoveFromStudy())
+                                      >
+                        </RadzenButton>
+                    </RadzenStack>
+                </RadzenCard>
+                <RadzenStack Orientation="Orientation.Vertical" class="rz-w-100">
 
+                    <RadzenFormField Text="Наименование заметки"
+                                     Variant="Variant.Text"
+                                     @bind-Visible=@_mainVm.IsIssueVisible
+                                     class="rz-w-100 rz-my-10">
+                        <RadzenTextBox @bind-Value="@_mainVm.SelectedItem.Name"
+                                       Change=@(args => _mainVm.IssueNameOnChange(args))
+                                       onfocus="this.select()" />
+                    </RadzenFormField>
+                    <RadzenButton Text="set-off" 
+                                  Style="max-width:100px"
+                                  Variant="Variant.Flat" 
+                                  Click=@(arg => _mainVm.SetOffIssue())
+                                  Shade="Shade.Lighter"
+                                  ButtonStyle="ButtonStyle.Success"
+                                    @bind-Visible=@_mainVm.IsIssueVisible>
+                    </RadzenButton>
+                </RadzenStack>
+            </RadzenStack>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenHtmlEditor @bind-Visible=@_mainVm.IsIssueVisible
+                              @bind-Value=@_mainVm.EditingIssue.AnswerText
+                              @oninput=@(changeEventArg => _mainVm.AnswerChanged(changeEventArg))
+                              class="rz-w-100" />
+        </RadzenRow>
+    </RadzenColumn>
 </RadzenRow>
 
 
@@ -27,6 +81,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _mainVm = await MainViewModel.CreateRepeatCatalogAsync();
+        _mainVm = await MainViewModel.CreateRepeatCatalogAsync(DateTime.Today);
     }
 }

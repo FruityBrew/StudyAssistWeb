@@ -139,9 +139,9 @@ namespace StudyAssist.BlazorApp.ViewModels
             Catalogs = await AppDtoReseiver.GetCatalogsAsync();
         }
 
-        internal async Task InitializeRepeatCatalogAsync()
+        internal async Task InitializeRepeatCatalogAsync(DateTime date)
         {
-            Catalogs = await AppDtoReseiver.GetRepeatCatalogsAsync();
+            Catalogs = await AppDtoReseiver.GetRepeatCatalogsAsync(date);
         }
 
         internal static async Task<MainViewModel> CreateBaseCatalogAsync()
@@ -152,10 +152,10 @@ namespace StudyAssist.BlazorApp.ViewModels
             return instance;
         }
 
-        internal static async Task<MainViewModel> CreateRepeatCatalogAsync()
+        internal static async Task<MainViewModel> CreateRepeatCatalogAsync(DateTime date)
         {
             MainViewModel instance = new MainViewModel();
-            await instance.InitializeRepeatCatalogAsync();
+            await instance.InitializeRepeatCatalogAsync(date);
 
             return instance;
         }
@@ -400,6 +400,8 @@ namespace StudyAssist.BlazorApp.ViewModels
             _expandedTheme = SelectedTheme.Name;
         }
 
+
+
         internal async void AddToStudy()
         {
             EditingIssue.IsStudy = true;
@@ -431,6 +433,49 @@ namespace StudyAssist.BlazorApp.ViewModels
                 .SelectMany(cat => cat.Themes)
                 .SelectMany(t => t.Issues)
                 .FirstOrDefault(th => th.Id == issueId);
+        }
+
+        internal async void SetOffIssue()
+        {
+            await AppDtoReseiver.UpdateIssueStudyDateAsync(EditingIssue);
+
+            ThemeVm selectedTheme = SelectedTheme;
+            CatalogVm selectedCatalog = SelectedCatalog;
+
+            _catalogs = await AppDtoReseiver.GetRepeatCatalogsAsync(DateTime.Today);
+
+            ThemeVm changedSelectedTheme = _FindThemeBy(SelectedItem.ParentId);
+            EditingIssue = _defaultIssue;
+
+
+            if(changedSelectedTheme == null)
+            {
+                SelectedTheme = _defaultTheme;
+
+                CatalogVm changedSelectedCatalog = _catalogs.FirstOrDefault(cat => cat.Id == selectedTheme.ParentId);
+
+                if(changedSelectedCatalog == null)
+                {
+                    SelectedCatalog = _defaultCatalog;
+
+                    return;
+                }
+
+                SelectedCatalog = changedSelectedCatalog;
+                _expandedCatalog = changedSelectedCatalog.Name;
+
+                return;
+            }
+
+            SelectedTheme = changedSelectedTheme;
+            _expandedCatalog = selectedCatalog.Name;
+            _expandedTheme = selectedTheme.Name;
+
+
+            _selectedItem = _defaultItem;
+
+            каталог и тема не выделяются
+            //CurrentItemChanged();
         }
 
         #endregion Issues

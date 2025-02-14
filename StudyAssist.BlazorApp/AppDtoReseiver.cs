@@ -1,5 +1,6 @@
 ﻿using StudyAssist.App.Api.Dtos;
 using StudyAssist.BlazorApp.ViewModels;
+using StudyAssist.Model;
 
 namespace StudyAssist.BlazorApp
 {
@@ -198,7 +199,7 @@ namespace StudyAssist.BlazorApp
             return issueId;
         }
 
-        internal static async Task<List<CatalogVm>> GetRepeatCatalogsAsync()
+        internal static async Task<List<CatalogVm>> GetRepeatCatalogsAsync(DateTime date)
         {
             List<CatalogVm> catalogs = _catalogsDto.Catalogs
                             .Select(catalog => new CatalogVm
@@ -215,7 +216,8 @@ namespace StudyAssist.BlazorApp
                                         Issues = _catalogsDto.Issues
                                             .Where(issue => issue.Value.ThemeId == theme.Key)
                                             .Where(issue => _editingIssueVms
-                                                                                                    .Where(issueVm => issueVm.IsStudy)
+                                                                                                    .Where(issueVm => issueVm.IsStudy
+                                                                                                        && issueVm.RepeatDate <= date)
                                                                                                     .Select(issueVm => issueVm.Id)
                                                                                                     .Contains(issue.Key))
                                             .Select(issue => new ItemVm()
@@ -233,6 +235,16 @@ namespace StudyAssist.BlazorApp
 
 
             return await Task.FromResult(catalogs);
+        }
+
+        internal static async Task UpdateIssueStudyDateAsync(EditingIssueVm issueVm)
+        {
+            EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
+            if(editingIssue == null)
+                return;
+
+            editingIssue.RepeatDate = DateTime.Now.AddDays(7);
+            editingIssue.RepeatCount++;
         }
 
         private static List<EditingIssueVm> _editingIssueVms = new List<EditingIssueVm>
@@ -259,6 +271,10 @@ namespace StudyAssist.BlazorApp
             {
                 Id = 1,
                 Name = "Issue111",
+                RepeatCount = 1,
+                RepeatDate = DateTime.Today.AddDays(-1),
+                IsStudy = true,
+                AnswerText = @"<p>Yfdrf<p/>"
             },
             new EditingIssueVm
             {
