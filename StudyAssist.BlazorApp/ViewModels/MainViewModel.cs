@@ -457,25 +457,22 @@ namespace StudyAssist.BlazorApp.ViewModels
                 if(changedSelectedCatalog == null)
                 {
                     SelectedCatalog = _defaultCatalog;
+                    EditingIssue = _defaultIssue;
+                    IsIssueVisible = false;
 
                     return;
                 }
 
-                SelectedCatalog = changedSelectedCatalog;
+                CurrentItem = changedSelectedCatalog;
                 _expandedCatalog = changedSelectedCatalog.Name;
 
                 return;
             }
 
-            SelectedTheme = changedSelectedTheme;
             _expandedCatalog = selectedCatalog.Name;
             _expandedTheme = selectedTheme.Name;
 
-
-            _selectedItem = _defaultItem;
-
-            каталог и тема не выделяются
-            //CurrentItemChanged();
+            CurrentItem = changedSelectedTheme;
         }
 
         #endregion Issues
