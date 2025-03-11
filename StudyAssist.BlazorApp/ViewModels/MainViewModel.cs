@@ -24,9 +24,6 @@ namespace StudyAssist.BlazorApp.ViewModels
         private bool _isThemeVisible = false;
         private bool _isIssueVisible = false;
         private bool _isCatalogVisible = false;
-        private bool _isCatalogDisabled = true;
-        private bool _isThemeDisabled = false;
-        private bool _isIssueDisabled = false;
         internal string _expandedCatalog;
         internal string _expandedTheme;
         internal TypingTimer _timer;
@@ -89,24 +86,6 @@ namespace StudyAssist.BlazorApp.ViewModels
             set => _isCatalogVisible = value; 
         }
 
-        internal bool IsCatalogDisabled 
-        { 
-            get => _isCatalogDisabled; 
-            set => _isCatalogDisabled = value; 
-        }
-
-        internal bool IsThemeDisabled 
-        { 
-            get => _isThemeDisabled; 
-            set => _isThemeDisabled = value; 
-        }
-
-        internal bool IsIssueDisabled 
-        { 
-            get => _isIssueDisabled; 
-            set => _isIssueDisabled = value; 
-        }
-        
         internal CatalogVm SelectedCatalog 
         { 
             get => _selectedCatalog; 
@@ -182,32 +161,19 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         #region utilities
 
-
-
-        internal bool Getf()
-        {
-            return SelectedItem == null;
-        }
-
         internal async void CurrentItemChanged()
         {
             if(CurrentItem is CatalogVm catalog)
             {
                 SelectedCatalog = Catalogs
                     .FirstOrDefault(cat => cat.Id == catalog.Id)!;
-                // _isCatalogSelected = true;
+
                 SelectedTheme = _defaultTheme;
                 SelectedItem = _defaultItem;
-
                 IsThemeVisible = false;
                 IsIssueVisible = false;
                 IsCatalogVisible = true;
-                // _isCatalogDisabled = false;
                 EditingIssue = _defaultIssue;
-
-                // _repeatCountText = @"Количество повторений: -";
-                // _repeatDateText = @"Дата повтора: -";
-
             }
             else if(CurrentItem is ThemeVm theme)
             {
@@ -220,12 +186,7 @@ namespace StudyAssist.BlazorApp.ViewModels
                 IsThemeVisible = true;
                 IsIssueVisible = false;
                 IsCatalogVisible = false;
-                // _isCatalogDisabled = true;
-                // _isThemeDisabled = false;
                 EditingIssue = _defaultIssue;
-
-                // _repeatCountText = @"Количество повторений: -";
-                // _repeatDateText = @"Дата повтора: -";
 
                 return;
             }
