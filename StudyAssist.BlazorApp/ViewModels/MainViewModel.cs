@@ -414,7 +414,20 @@ namespace StudyAssist.BlazorApp.ViewModels
             EditingIssue.IsStudy = false;
             await AppDtoReseiver.UpdateIssueStudyAsync(EditingIssue);
             CurrentItemChanged();
+        }
 
+        internal async void RemoveFromStudyAndUpdateRepeatList()
+        {
+            EditingIssue.IsStudy = false;
+
+            await _UpdateCatalogAfterRemoveIssue();
+        }
+
+        internal async void SetOffIssue()
+        {
+            await AppDtoReseiver.UpdateIssueStudyDateAsync(EditingIssue);
+
+            await _UpdateCatalogAfterRemoveIssue();
         }
 
         internal async void AnswerChanged(ChangeEventArgs args)
@@ -435,10 +448,8 @@ namespace StudyAssist.BlazorApp.ViewModels
                 .FirstOrDefault(th => th.Id == issueId);
         }
 
-        internal async void SetOffIssue()
+        private async Task _UpdateCatalogAfterRemoveIssue()
         {
-            await AppDtoReseiver.UpdateIssueStudyDateAsync(EditingIssue);
-
             ThemeVm selectedTheme = SelectedTheme;
             CatalogVm selectedCatalog = SelectedCatalog;
 
