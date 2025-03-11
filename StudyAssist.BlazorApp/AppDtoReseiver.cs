@@ -237,7 +237,7 @@ namespace StudyAssist.BlazorApp
             return await Task.FromResult(catalogs);
         }
 
-        internal static async Task UpdateIssueStudyDateAsync(EditingIssueVm issueVm)
+        internal static async Task ProlongIssueStudyDateAsync(EditingIssueVm issueVm)
         {
             EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
             if(editingIssue == null)

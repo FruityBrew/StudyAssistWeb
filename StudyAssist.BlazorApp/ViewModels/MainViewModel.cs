@@ -419,13 +419,14 @@ namespace StudyAssist.BlazorApp.ViewModels
         internal async void RemoveFromStudyAndUpdateRepeatList()
         {
             EditingIssue.IsStudy = false;
+            await AppDtoReseiver.UpdateIssueStudyAsync(EditingIssue);
 
             await _UpdateCatalogAfterRemoveIssue();
         }
 
         internal async void SetOffIssue()
         {
-            await AppDtoReseiver.UpdateIssueStudyDateAsync(EditingIssue);
+            await AppDtoReseiver.ProlongIssueStudyDateAsync(EditingIssue);
 
             await _UpdateCatalogAfterRemoveIssue();
         }
