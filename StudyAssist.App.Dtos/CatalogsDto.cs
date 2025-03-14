@@ -1,8 +1,8 @@
-﻿namespace StudyAssist.App.Api.Dtos
+﻿namespace StudyAssist.App.Dtos
 {
     public class CatalogsDto
     {
-        public CatalogsDto() 
+        public CatalogsDto()
         {
             Catalogs = new();
             Themes = new();

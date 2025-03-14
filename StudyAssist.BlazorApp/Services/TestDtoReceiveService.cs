@@ -1,10 +1,10 @@
-﻿using StudyAssist.App.Api.Dtos;
+﻿using StudyAssist.App.Dtos;
 using StudyAssist.BlazorApp.ViewModels;
 using StudyAssist.Model;
 
-namespace StudyAssist.BlazorApp
+namespace StudyAssist.BlazorApp.Services
 {
-    public static class AppDtoReseiver
+    public static class TestDtoReceiveService
     {
         private static CatalogsDto _catalogsDto = new CatalogsDto()
         {
@@ -40,8 +40,8 @@ namespace StudyAssist.BlazorApp
         internal static async Task<List<CatalogVm>> GetCatalogsAsync()
         {
             List<CatalogVm> catalogs = _catalogsDto.Catalogs
-                .Select(catalog => new CatalogVm 
-                { 
+                .Select(catalog => new CatalogVm
+                {
                     Id = catalog.Key,
                     Name = catalog.Value,
                     Themes = _catalogsDto.Themes
@@ -52,7 +52,7 @@ namespace StudyAssist.BlazorApp
                             Name = theme.Value.Name,
                             ParentId = catalog.Key,
                             Issues = _catalogsDto.Issues
-                                .Where(issue=> issue.Value.ThemeId == theme.Key)
+                                .Where(issue => issue.Value.ThemeId == theme.Key)
                                 .Select(issue => new ItemVm()
                                 {
                                     Id = issue.Key,
@@ -111,12 +111,12 @@ namespace StudyAssist.BlazorApp
                 .Where(i => themes.Contains(i.Value.ThemeId))
                 .Select(i => i.Key);
 
-            foreach(var issue in issues)
+            foreach (var issue in issues)
             {
                 _catalogsDto.Issues.Remove(issue);
             }
 
-            foreach(var theme in themes)
+            foreach (var theme in themes)
             {
                 _catalogsDto.Themes.Remove(theme);
             }
@@ -130,7 +130,7 @@ namespace StudyAssist.BlazorApp
                 .Where(i => source.ParentId == i.Value.ThemeId)
                 .Select(i => i.Key);
 
-            foreach(var issue in issues)
+            foreach (var issue in issues)
             {
                 _catalogsDto.Issues.Remove(issue);
             }
@@ -147,8 +147,8 @@ namespace StudyAssist.BlazorApp
 
             var delIssue = _editingIssueVms.FirstOrDefault(f => f.Id == deleted.Id);
 
-            if(delIssue != null)
-            _editingIssueVms.Remove(delIssue);
+            if (delIssue != null)
+                _editingIssueVms.Remove(delIssue);
         }
 
 
@@ -164,7 +164,7 @@ namespace StudyAssist.BlazorApp
         internal static async Task UpdateIssueAnswerAsync(EditingIssueVm issueVm)
         {
             EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
-            if(editingIssue == null)
+            if (editingIssue == null)
                 return;
 
             editingIssue.AnswerText = issueVm.AnswerText;
@@ -173,12 +173,12 @@ namespace StudyAssist.BlazorApp
         internal static async Task UpdateIssueStudyAsync(EditingIssueVm issueVm)
         {
             EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
-            if(editingIssue == null)
+            if (editingIssue == null)
                 return;
 
             editingIssue.IsStudy = issueVm.IsStudy;
 
-            if(editingIssue.IsStudy == false)
+            if (editingIssue.IsStudy == false)
             {
                 editingIssue.RepeatDate = null;
                 editingIssue.RepeatCount = 0;
@@ -240,7 +240,7 @@ namespace StudyAssist.BlazorApp
         internal static async Task ProlongIssueStudyDateAsync(EditingIssueVm issueVm)
         {
             EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
-            if(editingIssue == null)
+            if (editingIssue == null)
                 return;
 
             editingIssue.RepeatDate = DateTime.Now.AddDays(7);

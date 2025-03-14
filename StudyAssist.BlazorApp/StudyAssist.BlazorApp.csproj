@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StudyAssist.App.Api\StudyAssist.App.Api.csproj" />
+    <ProjectReference Include="..\StudyAssist.App.Dtos\StudyAssist.App.Dtos.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 
