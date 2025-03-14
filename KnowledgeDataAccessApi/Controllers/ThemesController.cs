@@ -1,4 +1,5 @@
 ﻿using KnowledgeDataAccessApi.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,16 @@ namespace KnowledgeDataAccessApi.Controllers
         #endregion Constructor
 
         #region Api
+
+        /// <summary>
+        /// Запрашивает все темы.
+        /// </summary>
+        [HttpGet]
+        [Authorize("KnowledgeApi.Read")]
+        public async Task<ActionResult<List<Theme>>> GetThemes()
+        {
+            return await _dbContext.Themes.ToListAsync();
+        }
 
         /// <summary>
         /// Запрашивает все задачи темы

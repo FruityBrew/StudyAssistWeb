@@ -1,8 +1,10 @@
 ﻿using KnowledgeDataAccessApi.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudyAssist.Model;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Utilities;
 
@@ -22,7 +24,17 @@ namespace KnowledgeDataAccessApi.Controllers
         #endregion Constructors
 
         #region Api
-        
+
+        /// <summary>
+        /// Запрашивает все вопросы.
+        /// </summary>
+        [HttpGet]
+        [Authorize("KnowledgeApi.Read")]
+        public async Task<ActionResult<List<Issue>>> GetIssues()
+        {
+            return await _dbContext.Issues.ToListAsync();
+        }
+
         /// <summary>
         /// Запрашивает вопрос
         /// </summary>
