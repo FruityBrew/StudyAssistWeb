@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StudyAssist.App.Dtos\StudyAssist.App.Dtos.csproj" />
     <ProjectReference Include="..\StudyAssist.Model\StudyAssist.Model.csproj" />
   </ItemGroup>
 
