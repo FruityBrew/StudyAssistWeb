@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using StudyAssist.BlazorApp.Interfaces;
 using StudyAssist.BlazorApp.Services;
 using Utilities;
 
@@ -113,10 +114,16 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         #endregion properties
 
+        IDtoReceiverService _receiver;
+
+        internal async Task InitializeDefaultViewModelAsync()
+        {
+            Catalogs = new List<CatalogVm>();
+        }
 
         internal async Task InitializeBaseCatalogAsync()
         {
-            Catalogs = await TestDtoReceiveService.GetCatalogsAsync();
+            Catalogs = await _receiver.GetCatalogTreeAsync();
         }
 
         internal async Task InitializeRepeatCatalogAsync(DateTime date)
@@ -124,20 +131,34 @@ namespace StudyAssist.BlazorApp.ViewModels
             Catalogs = await TestDtoReceiveService.GetRepeatCatalogsAsync(date);
         }
 
-        internal static async Task<MainViewModel> CreateBaseCatalogAsync()
+        internal static async Task<MainViewModel> CreateBaseCatalogAsync(
+            IDtoReceiverService receiver)
         {
-            MainViewModel instance = new MainViewModel();
+            MainViewModel instance = new MainViewModel(receiver);
             await instance.InitializeBaseCatalogAsync();
 
             return instance;
         }
 
-        internal static async Task<MainViewModel> CreateRepeatCatalogAsync(DateTime date)
+        internal static async Task<MainViewModel> CreateDefaultViewModel()
         {
             MainViewModel instance = new MainViewModel();
+            return instance;
+        }
+
+        internal static async Task<MainViewModel> CreateRepeatCatalogAsync(
+            IDtoReceiverService receiver,
+            DateTime date)
+        {
+            MainViewModel instance = new MainViewModel(receiver);
             await instance.InitializeRepeatCatalogAsync(date);
 
             return instance;
+        }
+
+        private MainViewModel(IDtoReceiverService dtoReceiverService) : this()
+        {
+            _receiver = dtoReceiverService;
         }
 
         private MainViewModel()
