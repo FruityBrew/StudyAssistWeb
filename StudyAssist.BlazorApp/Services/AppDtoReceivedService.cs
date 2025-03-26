@@ -28,27 +28,29 @@ namespace StudyAssist.BlazorApp.Services
 
             response.EnsureSuccessStatusCode();
 
+            String catalogsDtoStr = await response.Content.ReadAsStringAsync();
+
             CatalogsDto catalogsDto = await response.Content.ReadFromJsonAsync<CatalogsDto>();
 
             List<CatalogVm> catalogs = catalogsDto.Catalogs
                 .Select(catalog => new CatalogVm
                 {
-                    Id = catalog.Key,
-                    Name = catalog.Value,
+                    Id = catalog.Id,
+                    Name = catalog.Name,
                     Themes = catalogsDto.Themes
-                        .Where(theme => theme.Value.CatalogId == catalog.Key)
+                        .Where(theme => theme.ParentId == catalog.Id)
                         .Select(theme => new ThemeVm
                         {
-                            Id = theme.Key,
-                            Name = theme.Value.Name,
-                            ParentId = catalog.Key,
+                            Id = theme.Id,
+                            Name = theme.Name,
+                            ParentId = catalog.Id,
                             Issues = catalogsDto.Issues
-                                .Where(issue => issue.Value.ThemeId == theme.Key)
+                                .Where(issue => issue.ParentId == theme.Id)
                                 .Select(issue => new ItemVm()
                                 {
-                                    Id = issue.Key,
-                                    Name = issue.Value.Name,
-                                    ParentId = theme.Key
+                                    Id = issue.Id,
+                                    Name = issue.Name,
+                                    ParentId = theme.Id
                                 }).ToList()
                         }).ToList(),
                 })

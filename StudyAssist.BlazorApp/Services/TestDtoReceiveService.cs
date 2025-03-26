@@ -8,32 +8,32 @@ namespace StudyAssist.BlazorApp.Services
     {
         private static CatalogsDto _catalogsDto = new CatalogsDto()
         {
-            Catalogs = new Dictionary<int, string>
+            Catalogs = new List<ItemValue>
                 {
-                    {1, "First" },
-                    {2, "Second" },
-                    {3,  "Third"},
+                    new (1, "First"),
+                    new (2, "Second" ),
+                    new(3,  "Third"),
                 },
             Themes =
                 {
-                    {1, (CatalogId:1, Name:"Theme11") },
-                    {2, (CatalogId:1, Name:"Theme12") },
-                    {3, (CatalogId:1, Name:"Theme13") },
-                    {4, (CatalogId:2, Name:"Theme24") },
-                    {5, (CatalogId:2, Name:"Theme25") },
-                    {6, (CatalogId:3, Name:"Theme36") },
+                    new(1, "Theme11", 1 ),
+                    new(2, "Theme12", 1 ),
+                    new(3, "Theme13", 1 ),
+                    new(4, "Theme24", 2 ),
+                    new(5, "Theme25", 2 ),
+                    new(6, "Theme36", 3 ),
                 },
             Issues =
                 {
-                    {1, (ThemeId:1, Name:"Issue111") },
-                    {2, (ThemeId:1, Name:"Issue112") },
-                    {3, (ThemeId:2, Name:"Issue123 Очень длинное название Очень длинное название Очень длинное название Очень длинное название ") },
-                    {4, (ThemeId:3, Name:"Issue134") },
-                    {5, (ThemeId:3, Name:"Issue135") },
-                    {6, (ThemeId:4, Name:"Issue246") },
-                    {7, (ThemeId:4, Name:"Issue247") },
-                    {8, (ThemeId:1, Name:"Issue118") },
-                    {9, (ThemeId:1, Name:"Issue119") },
+                    new (1,"Issue111", 1),
+                    new (2,"Issue112", 1),
+                    new (3,"Issue123 Очень длинное название Очень длинное название Очень длинное название Очень длинное название ", 2),
+                    new (4,"Issue134", 3),
+                    new (5,"Issue135", 3),
+                    new (6,"Issue246", 4),
+                    new (7,"Issue247", 4),
+                    new (8,"Issue118", 1),
+                    new (9,"Issue119", 1),
                 }
         };
 
@@ -42,22 +42,22 @@ namespace StudyAssist.BlazorApp.Services
             List<CatalogVm> catalogs = _catalogsDto.Catalogs
                 .Select(catalog => new CatalogVm
                 {
-                    Id = catalog.Key,
-                    Name = catalog.Value,
+                    Id = catalog.Id,
+                    Name = catalog.Name,
                     Themes = _catalogsDto.Themes
-                        .Where(theme => theme.Value.CatalogId == catalog.Key)
+                        .Where(theme => theme.ParentId == catalog.Id)
                         .Select(theme => new ThemeVm
                         {
-                            Id = theme.Key,
-                            Name = theme.Value.Name,
-                            ParentId = catalog.Key,
+                            Id = theme.Id,
+                            Name = theme.Name,
+                            ParentId = theme.ParentId ?? 0,
                             Issues = _catalogsDto.Issues
-                                .Where(issue => issue.Value.ThemeId == theme.Key)
+                                .Where(issue => issue.ParentId == theme.Id)
                                 .Select(issue => new ItemVm()
                                 {
-                                    Id = issue.Key,
-                                    Name = issue.Value.Name,
-                                    ParentId = theme.Key
+                                    Id = issue.Id,
+                                    Name = issue.Name,
+                                    ParentId = theme.ParentId ?? 0
                                 }).ToList()
                         }).ToList(),
                 })
@@ -75,90 +75,102 @@ namespace StudyAssist.BlazorApp.Services
 
         internal static async Task<int> AddThemeAsync(ThemeVm theme)
         {
-            int themeId = _catalogsDto.Themes.Max(th => th.Key) + 1;
-            _catalogsDto.Themes.Add(themeId, (theme.ParentId, theme.Name));
+            int themeId = _catalogsDto.Themes.Max(th => th.Id) + 1;
+            _catalogsDto.Themes.Add(new ItemValue(themeId, theme.Name, theme.ParentId));
             return themeId;
         }
 
         internal static async Task UpdateThemeNameAsync(ThemeVm source)
         {
-            _catalogsDto.Themes.Remove(source.Id);
-            _catalogsDto.Themes.Add(source.Id, (source.ParentId, source.Name));
+            ItemValue? taregetRemoving = _catalogsDto.Themes.FirstOrDefault(th => th.Id == source.Id);
+            _catalogsDto.Themes.Remove(taregetRemoving);
+
+            _catalogsDto.Themes.Add(new ItemValue( source.Id, source.Name, source.ParentId));
         }
 
         internal static async Task<int> AddCatalogAsync(CatalogVm catalog)
         {
-            int catalogId = _catalogsDto.Catalogs.Max(c => c.Key) + 1;
-            _catalogsDto.Catalogs.Add(catalogId, catalog.Name);
+            int catalogId = _catalogsDto.Catalogs.Max(c => c.Id) + 1;
+            _catalogsDto.Catalogs.Add(new (catalogId, catalog.Name));
 
             return catalogId;
         }
 
         internal static async Task UpdateCatalogNameAsync(CatalogVm source)
         {
+            ItemValue? taregetRemoving = _catalogsDto.Themes.FirstOrDefault(i => i.Id == source.Id);
 
-            _catalogsDto.Catalogs.Remove(source.Id);
-            _catalogsDto.Catalogs.Add(source.Id, source.Name);
+            _catalogsDto.Catalogs.Remove(taregetRemoving);
+            _catalogsDto.Catalogs.Add(new(source.Id, source.Name));
         }
 
         internal static async Task DeleteCatalogAsync(CatalogVm source)
         {
             var themes = _catalogsDto.Themes
-                .Where(th => th.Value.CatalogId == source.Id)
-                .Select(th => th.Key);
+                .Where(th => th.ParentId == source.Id);
+            //.Select(th => th.Id);
 
-            var issues = _catalogsDto.Issues
-                .Where(i => themes.Contains(i.Value.ThemeId))
-                .Select(i => i.Key);
+            //var issues = _catalogsDto.Issues
+            //    .Where(i => themes.Any(t => t.Id == i.ParentId));
+            //.Select(i => i.Key);
 
-            foreach (var issue in issues)
-            {
-                _catalogsDto.Issues.Remove(issue);
-            }
+            _catalogsDto.Issues.RemoveAll(i => themes.Any(t => t.Id == i.ParentId));
+
+            //foreach (var issue in issues)
+            //{
+            //    _catalogsDto.Issues.Remove(issue);
+            //}
 
             foreach (var theme in themes)
             {
                 _catalogsDto.Themes.Remove(theme);
             }
-            _catalogsDto.Catalogs.Remove(source.Id);
+
+            _catalogsDto.Catalogs.RemoveAll(cat => cat.Id == source.Id);
 
         }
 
         internal static async Task DeleteThemeAsync(ThemeVm source)
         {
-            var issues = _catalogsDto.Issues
-                .Where(i => source.ParentId == i.Value.ThemeId)
-                .Select(i => i.Key);
+            //var issues = _catalogsDto.Issues
+            //    .Where(i => source.ParentId == i.Value.ThemeId)
+            //    .Select(i => i.Key);
 
-            foreach (var issue in issues)
-            {
-                _catalogsDto.Issues.Remove(issue);
-            }
+            //foreach (var issue in issues)
+            //{
+            //    _catalogsDto.Issues.Remove(issue);
+            //}
 
-            _catalogsDto.Themes.Remove(source.Id);
+            _catalogsDto.Issues.RemoveAll(i =>  i.ParentId == source.Id);
+
+            _catalogsDto.Themes.RemoveAll(t => t.Id == source.Id);
         }
 
         internal static async Task DeleteIssueAsync(ItemVm deleted)
         {
-            var delItem = _catalogsDto.Issues
-                .FirstOrDefault(i => i.Key == deleted.Id);
+            //var delItem = _catalogsDto.Issues
+            //    .FirstOrDefault(i => i.Key == deleted.Id);
 
-            _catalogsDto.Issues.Remove(delItem.Key);
+            _catalogsDto.Issues.RemoveAll(i => i.Id == deleted.Id);
 
-            var delIssue = _editingIssueVms.FirstOrDefault(f => f.Id == deleted.Id);
+            //var delIssue = _editingIssueVms.FirstOrDefault(f => f.Id == deleted.Id);
 
-            if (delIssue != null)
-                _editingIssueVms.Remove(delIssue);
+            //if (delIssue != null)
+            //    _editingIssueVms.Remove(delIssue);
+
+            _editingIssueVms.RemoveAll(ivm => ivm.Id == deleted.Id);
         }
 
 
         internal static async Task UpdateIssueNameAsync(ItemVm source)
         {
-            var target = _catalogsDto.Issues
-                .FirstOrDefault(t => t.Key == source.Id);
+            //var target = _catalogsDto.Issues
+            //    .FirstOrDefault(t => t.Key == source.Id);
 
-            _catalogsDto.Issues.Remove(source.Id);
-            _catalogsDto.Issues.Add(source.Id, (source.ParentId, source.Name));
+            //_catalogsDto.Issues.Remove(source.Id);
+
+            _catalogsDto.Issues.RemoveAll(i => i.Id == source.Id);
+            _catalogsDto.Issues.Add(new ItemValue( source.Id, source.Name, source.ParentId));
         }
 
         internal static async Task UpdateIssueAnswerAsync(EditingIssueVm issueVm)
@@ -191,8 +203,8 @@ namespace StudyAssist.BlazorApp.Services
 
         internal static async Task<int> AddIssueAsync(EditingIssueVm issue)
         {
-            int issueId = _catalogsDto.Issues.Max(i => i.Key) + 1;
-            _catalogsDto.Issues.Add(issueId, (issue.ParentId, issue.Name));
+            int issueId = _catalogsDto.Issues.Max(i => i.Id) + 1;
+            _catalogsDto.Issues.Add(new ItemValue(issue.Id, issue.Name, issue.ParentId));
             issue.Id = issueId;
             _editingIssueVms.Add(issue);
 
@@ -204,27 +216,27 @@ namespace StudyAssist.BlazorApp.Services
             List<CatalogVm> catalogs = _catalogsDto.Catalogs
                             .Select(catalog => new CatalogVm
                             {
-                                Id = catalog.Key,
-                                Name = catalog.Value,
+                                Id = catalog.Id,
+                                Name = catalog.Name,
                                 Themes = _catalogsDto.Themes
-                                    .Where(theme => theme.Value.CatalogId == catalog.Key)
+                                    .Where(theme => theme.ParentId == catalog.Id)
                                     .Select(theme => new ThemeVm
                                     {
-                                        Id = theme.Key,
-                                        Name = theme.Value.Name,
-                                        ParentId = catalog.Key,
+                                        Id = theme.Id,
+                                        Name = theme.Name,
+                                        ParentId = catalog.Id,
                                         Issues = _catalogsDto.Issues
-                                            .Where(issue => issue.Value.ThemeId == theme.Key)
+                                            .Where(issue => issue.ParentId == theme.Id)
                                             .Where(issue => _editingIssueVms
                                                                                                     .Where(issueVm => issueVm.IsStudy
                                                                                                         && issueVm.RepeatDate <= date)
                                                                                                     .Select(issueVm => issueVm.Id)
-                                                                                                    .Contains(issue.Key))
+                                                                                                    .Contains(issue.Id))
                                             .Select(issue => new ItemVm()
                                             {
-                                                Id = issue.Key,
-                                                Name = issue.Value.Name,
-                                                ParentId = theme.Key
+                                                Id = issue.Id,
+                                                Name = issue.Name,
+                                                ParentId = theme.ParentId ?? 0
                                             }).ToList()
                                     })
                                     .Where(theme => theme.Issues.Count > 0)

@@ -44,26 +44,15 @@ namespace StudyAssist.App.Api.Controllers
 
             List<Catalog> catalogs = await _GetCatalogs(dataAccessClient);
 
-            IEnumerable<KeyValuePair<int, string>> catalogsPairs = catalogs
-                .Select(cat => new KeyValuePair<int, string>(cat.CatalogId.Value, cat.Name));
-
-            catalogsDto.Catalogs = new(catalogsPairs);
+            catalogsDto.Catalogs.AddRange(catalogs.Select(cat => new ItemValue(cat.CatalogId.Value, cat.Name)));
 
             List<Theme> themes = await _GetThemes(dataAccessClient);
 
-            IEnumerable<KeyValuePair<int, (int, string)>> themesPairs = themes.
-                Select(theme => new KeyValuePair<int, (int, string)>(
-                    theme.ThemeId.Value, (theme.CatalogId.Value, theme.Name)));
-
-            catalogsDto.Themes = new(themesPairs);
+            catalogsDto.Themes.AddRange(themes.Select(t => new ItemValue(t.ThemeId.Value, t.Name, t.CatalogId)));
 
             List<Issue> issues = await _GetIssues(dataAccessClient);
 
-            IEnumerable<KeyValuePair<int, (int, string)>> issuesPairs = issues.
-                Select(issue => new KeyValuePair<int, (int, string)>(
-                    issue.IssueId.Value, (issue.ThemeId.Value, issue.Answer)));
-
-            catalogsDto.Issues = new(issuesPairs);
+            catalogsDto.Issues = new(issues.Select(i => new ItemValue(i.IssueId.Value, i.Question, i.ThemeId)));
 
             return catalogsDto;
         }
