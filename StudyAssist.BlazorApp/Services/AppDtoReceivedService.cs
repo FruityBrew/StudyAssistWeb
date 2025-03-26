@@ -18,6 +18,36 @@ namespace StudyAssist.BlazorApp.Services
             _configuration = configuration;
         }
 
+        public Task<int> AddCatalogAsync(CatalogVm catalog)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> AddIssueAsync(EditingIssueVm issue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<int> AddThemeAsync(ThemeVm theme)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteCatalogAsync(CatalogVm source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteIssueAsync(ItemVm deleted)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteThemeAsync(ThemeVm source)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<CatalogVm>> GetCatalogTreeAsync()
         {
             HttpClient dataAccessClient = await _ConfigureAuthenticatedHttpClient();
@@ -59,11 +89,50 @@ namespace StudyAssist.BlazorApp.Services
             return catalogs;
         }
 
+        public Task<EditingIssueVm> GetEditingIssue(int issueId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<EditingIssueVm> GetEditingIssueAsync()
         {
             throw new NotImplementedException();
         }
 
+        public Task<List<CatalogVm>> GetRepeatCatalogTreeAsync(DateTime date)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ProlongIssueStudyDateAsync(EditingIssueVm issueVm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateCatalogNameAsync(CatalogVm source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateIssueAnswerAsync(EditingIssueVm issueVm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateIssueNameAsync(ItemVm source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateIssueStudyAsync(EditingIssueVm issueVm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateThemeNameAsync(ThemeVm source)
+        {
+            throw new NotImplementedException();
+        }
 
         private async Task<HttpClient> _ConfigureAuthenticatedHttpClient()
         {

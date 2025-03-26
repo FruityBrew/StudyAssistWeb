@@ -116,6 +116,8 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         IDtoReceiverService _receiver;
 
+
+
         internal async Task InitializeDefaultViewModelAsync()
         {
             Catalogs = new List<CatalogVm>();
@@ -128,7 +130,7 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         internal async Task InitializeRepeatCatalogAsync(DateTime date)
         {
-            Catalogs = await TestDtoReceiveService.GetRepeatCatalogsAsync(date);
+            Catalogs = await _receiver.GetRepeatCatalogTreeAsync(date);
         }
 
         internal static async Task<MainViewModel> CreateBaseCatalogAsync(
@@ -220,7 +222,7 @@ namespace StudyAssist.BlazorApp.ViewModels
                     .FirstOrDefault(cat => cat.Id == SelectedTheme.ParentId)!;
 
 
-                var res = await TestDtoReceiveService.GetEditingIssue(issueItem.Id);
+                var res = await _receiver.GetEditingIssue(issueItem.Id);
 
 
                 if(res == null)
@@ -259,8 +261,8 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         internal async void DeleteCatalog()
         {
-            await TestDtoReceiveService.DeleteCatalogAsync(SelectedCatalog);
-            Catalogs = await TestDtoReceiveService.GetCatalogsAsync();
+            await _receiver.DeleteCatalogAsync(SelectedCatalog);
+            Catalogs = await _receiver.GetCatalogTreeAsync();
             // _selectedCatalog = null;
 
             CurrentItem = null;
@@ -273,8 +275,8 @@ namespace StudyAssist.BlazorApp.ViewModels
                 Name = "Введите название каталога..."
             };
 
-            int newCatId = await TestDtoReceiveService.AddCatalogAsync(catalog);
-            Catalogs = await TestDtoReceiveService.GetCatalogsAsync();
+            int newCatId = await _receiver.AddCatalogAsync(catalog);
+            Catalogs = await _receiver.GetCatalogTreeAsync();
             CurrentItem = Catalogs.FirstOrDefault(cat => cat.Id == newCatId);
             CurrentItemChanged();
         }
@@ -285,8 +287,8 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         internal async void DeleteTheme()
         {
-            await TestDtoReceiveService.DeleteThemeAsync(SelectedTheme);
-            Catalogs = await TestDtoReceiveService.GetCatalogsAsync();
+            await _receiver.DeleteThemeAsync(SelectedTheme);
+            Catalogs = await _receiver.GetCatalogTreeAsync();
             CurrentItem = Catalogs.FirstOrDefault(cat => cat.Id == SelectedTheme.ParentId);
 
             CurrentItemChanged();
@@ -300,13 +302,13 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         internal async void ThemeNameOnChange(string args)
         {
-            await TestDtoReceiveService.UpdateThemeNameAsync(SelectedTheme);
+            await _receiver.UpdateThemeNameAsync(SelectedTheme);
             // _catalogs = await TestDtoReceiveService.GetCatalogsAsync();
         }
 
         internal async void CatalogNameOnChange(string args)
         {
-            await TestDtoReceiveService.UpdateCatalogNameAsync(SelectedCatalog);
+            await _receiver.UpdateCatalogNameAsync(SelectedCatalog);
         }
 
         private ThemeVm? _FindThemeBy(int themeId)
@@ -326,9 +328,9 @@ namespace StudyAssist.BlazorApp.ViewModels
                 Name = "Введите наименование темы...",
             };
 
-            int newThemeId = await TestDtoReceiveService.AddThemeAsync(newTheme);
+            int newThemeId = await _receiver.AddThemeAsync(newTheme);
 
-            Catalogs = await TestDtoReceiveService.GetCatalogsAsync();
+            Catalogs = await _receiver.GetCatalogTreeAsync();
 
             _expandedCatalog = SelectedCatalog.Name;
 
@@ -350,9 +352,9 @@ namespace StudyAssist.BlazorApp.ViewModels
                 AnswerText = String.Empty
             };
 
-            int newIssueId = await TestDtoReceiveService.AddIssueAsync(newIssue);
+            int newIssueId = await _receiver.AddIssueAsync(newIssue);
 
-            Catalogs = await TestDtoReceiveService.GetCatalogsAsync();
+            Catalogs = await _receiver.GetCatalogTreeAsync();
 
             _expandedCatalog = Catalogs.FirstOrDefault(cat => cat.Id == SelectedTheme.ParentId).Name;
             _expandedTheme = SelectedTheme.Name;
@@ -362,13 +364,13 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         internal async void IssueNameOnChange(string args)
         {
-            await TestDtoReceiveService.UpdateIssueNameAsync(SelectedItem);
+            await _receiver.UpdateIssueNameAsync(SelectedItem);
         }
 
         internal async void DeleteIssue()
         {
-            await TestDtoReceiveService.DeleteIssueAsync(SelectedItem);
-            Catalogs = await TestDtoReceiveService.GetCatalogsAsync();
+            await _receiver.DeleteIssueAsync(SelectedItem);
+            Catalogs = await _receiver.GetCatalogTreeAsync();
 
             ThemeVm selectedTheme = _FindThemeBy(SelectedItem.ParentId);
 
@@ -388,28 +390,28 @@ namespace StudyAssist.BlazorApp.ViewModels
         internal async void AddToStudy()
         {
             EditingIssue.IsStudy = true;
-            await TestDtoReceiveService.UpdateIssueStudyAsync(EditingIssue);
+            await _receiver.UpdateIssueStudyAsync(EditingIssue);
             CurrentItemChanged();
         }
 
         internal async void RemoveFromStudy()
         {
             EditingIssue.IsStudy = false;
-            await TestDtoReceiveService.UpdateIssueStudyAsync(EditingIssue);
+            await _receiver.UpdateIssueStudyAsync(EditingIssue);
             CurrentItemChanged();
         }
 
         internal async void RemoveFromStudyAndUpdateRepeatList()
         {
             EditingIssue.IsStudy = false;
-            await TestDtoReceiveService.UpdateIssueStudyAsync(EditingIssue);
+            await _receiver.UpdateIssueStudyAsync(EditingIssue);
 
             await _UpdateCatalogAfterRemoveIssue();
         }
 
         internal async void SetOffIssue()
         {
-            await TestDtoReceiveService.ProlongIssueStudyDateAsync(EditingIssue);
+            await _receiver.ProlongIssueStudyDateAsync(EditingIssue);
 
             await _UpdateCatalogAfterRemoveIssue();
         }
@@ -419,7 +421,7 @@ namespace StudyAssist.BlazorApp.ViewModels
             if(_timer.IsActive == false)
                 _timer.Activate(async () =>
                 {
-                    await TestDtoReceiveService.UpdateIssueAnswerAsync(EditingIssue);
+                    await _receiver.UpdateIssueAnswerAsync(EditingIssue);
                 });
 
         }
@@ -437,7 +439,7 @@ namespace StudyAssist.BlazorApp.ViewModels
             ThemeVm selectedTheme = SelectedTheme;
             CatalogVm selectedCatalog = SelectedCatalog;
 
-            _catalogs = await TestDtoReceiveService.GetRepeatCatalogsAsync(DateTime.Today);
+            _catalogs = await _receiver.GetRepeatCatalogTreeAsync(DateTime.Today);
 
             ThemeVm changedSelectedTheme = _FindThemeBy(SelectedItem.ParentId);
             EditingIssue = _defaultIssue;

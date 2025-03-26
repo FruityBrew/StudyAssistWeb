@@ -1,12 +1,13 @@
 ﻿using StudyAssist.App.Dtos;
+using StudyAssist.BlazorApp.Interfaces;
 using StudyAssist.BlazorApp.ViewModels;
 using StudyAssist.Model;
 
 namespace StudyAssist.BlazorApp.Services
 {
-    public static class TestDtoReceiveService
+    public class TestDtoReceiveService : IDtoReceiverService
     {
-        private static CatalogsDto _catalogsDto = new CatalogsDto()
+        private CatalogsDto _catalogsDto = new CatalogsDto()
         {
             Catalogs = new List<ItemValue>
                 {
@@ -37,7 +38,7 @@ namespace StudyAssist.BlazorApp.Services
                 }
         };
 
-        internal static async Task<List<CatalogVm>> GetCatalogsAsync()
+        public  async Task<List<CatalogVm>> GetCatalogTreeAsync()
         {
             List<CatalogVm> catalogs = _catalogsDto.Catalogs
                 .Select(catalog => new CatalogVm
@@ -67,20 +68,25 @@ namespace StudyAssist.BlazorApp.Services
             return await Task.FromResult(catalogs);
         }
 
+        public async Task<EditingIssueVm> GetEditingIssueAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-        internal static async Task<EditingIssueVm> GetEditingIssue(int issueId)
+
+        public async Task<EditingIssueVm> GetEditingIssue(int issueId)
         {
             return await Task.FromResult(_editingIssueVms.FirstOrDefault(f => f.Id == issueId));
         }
 
-        internal static async Task<int> AddThemeAsync(ThemeVm theme)
+        public async Task<int> AddThemeAsync(ThemeVm theme)
         {
             int themeId = _catalogsDto.Themes.Max(th => th.Id) + 1;
             _catalogsDto.Themes.Add(new ItemValue(themeId, theme.Name, theme.ParentId));
             return themeId;
         }
 
-        internal static async Task UpdateThemeNameAsync(ThemeVm source)
+        public async Task UpdateThemeNameAsync(ThemeVm source)
         {
             ItemValue? taregetRemoving = _catalogsDto.Themes.FirstOrDefault(th => th.Id == source.Id);
             _catalogsDto.Themes.Remove(taregetRemoving);
@@ -88,7 +94,7 @@ namespace StudyAssist.BlazorApp.Services
             _catalogsDto.Themes.Add(new ItemValue( source.Id, source.Name, source.ParentId));
         }
 
-        internal static async Task<int> AddCatalogAsync(CatalogVm catalog)
+        public async Task<int> AddCatalogAsync(CatalogVm catalog)
         {
             int catalogId = _catalogsDto.Catalogs.Max(c => c.Id) + 1;
             _catalogsDto.Catalogs.Add(new (catalogId, catalog.Name));
@@ -96,7 +102,7 @@ namespace StudyAssist.BlazorApp.Services
             return catalogId;
         }
 
-        internal static async Task UpdateCatalogNameAsync(CatalogVm source)
+        public async Task UpdateCatalogNameAsync(CatalogVm source)
         {
             ItemValue? taregetRemoving = _catalogsDto.Themes.FirstOrDefault(i => i.Id == source.Id);
 
@@ -104,7 +110,7 @@ namespace StudyAssist.BlazorApp.Services
             _catalogsDto.Catalogs.Add(new(source.Id, source.Name));
         }
 
-        internal static async Task DeleteCatalogAsync(CatalogVm source)
+        public async Task DeleteCatalogAsync(CatalogVm source)
         {
             var themes = _catalogsDto.Themes
                 .Where(th => th.ParentId == source.Id);
@@ -130,7 +136,7 @@ namespace StudyAssist.BlazorApp.Services
 
         }
 
-        internal static async Task DeleteThemeAsync(ThemeVm source)
+        public async Task DeleteThemeAsync(ThemeVm source)
         {
             //var issues = _catalogsDto.Issues
             //    .Where(i => source.ParentId == i.Value.ThemeId)
@@ -146,7 +152,7 @@ namespace StudyAssist.BlazorApp.Services
             _catalogsDto.Themes.RemoveAll(t => t.Id == source.Id);
         }
 
-        internal static async Task DeleteIssueAsync(ItemVm deleted)
+        public  async Task DeleteIssueAsync(ItemVm deleted)
         {
             //var delItem = _catalogsDto.Issues
             //    .FirstOrDefault(i => i.Key == deleted.Id);
@@ -162,7 +168,7 @@ namespace StudyAssist.BlazorApp.Services
         }
 
 
-        internal static async Task UpdateIssueNameAsync(ItemVm source)
+        public async Task UpdateIssueNameAsync(ItemVm source)
         {
             //var target = _catalogsDto.Issues
             //    .FirstOrDefault(t => t.Key == source.Id);
@@ -173,7 +179,7 @@ namespace StudyAssist.BlazorApp.Services
             _catalogsDto.Issues.Add(new ItemValue( source.Id, source.Name, source.ParentId));
         }
 
-        internal static async Task UpdateIssueAnswerAsync(EditingIssueVm issueVm)
+        public async Task UpdateIssueAnswerAsync(EditingIssueVm issueVm)
         {
             EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
             if (editingIssue == null)
@@ -182,7 +188,7 @@ namespace StudyAssist.BlazorApp.Services
             editingIssue.AnswerText = issueVm.AnswerText;
         }
 
-        internal static async Task UpdateIssueStudyAsync(EditingIssueVm issueVm)
+        public async Task UpdateIssueStudyAsync(EditingIssueVm issueVm)
         {
             EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
             if (editingIssue == null)
@@ -201,17 +207,17 @@ namespace StudyAssist.BlazorApp.Services
             }
         }
 
-        internal static async Task<int> AddIssueAsync(EditingIssueVm issue)
+        public async Task<int> AddIssueAsync(EditingIssueVm issue)
         {
             int issueId = _catalogsDto.Issues.Max(i => i.Id) + 1;
-            _catalogsDto.Issues.Add(new ItemValue(issue.Id, issue.Name, issue.ParentId));
+            _catalogsDto.Issues.Add(new ItemValue(issueId, issue.Name, issue.ParentId));
             issue.Id = issueId;
             _editingIssueVms.Add(issue);
 
             return issueId;
         }
 
-        internal static async Task<List<CatalogVm>> GetRepeatCatalogsAsync(DateTime date)
+        public async Task<List<CatalogVm>> GetRepeatCatalogTreeAsync(DateTime date)
         {
             List<CatalogVm> catalogs = _catalogsDto.Catalogs
                             .Select(catalog => new CatalogVm
@@ -249,7 +255,7 @@ namespace StudyAssist.BlazorApp.Services
             return await Task.FromResult(catalogs);
         }
 
-        internal static async Task ProlongIssueStudyDateAsync(EditingIssueVm issueVm)
+        public async Task ProlongIssueStudyDateAsync(EditingIssueVm issueVm)
         {
             EditingIssueVm editingIssue = _editingIssueVms.FirstOrDefault(f => f.Id == issueVm.Id);
             if (editingIssue == null)
@@ -259,7 +265,7 @@ namespace StudyAssist.BlazorApp.Services
             editingIssue.RepeatCount++;
         }
 
-        private static List<EditingIssueVm> _editingIssueVms = new List<EditingIssueVm>
+        private  List<EditingIssueVm> _editingIssueVms = new List<EditingIssueVm>
         {
             new EditingIssueVm
             {
