@@ -68,13 +68,7 @@ namespace StudyAssist.BlazorApp.Services
             return await Task.FromResult(catalogs);
         }
 
-        public async Task<EditingIssueVm> GetEditingIssueAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public async Task<EditingIssueVm> GetEditingIssue(int issueId)
+        public async Task<EditingIssueVm> GetEditingIssueAsync(int issueId)
         {
             return await Task.FromResult(_editingIssueVms.FirstOrDefault(f => f.Id == issueId));
         }

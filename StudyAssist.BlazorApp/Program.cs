@@ -17,8 +17,8 @@ namespace StudyAssist.BlazorApp
             builder.Services.AddRadzenComponents();
 
             builder.Services.AddHttpClient();
-			//builder.Services.AddScoped<IDtoReceiverService, AppDtoReceivedService>();
-			builder.Services.AddScoped<IDtoReceiverService, TestDtoReceiveService>();
+			builder.Services.AddScoped<IDtoReceiverService, AppDtoReceivedService>();
+			//builder.Services.AddScoped<IDtoReceiverService, TestDtoReceiveService>();
 
 			var app = builder.Build();
 			

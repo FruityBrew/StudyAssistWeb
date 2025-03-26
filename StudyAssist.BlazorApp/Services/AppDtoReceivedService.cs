@@ -58,8 +58,6 @@ namespace StudyAssist.BlazorApp.Services
 
             response.EnsureSuccessStatusCode();
 
-            String catalogsDtoStr = await response.Content.ReadAsStringAsync();
-
             CatalogsDto catalogsDto = await response.Content.ReadFromJsonAsync<CatalogsDto>();
 
             List<CatalogVm> catalogs = catalogsDto.Catalogs
@@ -89,14 +87,11 @@ namespace StudyAssist.BlazorApp.Services
             return catalogs;
         }
 
-        public Task<EditingIssueVm> GetEditingIssue(int issueId)
+        public async Task<EditingIssueVm> GetEditingIssueAsync(int issueId)
         {
-            throw new NotImplementedException();
-        }
+            HttpClient dataAccessClient = await _ConfigureAuthenticatedHttpClient();
 
-        public Task<EditingIssueVm> GetEditingIssueAsync()
-        {
-            throw new NotImplementedException();
+
         }
 
         public Task<List<CatalogVm>> GetRepeatCatalogTreeAsync(DateTime date)
