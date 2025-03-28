@@ -50,17 +50,9 @@ namespace StudyAssist.BlazorApp.Services
 
         public async Task<List<CatalogVm>> GetCatalogTreeAsync()
         {
-            HttpClient dataAccessClient = await _ConfigureAuthenticatedHttpClient();
+            CatalogsDto catalogsDto = await _RequestAsync<CatalogsDto>("catalog/getcatalogs");
 
-            string catalogsUrl = _configuration.GetValue<string>("WebApiUrls:AppApi");
-
-            HttpResponseMessage response = await dataAccessClient.GetAsync(catalogsUrl + "catalog/getcatalogs");
-
-            response.EnsureSuccessStatusCode();
-
-            CatalogsDto catalogsDto = await response.Content.ReadFromJsonAsync<CatalogsDto>();
-
-            List<CatalogVm> catalogs = catalogsDto.Catalogs
+            List <CatalogVm> catalogs = catalogsDto.Catalogs
                 .Select(catalog => new CatalogVm
                 {
                     Id = catalog.Id,
@@ -89,9 +81,32 @@ namespace StudyAssist.BlazorApp.Services
 
         public async Task<EditingIssueVm> GetEditingIssueAsync(int issueId)
         {
+            IssueDto issueDto = await _RequestAsync<IssueDto>("issues/getissue/"+issueId);
+
+            EditingIssueVm issueVm = new()
+            {
+                AnswerText = issueDto.AnswerText,
+                RepeatCount = issueDto.RepeatCount,
+                Id = issueDto.Id.Value,
+                IsStudy = issueDto.IsStudy,
+                ParentId = issueDto.ThemeId.Value,
+                RepeatDate = issueDto.RepeatDate,
+            };
+
+            return issueVm;
+        }
+
+        private async Task<T> _RequestAsync<T>(string urlSegment) where T : class
+        {
             HttpClient dataAccessClient = await _ConfigureAuthenticatedHttpClient();
+            string catalogsUrl = _configuration.GetValue<string>("WebApiUrls:AppApi");
+            HttpResponseMessage response = await dataAccessClient.GetAsync(
+                catalogsUrl + urlSegment);
+            response.EnsureSuccessStatusCode();
 
+            T responsed = await response.Content.ReadFromJsonAsync<T>();
 
+            return responsed;
         }
 
         public Task<List<CatalogVm>> GetRepeatCatalogTreeAsync(DateTime date)

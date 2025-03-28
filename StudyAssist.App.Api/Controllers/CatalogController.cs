@@ -11,27 +11,19 @@ namespace StudyAssist.App.Api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CatalogController : ControllerBase
+    public class CatalogController : AppApiControllerBase
     {
-		private readonly IHttpClientFactory _httpClientFactory;
-		private readonly IConfiguration _configuration;
-
-        private string? _dataAccessUri;
 
         public CatalogController(
             IHttpClientFactory httpClientFactory,
-            IConfiguration configuration) 
+            IConfiguration configuration) : base(httpClientFactory, configuration) 
         {
-            _httpClientFactory = httpClientFactory;
-			_configuration = configuration;
-		}
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<CatalogsDto>>> GetCatalogs()
         {
             HttpClient dataAccessClient = await _ConfigureAuthenticatedHttpClient();
-
-            _dataAccessUri = _configuration.GetValue<string>("WebApiUrls:KnowledgeDataAccessApi");
 
             CatalogsDto catalogsDto = await _CreateCatalogsDto(dataAccessClient);
 
@@ -96,29 +88,6 @@ namespace StudyAssist.App.Api.Controllers
             return res;
         }
 
-        private async Task<HttpClient> _ConfigureAuthenticatedHttpClient()
-        {
-            string? identityServerUri = _configuration.GetValue<string>("AuthConfig:IdentityServerAuthorityUrl");
-            HttpClient identityServerClient = _httpClientFactory.CreateClient();
 
-            DiscoveryDocumentResponse discoveryDocument = await identityServerClient.GetDiscoveryDocumentAsync(
-                identityServerUri);
-
-            var tokenResponse = await identityServerClient.RequestClientCredentialsTokenAsync(
-                new ClientCredentialsTokenRequest
-                {
-                    Address = discoveryDocument.TokenEndpoint,
-                    ClientId = "studyAssist_id",
-                    ClientSecret = "studyAssist_secret",
-                    GrantType = GrantTypes.ClientCredentials,
-                    Scope = "User"
-
-                });
-
-            HttpClient client = _httpClientFactory.CreateClient();
-            client.SetBearerToken(tokenResponse.AccessToken);
-
-            return client;
-        }
     }
 }

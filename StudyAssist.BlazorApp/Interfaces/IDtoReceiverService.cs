@@ -9,7 +9,7 @@ namespace StudyAssist.BlazorApp.Interfaces
         Task<List<CatalogVm>> GetRepeatCatalogTreeAsync(DateTime date);
 
         Task DeleteCatalogAsync(CatalogVm source);
-        Task<EditingIssueVm> GetEditingIssue(int issueId);
+        Task<EditingIssueVm> GetEditingIssueAsync(int issueId);
 
         Task<int> AddCatalogAsync(CatalogVm catalog);
 
