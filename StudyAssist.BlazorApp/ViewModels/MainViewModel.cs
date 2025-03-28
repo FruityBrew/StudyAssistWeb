@@ -185,7 +185,7 @@ namespace StudyAssist.BlazorApp.ViewModels
 
         #region utilities
 
-        internal async void CurrentItemChanged()
+        internal async Task CurrentItemChanged()
         {
             if(CurrentItem is CatalogVm catalog)
             {
@@ -222,7 +222,7 @@ namespace StudyAssist.BlazorApp.ViewModels
                     .FirstOrDefault(cat => cat.Id == SelectedTheme.ParentId)!;
 
 
-                var res = await _receiver.GetEditingIssue(issueItem.Id);
+                var res = await _receiver.GetEditingIssueAsync(issueItem.Id);
 
 
                 if(res == null)
